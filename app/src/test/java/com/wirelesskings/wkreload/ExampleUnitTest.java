@@ -1,4 +1,4 @@
-package com.wirelesskings.rechargetree;
+package com.wirelesskings.wkreload;
 
 import org.junit.Test;
 
