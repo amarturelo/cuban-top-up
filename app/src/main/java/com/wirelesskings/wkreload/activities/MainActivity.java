@@ -1,4 +1,4 @@
-package com.wirelesskings.wkreload;
+package com.wirelesskings.wkreload.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.mail.async.CallSender;
 import com.wirelesskings.wkreload.mail.async.OnStateChangedListener;
 import com.wirelesskings.wkreload.mail.settings.Constants;

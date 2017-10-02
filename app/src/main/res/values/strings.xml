@@ -1,4 +1,16 @@
 <resources>
-    <string name="app_name">Recharge Tree</string>
+    <string name="app_name">WK Reload</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="login">entrar</string>
+    <string name="hi">Hola.</string>
+    <string name="letsgetstarted">Comencemos</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="next">siguiente</string>
+    <string name="settings_server">Ajustes de Nauta</string>
+    <string name="stub_mail">\@nauta.cu</string>
+    <string name="hint_user">usuario</string>
+    <string name="hint_password">contraseña</string>
 </resources>
