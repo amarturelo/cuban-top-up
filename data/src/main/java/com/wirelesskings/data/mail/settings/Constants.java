@@ -1,4 +1,4 @@
-package com.wirelesskings.data.rxmail.settings;
+package com.wirelesskings.data.mail.settings;
 
 public class Constants {
     public static final int PLAIN               = 0;

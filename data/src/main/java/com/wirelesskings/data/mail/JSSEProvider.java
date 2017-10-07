@@ -1,4 +1,4 @@
-package com.wirelesskings.data.rxmail;
+package com.wirelesskings.data.mail;
 
 import java.security.AccessController;
 import java.security.Provider;

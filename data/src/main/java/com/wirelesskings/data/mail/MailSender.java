@@ -1,10 +1,10 @@
-package com.wirelesskings.data.rxmail;
+package com.wirelesskings.data.mail;
 
 
 
 
-import com.wirelesskings.data.rxmail.settings.Constants;
-import com.wirelesskings.data.rxmail.settings.Setting;
+import com.wirelesskings.data.mail.settings.Constants;
+import com.wirelesskings.data.mail.settings.Setting;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

@@ -10,10 +10,12 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.wirelesskings.data.rxmail.async.CallSender;
-import com.wirelesskings.data.rxmail.async.OnStateChangedListener;
-import com.wirelesskings.data.rxmail.settings.Constants;
-import com.wirelesskings.data.rxmail.settings.Setting;
+import com.wirelesskings.data.mail.async.CallSender;
+import com.wirelesskings.data.mail.async.OnStateChangedListener;
+import com.wirelesskings.data.mail.rx.RxCallReceiver;
+import com.wirelesskings.data.mail.rx.RxCallSender;
+import com.wirelesskings.data.mail.settings.Constants;
+import com.wirelesskings.data.mail.settings.Setting;
 import com.wirelesskings.wkreload.R;
 
 import java.util.ArrayList;
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                sendMail();
+                //receivedMail();
             }
         });
     }
@@ -44,30 +46,23 @@ public class MainActivity extends AppCompatActivity {
         mSetting.setHost("smtp.nauta.cu");
         mSetting.setPort(Constants.SMTP_PLAIN_PORT); //25 for smtp plain,465 for smtp ssl
 
-        CallSender mSender=new CallSender(mSetting);
-        mSender.execute("Test", "texto", "amarturelo@nauta.cu", new OnStateChangedListener() {
-            @Override
-            public void onExecuting() {
+        /*RxCallSender rxCallSender = new RxCallSender(mSetting, 2, 1000);
 
-            }
+        rxCallSender.sender("Test", "texto", "amarturelo@nauta.cu")
+                .subscribe(() -> System.out.println("subscribe " + "complete")
+                        , throwable -> System.out.println("error " + throwable.toString()));*/
 
-            @Override
-            public void onSuccess(ArrayList<?> list) {
-                Log.i("REPORT", "Correo enviado");
+    }
 
-            }
+    private void receivedMail() {
+        Setting mSetting = new Setting("amarturelo@nauta.cu", "adriana*2017");
+        mSetting.setServerType(Constants.IMAP_PLAIN);
+        mSetting.setHost("imap.nauta.cu");
+        mSetting.setPort(Constants.IMAP_PLAIN_PORT);
 
-            @Override
-            public void onError(int code, String msg) {
-                Log.i("REPORT", "Correo en envio");
+        RxCallReceiver rxCallReceiver = new RxCallReceiver(2, 1000, mSetting);
 
-            }
-
-            @Override
-            public void onCanceled() {
-
-            }
-        });
+        rxCallReceiver.receiver("Toma").subscribe(o -> Log.d("Main", o.toString()), throwable -> Log.d("Main", throwable.toString()));
     }
 
     @Override

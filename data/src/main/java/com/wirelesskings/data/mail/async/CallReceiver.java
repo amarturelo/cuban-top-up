@@ -1,12 +1,12 @@
-package com.wirelesskings.data.rxmail.async;
+package com.wirelesskings.data.mail.async;
 
 import android.os.AsyncTask;
 
 
-import com.wirelesskings.data.rxmail.MailFetcher;
-import com.wirelesskings.data.rxmail.model.Email;
-import com.wirelesskings.data.rxmail.model.ImapResponse;
-import com.wirelesskings.data.rxmail.settings.Setting;
+import com.wirelesskings.data.mail.MailFetcher;
+import com.wirelesskings.data.mail.model.Email;
+import com.wirelesskings.data.mail.model.ImapResponse;
+import com.wirelesskings.data.mail.settings.Setting;
 
 import java.io.IOException;
 import java.util.ArrayList;

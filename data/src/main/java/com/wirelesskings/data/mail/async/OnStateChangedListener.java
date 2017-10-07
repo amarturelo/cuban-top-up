@@ -1,4 +1,4 @@
-package com.wirelesskings.data.rxmail.async;
+package com.wirelesskings.data.mail.async;
 
 import java.util.ArrayList;
 

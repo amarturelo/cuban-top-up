@@ -1,9 +1,9 @@
-package com.wirelesskings.data.rxmail;
+package com.wirelesskings.data.mail;
 
 import com.sun.mail.imap.IMAPStore;
-import com.wirelesskings.data.rxmail.model.Email;
-import com.wirelesskings.data.rxmail.settings.Constants;
-import com.wirelesskings.data.rxmail.settings.Setting;
+import com.wirelesskings.data.mail.model.Email;
+import com.wirelesskings.data.mail.settings.Constants;
+import com.wirelesskings.data.mail.settings.Setting;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -130,7 +130,7 @@ public class MailFetcher {
             @Override
             public boolean match(Message message) {
                 try {
-                    if (message.getSubject().contains(keyword)) {
+                    if (message.getSubject()!=null && message.getSubject().contains(keyword)) {
                         return true;
                     }
                 } catch (MessagingException ex) {
@@ -143,6 +143,7 @@ public class MailFetcher {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         // performs search through the folder
         Message[] messages = inboxFolder.search(searchCondition);
+
         /*
         FetchProfile fetchProfile = new FetchProfile();
         fetchProfile.add(FetchProfile.Item.ENVELOPE);

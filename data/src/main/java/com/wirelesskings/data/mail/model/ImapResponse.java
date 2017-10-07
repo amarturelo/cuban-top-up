@@ -1,4 +1,4 @@
-package com.wirelesskings.data.rxmail.model;
+package com.wirelesskings.data.mail.model;
 
 import java.util.ArrayList;
 
