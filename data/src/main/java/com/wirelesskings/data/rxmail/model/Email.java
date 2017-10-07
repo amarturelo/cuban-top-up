@@ -1,4 +1,4 @@
-package com.wirelesskings.wkreload.mail.model;
+package com.wirelesskings.data.rxmail.model;
 
 public class Email {
     private String from;

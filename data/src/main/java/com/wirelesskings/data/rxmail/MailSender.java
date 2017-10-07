@@ -1,9 +1,10 @@
-package com.wirelesskings.wkreload.mail;
+package com.wirelesskings.data.rxmail;
 
 
 
-import com.wirelesskings.wkreload.mail.settings.Constants;
-import com.wirelesskings.wkreload.mail.settings.Setting;
+
+import com.wirelesskings.data.rxmail.settings.Constants;
+import com.wirelesskings.data.rxmail.settings.Setting;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

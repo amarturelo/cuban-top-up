@@ -6,90 +6,89 @@
     tools:context="com.wirelesskings.wkreload.fragments.LoginFragment"
     tools:showIn="@layout/activity_login">
 
-    <RelativeLayout
-        android:id="@+id/action_bar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
+    <LinearLayout
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <FrameLayout
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:padding="16dp">
+            android:layout_gravity="center_horizontal"
+            android:text="@string/hi"
+            android:textSize="32sp"
+            android:textStyle="bold" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_back_black_24dp" />
-        </FrameLayout>
-    </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Comencemos"
+            android:textSize="32sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:textSize="18sp" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/login_bottom"
-        android:layout_below="@+id/action_bar"
-        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/layout_description"
+        android:layout_marginTop="8dp"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="32dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="64dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/hi"
-                android:textSize="32sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/letsgetstarted"
-                android:textSize="24sp" />
-        </LinearLayout>
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:orientation="vertical">
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_user"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-            </android.support.design.widget.TextInputLayout>
+            android:orientation="horizontal">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp">
+                android:layout_toLeftOf="@+id/stub">
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_password"
-                    android:inputType="textPassword"
-                    android:textSize="24sp" />
+                    android:hint="@string/hint_user" />
             </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
+
+        </RelativeLayout>
 
 
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_password"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -97,7 +96,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/red"
+        android:background="@color/yellow"
         android:orientation="vertical">
 
         <TextView
@@ -111,6 +110,5 @@
             android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
-
 
 </RelativeLayout>

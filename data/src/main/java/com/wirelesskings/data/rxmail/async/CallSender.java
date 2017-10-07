@@ -1,16 +1,17 @@
-package com.wirelesskings.wkreload.mail.async;
+package com.wirelesskings.data.rxmail.async;
 
 import android.os.AsyncTask;
 
 
-import com.wirelesskings.wkreload.mail.MailSender;
-import com.wirelesskings.wkreload.mail.model.SmtpResponse;
-import com.wirelesskings.wkreload.mail.settings.Setting;
+import com.wirelesskings.data.rxmail.MailSender;
+import com.wirelesskings.data.rxmail.model.SmtpResponse;
+import com.wirelesskings.data.rxmail.settings.Setting;
 
 import java.util.ArrayList;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
+
 
 public class CallSender {
     private Setting setting;

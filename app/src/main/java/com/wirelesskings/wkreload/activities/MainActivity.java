@@ -10,11 +10,11 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.wirelesskings.data.rxmail.async.CallSender;
+import com.wirelesskings.data.rxmail.async.OnStateChangedListener;
+import com.wirelesskings.data.rxmail.settings.Constants;
+import com.wirelesskings.data.rxmail.settings.Setting;
 import com.wirelesskings.wkreload.R;
-import com.wirelesskings.wkreload.mail.async.CallSender;
-import com.wirelesskings.wkreload.mail.async.OnStateChangedListener;
-import com.wirelesskings.wkreload.mail.settings.Constants;
-import com.wirelesskings.wkreload.mail.settings.Setting;
 
 import java.util.ArrayList;
 

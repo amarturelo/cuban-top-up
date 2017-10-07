@@ -1,7 +1,7 @@
-package com.wirelesskings.wkreload.mail.async;
+package com.wirelesskings.data.rxmail.async;
 
 
-import com.wirelesskings.wkreload.mail.settings.Setting;
+import com.wirelesskings.data.rxmail.settings.Setting;
 
 public class Call {
     private Setting setting;

@@ -1,4 +1,4 @@
-package com.wirelesskings.wkreload.mail.settings;
+package com.wirelesskings.data.rxmail.settings;
 
 public class Setting {
     private String host;

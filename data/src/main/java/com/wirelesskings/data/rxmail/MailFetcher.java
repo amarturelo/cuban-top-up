@@ -1,9 +1,9 @@
-package com.wirelesskings.wkreload.mail;
+package com.wirelesskings.data.rxmail;
 
 import com.sun.mail.imap.IMAPStore;
-import com.wirelesskings.wkreload.mail.model.Email;
-import com.wirelesskings.wkreload.mail.settings.Constants;
-import com.wirelesskings.wkreload.mail.settings.Setting;
+import com.wirelesskings.data.rxmail.model.Email;
+import com.wirelesskings.data.rxmail.settings.Constants;
+import com.wirelesskings.data.rxmail.settings.Setting;
 
 import java.io.BufferedReader;
 import java.io.IOException;
