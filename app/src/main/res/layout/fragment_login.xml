@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wirelesskings.wkreload.fragments.LoginFragment"
-    tools:showIn="@layout/activity_login">
+    tools:context="com.wirelesskings.wkreload.fragments.LoginFragment">
 
     <LinearLayout
         android:id="@+id/title"

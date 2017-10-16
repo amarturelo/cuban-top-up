@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wirelesskings.wkreload.fragments.LoginFragment"
-    tools:showIn="@layout/activity_login">
+    tools:context="com.wirelesskings.wkreload.fragments.LoginFragment">
 
     <LinearLayout
         android:id="@+id/action_bar"
@@ -19,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/hi"
+            android:text="Configuremos"
             android:textSize="32sp"
             android:textStyle="bold" />
 
@@ -27,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Comencemos"
+            android:text="Su correo nauta"
             android:textSize="32sp" />
 
     </LinearLayout>

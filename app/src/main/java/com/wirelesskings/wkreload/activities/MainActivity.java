@@ -1,5 +1,6 @@
 package com.wirelesskings.wkreload.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,6 +21,8 @@ import com.wirelesskings.wkreload.R;
 
 import java.util.ArrayList;
 
+import me.drakeet.materialdialog.MaterialDialog;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -33,8 +36,43 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+                /*MaterialDialog mMaterialDialog = new MaterialDialog(MainActivity.this);
+                mMaterialDialog
+                        .setTitle("MaterialDialog")
+                        .setMessage("Hello world!")
+                        .setPositiveButton("OK", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mMaterialDialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("CANCEL", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mMaterialDialog.dismiss();
+                            }
+                        });
+
+                mMaterialDialog.show();*/
+
+                MaterialDialog mMaterialDialog = new MaterialDialog(MainActivity.this)
+                        .setTitle("Nueva recarga")
+                        .setContentView(R.layout.layout_recharge)
+                        .setPositiveButton("ACEPTAR", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                            }
+                        })
+                        .setNegativeButton("CANCELAR", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                            }
+                        });
+
+                mMaterialDialog.show();
+
                 //receivedMail();
             }
         });
