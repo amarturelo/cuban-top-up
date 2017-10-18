@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:orientation="vertical"
         android:padding="16dp">
 
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/action_bar"
         android:orientation="vertical"
-        android:padding="32dp">
+        android:padding="16dp">
 
         <TextView
             android:layout_width="wrap_content"

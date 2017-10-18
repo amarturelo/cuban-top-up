@@ -1,5 +1,6 @@
 package com.wirelesskings.wkreload.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -123,5 +124,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static Intent getCallingIntent(Context context) {
+        Intent callingIntent = new Intent(context, MainActivity.class);
+        return callingIntent;
     }
 }
