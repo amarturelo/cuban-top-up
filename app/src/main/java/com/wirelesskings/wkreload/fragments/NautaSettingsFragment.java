@@ -107,4 +107,17 @@ public class NautaSettingsFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    public static NautaSettingsFragment newInstance() {
+
+        Bundle args = new Bundle();
+
+        NautaSettingsFragment fragment = new NautaSettingsFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public interface NautaSettingsListened{
+        void onNautaSettings(String email,String password);
+    }
 }

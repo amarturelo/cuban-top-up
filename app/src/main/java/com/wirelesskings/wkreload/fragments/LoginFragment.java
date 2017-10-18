@@ -38,4 +38,13 @@ public class LoginFragment extends Fragment {
         //((AppCompatActivity)context).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
+
+    public static LoginFragment newInstance() {
+
+        Bundle args = new Bundle();
+
+        LoginFragment fragment = new LoginFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 }
