@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'realm-android'
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
@@ -40,4 +41,5 @@ dependencies {
     compile files('libs/activation.jar')
     compile files('libs/additionnal.jar')
     compile files('libs/mail.jar')
+    compile project(':domain')
 }

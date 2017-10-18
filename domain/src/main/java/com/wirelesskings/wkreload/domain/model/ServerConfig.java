@@ -4,11 +4,14 @@ package com.wirelesskings.wkreload.domain.model;
  * Created by Alberto on 18/10/2017.
  */
 
-public class NautaConfig {
+public class ServerConfig {
     private String email;
     private String password;
 
-    public NautaConfig(String email, String password) {
+    public ServerConfig() {
+    }
+
+    public ServerConfig(String email, String password) {
         this.email = email;
         this.password = password;
     }
