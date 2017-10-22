@@ -8,12 +8,15 @@ public class ServerConfig {
     private String email;
     private String password;
 
+    private Credentials credentials;
+
     public ServerConfig() {
     }
 
-    public ServerConfig(String email, String password) {
+    public ServerConfig(String email, String password, Credentials credentials) {
         this.email = email;
         this.password = password;
+        this.credentials = credentials;
     }
 
     public String getEmail() {
@@ -32,5 +35,18 @@ public class ServerConfig {
     public ServerConfig setPassword(String password) {
         this.password = password;
         return this;
+    }
+
+    public Credentials getCredentials() {
+        return credentials;
+    }
+
+    public ServerConfig setCredentials(Credentials credentials) {
+        this.credentials = credentials;
+        return this;
+    }
+
+    public boolean isEmpty() {
+        return email == null && password == null;
     }
 }

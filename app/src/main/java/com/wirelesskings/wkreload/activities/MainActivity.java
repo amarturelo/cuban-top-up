@@ -8,10 +8,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.wirelesskings.data.mail.async.CallSender;
 import com.wirelesskings.data.mail.async.OnStateChangedListener;
 import com.wirelesskings.data.mail.rx.RxCallReceiver;
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
                 mMaterialDialog.show();*/
 
-                MaterialDialog mMaterialDialog = new MaterialDialog(MainActivity.this)
+                /*MaterialDialog mMaterialDialog = new MaterialDialog(MainActivity.this)
                         .setTitle("Nueva recarga")
                         .setContentView(R.layout.layout_recharge)
                         .setPositiveButton("ACEPTAR", new View.OnClickListener() {
@@ -72,7 +74,24 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
 
-                mMaterialDialog.show();
+                mMaterialDialog.show();*/
+
+                /*new BottomDialog.Builder(MainActivity.this)
+                        .setTitle("Awesome!")
+                        .setContent("What can we improve? Your feedback is always welcome.")
+                        .show();*/
+                View v = getLayoutInflater().inflate(R.layout.layout_recharge, null);
+                new BottomDialog.Builder(MainActivity.this)
+                        .setTitle("Nueva recarga")
+                        .setContent("What can we improve? Your feedback is always welcome.")
+                        .setCustomView(v)
+                        .onPositive(new BottomDialog.ButtonCallback() {
+                            @Override
+                            public void onClick(BottomDialog dialog) {
+                                Log.d("BottomDialogs", "Do something!");
+                            }
+                        })
+                        .show();
 
                 //receivedMail();
             }

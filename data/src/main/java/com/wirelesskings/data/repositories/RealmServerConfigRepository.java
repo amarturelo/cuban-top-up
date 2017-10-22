@@ -31,7 +31,8 @@ public class RealmServerConfigRepository implements ServerConfigRepositoy {
             if (configs.size() > 0) {
                 config = configs.first();
                 e.onSuccess(Realm.getDefaultInstance().copyFromRealm(config));
-            }
+            } else
+                e.onSuccess(new RealmServerConfig());
         }).map(realmServerConfig -> serverConfigDataMapper.transform(realmServerConfig));
     }
 

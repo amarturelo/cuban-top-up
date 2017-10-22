@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void showServerConfig(ServerConfig serverConfig) {
-        if (serverConfig == null)
+        if (serverConfig.isEmpty())
             showNautaConfig();
         else {
             showLogin(serverConfig.getEmail());
