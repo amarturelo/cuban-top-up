@@ -20,15 +20,17 @@ public class ServerConfig {
         return email;
     }
 
-    public void setEmail(String email) {
+    public ServerConfig setEmail(String email) {
         this.email = email;
+        return this;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public ServerConfig setPassword(String password) {
         this.password = password;
+        return this;
     }
 }

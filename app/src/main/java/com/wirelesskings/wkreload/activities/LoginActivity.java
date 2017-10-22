@@ -1,17 +1,15 @@
 package com.wirelesskings.wkreload.activities;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import com.wirelesskings.data.model.mapper.ServerConfigDataMapper;
 import com.wirelesskings.data.repositories.RealmServerConfigRepository;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.domain.interactors.ServerConfigInteractor;
+import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 import com.wirelesskings.wkreload.executor.JobExecutor;
 import com.wirelesskings.wkreload.fragments.FragmentChangeManager;
 import com.wirelesskings.wkreload.fragments.LoginFragment;
@@ -21,11 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class LoginActivity extends AppCompatActivity implements LoginContract.View {
-
-    private FragmentChangeManager fragmentChangeManager;
+public class LoginActivity extends AppCompatActivity implements LoginContract.View,
+        NautaSettingsFragment.OnFragmentNautaSettingsListened,
+        LoginFragment.OnFragmentLoginListened {
 
     private LoginPresenter loginPresenter;
+
+    private ServerConfig serverConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +33,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         setContentView(R.layout.activity_login);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        List<Fragment> fragments = new ArrayList<>();
-
-        fragments.add(NautaSettingsFragment.newInstance());
-        fragments.add(LoginFragment.newInstance());
-
-        fragmentChangeManager = new FragmentChangeManager(getSupportFragmentManager(), R.id.fragment, (ArrayList<Fragment>) fragments);
 
         loginPresenter = new LoginPresenter(JobExecutor.getInstance(),
                 new ServerConfigInteractor(
@@ -54,22 +47,33 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     @Override
-    public void hasServerSettings() {
-        fragmentChangeManager.setFragments(1);
+    public void showServerConfig(ServerConfig serverConfig) {
+        if (serverConfig == null)
+            showNautaConfig();
+        else {
+            showLogin(serverConfig.getEmail());
+        }
+    }
+
+    private void showNautaConfig() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, NautaSettingsFragment.newInstance()).commit();
+    }
+
+    private void showLogin(String email) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, LoginFragment.newInstance(email)).commit();
     }
 
     @Override
-    public void showHome() {
-
+    public void onNautaSettings(String email, String password) {
+        if (serverConfig == null)
+            serverConfig = new ServerConfig();
+        serverConfig.setEmail(email)
+                .setPassword(password);
+        showLogin(serverConfig.getEmail());
     }
 
     @Override
-    public void showLogin() {
-        fragmentChangeManager.setFragments(1);
-    }
+    public void onLoginSettings(String email, String password) {
 
-    @Override
-    public void showServerSettings() {
-        fragmentChangeManager.setFragments(0);
     }
 }

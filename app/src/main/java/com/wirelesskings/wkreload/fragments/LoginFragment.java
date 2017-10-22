@@ -17,6 +17,10 @@ import com.wirelesskings.wkreload.R;
  */
 public class LoginFragment extends Fragment {
 
+    public static final String ARGS_USERNAME = "args_username";
+
+    private OnFragmentLoginListened mListener;
+
     public LoginFragment() {
     }
 
@@ -35,16 +39,28 @@ public class LoginFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        //((AppCompatActivity)context).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        if (context instanceof NautaSettingsFragment.OnFragmentNautaSettingsListened) {
+            mListener = (OnFragmentLoginListened) context;
+        } /*else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }*/
     }
 
-    public static LoginFragment newInstance() {
-
+    public static LoginFragment newInstance(String email) {
         Bundle args = new Bundle();
-
+        args.putString(ARGS_USERNAME, email);
         LoginFragment fragment = new LoginFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+
+    public interface OnFragmentLoginListened {
+        void onLoginSettings(String email, String password);
+    }
+
+    private String getArgsUsername() {
+        return getArguments().getString(ARGS_USERNAME);
     }
 }

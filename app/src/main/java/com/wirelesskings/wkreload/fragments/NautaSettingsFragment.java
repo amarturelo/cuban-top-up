@@ -10,15 +10,6 @@ import android.view.ViewGroup;
 
 import com.wirelesskings.wkreload.R;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link NautaSettingsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link NautaSettingsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class NautaSettingsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,7 +20,7 @@ public class NautaSettingsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    private OnFragmentNautaSettingsListened mListener;
 
     public NautaSettingsFragment() {
         // Required empty public constructor
@@ -69,18 +60,11 @@ public class NautaSettingsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_nauta_settings, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnFragmentNautaSettingsListened) {
+            mListener = (OnFragmentNautaSettingsListened) context;
         } /*else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -93,21 +77,6 @@ public class NautaSettingsFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-
     public static NautaSettingsFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -117,7 +86,7 @@ public class NautaSettingsFragment extends Fragment {
         return fragment;
     }
 
-    public interface NautaSettingsListened{
-        void onNautaSettings(String email,String password);
+    public interface OnFragmentNautaSettingsListened {
+        void onNautaSettings(String email, String password);
     }
 }

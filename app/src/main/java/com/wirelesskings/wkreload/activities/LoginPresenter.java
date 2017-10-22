@@ -29,19 +29,16 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
     @Override
     public void bindView(@NonNull LoginContract.View view) {
         super.bindView(view);
-        this.onServerSettings();
+        this.onHasCredentials();
     }
 
     @Override
-    public void onServerSettings() {
+    public void onHasCredentials() {
         final Disposable subscription = serverConfigInteractor.getServerConfig()
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(serverConfig -> {
-                    if (serverConfig != null)
-                        view.showLogin();
-                    else
-                        view.showServerSettings();
+                    view.showServerConfig(serverConfig);
                 });
 
         addSubscription(subscription);
