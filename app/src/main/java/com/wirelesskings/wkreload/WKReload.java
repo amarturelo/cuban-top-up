@@ -25,6 +25,7 @@ public class WKReload extends Application {
                 .name("wic")
                 //.encryptionKey(getKey())
                 .schemaVersion(42)
+                .deleteRealmIfMigrationNeeded()
                 //.modules(new MySchemaModule())
                 //.migration(new MyMigration())
                 .build();

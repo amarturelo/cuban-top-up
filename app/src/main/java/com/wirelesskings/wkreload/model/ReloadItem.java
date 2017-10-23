@@ -7,68 +7,79 @@ package com.wirelesskings.wkreload.model;
 public class ReloadItem {
     private String id;
     private String seller;
-    private int ammount;
+    private int amount;
     private int count;
     private String clientNumber;
     private String clientName;
+    private STATUS status;
 
     public ReloadItem() {
-    }
-
-    public ReloadItem(String id, String seller, int amount, int count, String clientNumber, String clientName) {
-        this.id = id;
-        this.seller = seller;
-        this.ammount = amount;
-        this.count = count;
-        this.clientNumber = clientNumber;
-        this.clientName = clientName;
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public ReloadItem setId(String id) {
         this.id = id;
+        return this;
     }
 
     public String getSeller() {
         return seller;
     }
 
-    public void setSeller(String seller) {
+    public ReloadItem setSeller(String seller) {
         this.seller = seller;
+        return this;
     }
 
-    public int getAmmount() {
-        return ammount;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setAmmount(int ammount) {
-        this.ammount = ammount;
+    public ReloadItem setAmount(int amount) {
+        this.amount = amount;
+        return this;
     }
 
     public int getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public ReloadItem setCount(int count) {
         this.count = count;
+        return this;
     }
 
     public String getClientNumber() {
         return clientNumber;
     }
 
-    public void setClientNumber(String clientNumber) {
+    public ReloadItem setClientNumber(String clientNumber) {
         this.clientNumber = clientNumber;
+        return this;
     }
 
     public String getClientName() {
         return clientName;
     }
 
-    public void setClientName(String clientName) {
+    public ReloadItem setClientName(String clientName) {
         this.clientName = clientName;
+        return this;
+    }
+
+    public STATUS getStatus() {
+        return status;
+    }
+
+    public ReloadItem setStatus(STATUS status) {
+        this.status = status;
+        return this;
+    }
+
+    public enum STATUS{
+        SEND,INPROGRESS,SUCCESS
     }
 }

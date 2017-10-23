@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wirelesskings.wkreload.R;
@@ -37,8 +38,21 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
         ReloadItem reloadItem = reloadItems.get(position);
         holder.client_name.setText(reloadItem.getClientName());
         holder.client_number.setText(reloadItem.getClientNumber());
-        holder.amount.setText(String.valueOf(reloadItem.getAmmount()));
-        holder.count.setText("x"+String.valueOf(reloadItem.getCount()));
+        holder.amount.setText(String.valueOf(reloadItem.getAmount()));
+        holder.count.setText("x" + String.valueOf(reloadItem.getCount()));
+
+        switch (reloadItem.getStatus()) {
+            case SEND:
+                holder.status.setImageResource(R.drawable.ic_done_black_24dp);
+                break;
+            case INPROGRESS:
+                holder.status.setImageResource(R.drawable.ic_in_progress_black_24dp);
+                break;
+            case SUCCESS:
+                holder.status.setImageResource(R.drawable.ic_done_all_black_24dp);
+                break;
+        }
+
         holder.seller.setText(reloadItem.getSeller());
     }
 
@@ -65,6 +79,9 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
 
         @BindView(R.id.tv_date)
         TextView date;
+
+        @BindView(R.id.iv_status)
+        ImageView status;
 
         public ViewHolder(View itemView) {
             super(itemView);

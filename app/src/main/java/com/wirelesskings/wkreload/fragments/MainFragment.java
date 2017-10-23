@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wirelesskings.wkreload.R;
+import com.wirelesskings.wkreload.adapter.DividerItemDecoration;
 import com.wirelesskings.wkreload.adapter.ReloadAdapterRecyclerView;
 import com.wirelesskings.wkreload.model.ReloadItem;
 
@@ -43,17 +44,33 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         reloadList.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        reloadList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
         List<ReloadItem> reloadItems = new ArrayList<>();
 
-        reloadItems.add(new ReloadItem("45", "Denis", 20, 2, "52950107", "Alberto"));
-        reloadItems.add(new ReloadItem("45", "Lazaro", 40, 1, "52858552", "Rosendo"));
-        reloadItems.add(new ReloadItem("45", "Denis", 15, 2, "52950107", "Alberto"));
-        reloadItems.add(new ReloadItem("45", "Adriana", 50, 4, "52659889", "Alberto"));
-        reloadItems.add(new ReloadItem("45", "Nelsy", 40, 3, "52950107", "Alberto"));
-        reloadItems.add(new ReloadItem("45", "Yslen", 20, 1, "52950107", "Alberto"));
-        reloadItems.add(new ReloadItem("45", "Richard", 10, 3, "52950107", "Alberto"));
-        reloadItems.add(new ReloadItem("45", "Robert", 20, 2, "52950107", "Alberto"));
+        reloadItems.add(new ReloadItem()
+                .setId("45")
+                .setStatus(ReloadItem.STATUS.INPROGRESS)
+                .setAmount(20)
+                .setClientName("Alberto")
+                .setClientNumber("52455665")
+                .setCount(2));
+
+        reloadItems.add(new ReloadItem()
+                .setId("46")
+                .setStatus(ReloadItem.STATUS.SEND)
+                .setAmount(40)
+                .setClientName("Denis")
+                .setClientNumber("52854578")
+                .setCount(2));
+
+        reloadItems.add(new ReloadItem()
+                .setId("89")
+                .setStatus(ReloadItem.STATUS.SUCCESS)
+                .setAmount(50)
+                .setClientName("Josue")
+                .setClientNumber("53568947")
+                .setCount(1));
+
 
         ReloadAdapterRecyclerView reloadAdapterRecyclerView = new ReloadAdapterRecyclerView(reloadItems);
         reloadList.setAdapter(reloadAdapterRecyclerView);
