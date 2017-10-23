@@ -1,4 +1,4 @@
-package com.wirelesskings.wkreload.domain.model;
+package com.wirelesskings.wkreload.domain.model.internal;
 
 /**
  * Created by Alberto on 18/10/2017.

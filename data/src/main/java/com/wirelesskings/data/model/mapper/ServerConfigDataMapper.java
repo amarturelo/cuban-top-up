@@ -1,7 +1,7 @@
 package com.wirelesskings.data.model.mapper;
 
-import com.wirelesskings.data.model.RealmServerConfig;
-import com.wirelesskings.wkreload.domain.model.ServerConfig;
+import com.wirelesskings.data.model.internal.RealmServerConfig;
+import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 
 import java.util.ArrayList;
 import java.util.List;

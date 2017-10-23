@@ -1,19 +1,13 @@
 package com.wirelesskings.data.repositories;
 
-import com.wirelesskings.data.model.RealmServerConfig;
+import com.wirelesskings.data.model.internal.RealmServerConfig;
 import com.wirelesskings.data.model.mapper.ServerConfigDataMapper;
-import com.wirelesskings.wkreload.domain.model.ServerConfig;
+import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 import com.wirelesskings.wkreload.domain.repositories.ServerConfigRepositoy;
 
-import java.util.List;
-
 import io.reactivex.Completable;
-import io.reactivex.CompletableEmitter;
-import io.reactivex.CompletableOnSubscribe;
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
-import io.reactivex.annotations.NonNull;
 import io.realm.Realm;
 import io.realm.RealmResults;
 

@@ -1,6 +1,6 @@
 package com.wirelesskings.wkreload.domain.repositories;
 
-import com.wirelesskings.wkreload.domain.model.ServerConfig;
+import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;

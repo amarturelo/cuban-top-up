@@ -1,0 +1,34 @@
+package com.wirelesskings.data.model;
+
+import io.realm.RealmObject;
+
+/**
+ * Created by Alberto on 23/10/2017.
+ */
+
+public class RealmSeller extends RealmObject {
+
+    private String name;
+    private String amount;
+
+    public RealmSeller() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public RealmSeller setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public RealmSeller setAmount(String amount) {
+        this.amount = amount;
+        return this;
+    }
+}
