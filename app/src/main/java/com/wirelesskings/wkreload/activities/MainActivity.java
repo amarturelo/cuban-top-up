@@ -4,27 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.github.javiersantos.bottomdialogs.BottomDialog;
-import com.wirelesskings.data.mail.async.CallSender;
-import com.wirelesskings.data.mail.async.OnStateChangedListener;
-import com.wirelesskings.data.mail.rx.RxCallReceiver;
-import com.wirelesskings.data.mail.rx.RxCallSender;
-import com.wirelesskings.data.mail.settings.Constants;
-import com.wirelesskings.data.mail.settings.Setting;
 import com.wirelesskings.wkreload.R;
-
-import java.util.ArrayList;
-
-import me.drakeet.materialdialog.MaterialDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -98,17 +86,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void sendMail() {
+    /*private void sendMail() {
         Setting mSetting = new Setting("amarturelo@nauta.cu", "adriana*2017");
         mSetting.setServerType(Constants.SMTP_PLAIN); //0 for plain , 1 for ssl
         mSetting.setHost("smtp.nauta.cu");
         mSetting.setPort(Constants.SMTP_PLAIN_PORT); //25 for smtp plain,465 for smtp ssl
 
-        /*RxCallSender rxCallSender = new RxCallSender(mSetting, 2, 1000);
+        *//*RxCallSender rxCallSender = new RxCallSender(mSetting, 2, 1000);
 
         rxCallSender.sender("Test", "texto", "amarturelo@nauta.cu")
                 .subscribe(() -> System.out.println("subscribe " + "complete")
-                        , throwable -> System.out.println("error " + throwable.toString()));*/
+                        , throwable -> System.out.println("error " + throwable.toString()));*//*
 
     }
 
@@ -121,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         RxCallReceiver rxCallReceiver = new RxCallReceiver(2, 1000, mSetting);
 
         rxCallReceiver.receiver("Toma").subscribe(o -> Log.d("Main", o.toString()), throwable -> Log.d("Main", throwable.toString()));
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

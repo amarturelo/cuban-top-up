@@ -29,4 +29,6 @@ public abstract class BasePresenter<T extends BaseContract.View>
   protected void clearSubscriptions() {
     compositeSubscription.clear();
   }
+
+
 }

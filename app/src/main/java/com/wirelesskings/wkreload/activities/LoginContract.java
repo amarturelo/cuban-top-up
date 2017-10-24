@@ -15,5 +15,6 @@ public interface LoginContract {
 
         void onHasCredentials();
 
+        void findUpdate(String nauta_mail, String nauta_password, String wk_username, String wk_password);
     }
 }

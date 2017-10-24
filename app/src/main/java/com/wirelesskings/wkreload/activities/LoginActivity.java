@@ -1,7 +1,6 @@
 package com.wirelesskings.wkreload.activities;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -9,14 +8,11 @@ import com.wirelesskings.data.model.mapper.ServerConfigDataMapper;
 import com.wirelesskings.data.repositories.RealmServerConfigRepository;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.domain.interactors.ServerConfigInteractor;
+import com.wirelesskings.wkreload.domain.model.internal.Credentials;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 import com.wirelesskings.wkreload.executor.JobExecutor;
-import com.wirelesskings.wkreload.fragments.FragmentChangeManager;
 import com.wirelesskings.wkreload.fragments.LoginFragment;
 import com.wirelesskings.wkreload.fragments.NautaSettingsFragment;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View,
@@ -74,6 +70,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void onLoginSettings(String email, String password) {
+        serverConfig.setCredentials(new Credentials().setUsername(email).setPassword(password));
 
+        loginPresenter.findUpdate(serverConfig.getEmail(), serverConfig.getPassword(), serverConfig.getCredentials().getUsername(), serverConfig.getCredentials().getPassword());
     }
 }

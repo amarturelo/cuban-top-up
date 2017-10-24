@@ -37,10 +37,13 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
         final Disposable subscription = serverConfigInteractor.getServerConfig()
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(serverConfig -> {
-                    view.showServerConfig(serverConfig);
-                });
+                .subscribe(serverConfig -> view.showServerConfig(serverConfig));
 
         addSubscription(subscription);
+    }
+
+    @Override
+    public void findUpdate(String nauta_mail, String nauta_password, String wk_username, String wk_password) {
+
     }
 }
