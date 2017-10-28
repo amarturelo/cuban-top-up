@@ -71,6 +71,110 @@ public class MainFragment extends Fragment {
                 .setClientNumber("53568947")
                 .setCount(1));
 
+        reloadItems.add(new ReloadItem()
+                .setId("89")
+                .setStatus(ReloadItem.STATUS.SUCCESS)
+                .setAmount(50)
+                .setClientName("Josue")
+                .setClientNumber("53568947")
+                .setCount(1));
+
+        reloadItems.add(new ReloadItem()
+                .setId("89")
+                .setStatus(ReloadItem.STATUS.SUCCESS)
+                .setAmount(50)
+                .setClientName("Josue")
+                .setClientNumber("53568947")
+                .setCount(1));
+
+        reloadItems.add(new ReloadItem()
+                .setId("89")
+                .setStatus(ReloadItem.STATUS.SUCCESS)
+                .setAmount(50)
+                .setClientName("Josue")
+                .setClientNumber("53568947")
+                .setCount(1));
+
+        reloadItems.add(new ReloadItem()
+                .setId("89")
+                .setStatus(ReloadItem.STATUS.SUCCESS)
+                .setAmount(50)
+                .setClientName("Josue")
+                .setClientNumber("53568947")
+                .setCount(1));
+
+        reloadItems.add(new ReloadItem()
+                .setId("89")
+                .setStatus(ReloadItem.STATUS.SUCCESS)
+                .setAmount(50)
+                .setClientName("Josue")
+                .setClientNumber("53568947")
+                .setCount(1));
+
+        reloadItems.add(new ReloadItem()
+                .setId("89")
+                .setStatus(ReloadItem.STATUS.SUCCESS)
+                .setAmount(50)
+                .setClientName("Josue")
+                .setClientNumber("53568947")
+                .setCount(1));
+
+        reloadItems.add(new ReloadItem()
+                .setId("89")
+                .setStatus(ReloadItem.STATUS.SUCCESS)
+                .setAmount(50)
+                .setClientName("Josue")
+                .setClientNumber("53568947")
+                .setCount(1));
+
+        reloadItems.add(new ReloadItem()
+                .setId("89")
+                .setStatus(ReloadItem.STATUS.SUCCESS)
+                .setAmount(50)
+                .setClientName("Josue")
+                .setClientNumber("53568947")
+                .setCount(1));
+
+        reloadItems.add(new ReloadItem()
+                .setId("89")
+                .setStatus(ReloadItem.STATUS.SUCCESS)
+                .setAmount(50)
+                .setClientName("Josue")
+                .setClientNumber("53568947")
+                .setCount(1));
+
+        reloadItems.add(new ReloadItem()
+                .setId("89")
+                .setStatus(ReloadItem.STATUS.SUCCESS)
+                .setAmount(50)
+                .setClientName("Josue")
+                .setClientNumber("53568947")
+                .setCount(1));
+
+        reloadItems.add(new ReloadItem()
+                .setId("89")
+                .setStatus(ReloadItem.STATUS.SUCCESS)
+                .setAmount(50)
+                .setClientName("Josue")
+                .setClientNumber("53568947")
+                .setCount(1));
+
+        reloadItems.add(new ReloadItem()
+                .setId("89")
+                .setStatus(ReloadItem.STATUS.SUCCESS)
+                .setAmount(50)
+                .setClientName("Josue")
+                .setClientNumber("53568947")
+                .setCount(1));
+
+        reloadItems.add(new ReloadItem()
+                .setId("89")
+                .setStatus(ReloadItem.STATUS.SUCCESS)
+                .setAmount(50)
+                .setClientName("Josue")
+                .setClientNumber("53568947")
+                .setCount(1));
+
 
         ReloadAdapterRecyclerView reloadAdapterRecyclerView = new ReloadAdapterRecyclerView(reloadItems);
         reloadList.setAdapter(reloadAdapterRecyclerView);

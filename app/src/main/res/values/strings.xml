@@ -20,6 +20,9 @@
     <string name="recharge">Recargar</string>
     <string name="hint_client_name">Nombre de Cliente</string>
     <string name="hint_client_number">Numero del cliente</string>
+    <string name="txt_cancel">Cancelar</string>
+    <string name="txt_reload">Recargar</string>
+    <string name="txt_debit">Débito</string>
 
     <string-array name="array_amount">
         <item>20</item>
@@ -34,4 +37,5 @@
         <item>x3</item>
         <item>x4</item>
     </string-array>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>

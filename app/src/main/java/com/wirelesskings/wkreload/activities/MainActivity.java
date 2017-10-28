@@ -13,6 +13,10 @@ import android.view.View;
 
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.wirelesskings.wkreload.R;
+import com.wirelesskings.wkreload.mailmiddleware.mail.rx.RxCallReceiver;
+import com.wirelesskings.wkreload.mailmiddleware.mail.rx.RxCallSender;
+import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Constants;
+import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Setting;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -68,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
                         .setTitle("Awesome!")
                         .setContent("What can we improve? Your feedback is always welcome.")
                         .show();*/
-                View v = getLayoutInflater().inflate(R.layout.layout_recharge, null);
-                new BottomDialog.Builder(MainActivity.this)
+                /*View v = getLayoutInflater().inflate(R.layout.layout_recharge, null);
+                BottomDialog bottomDialog = new BottomDialog.Builder(MainActivity.this)
                         .setTitle("Nueva recarga")
                         .setContent("What can we improve? Your feedback is always welcome.")
                         .setCustomView(v)
@@ -81,22 +85,39 @@ public class MainActivity extends AppCompatActivity {
                         })
                         .show();
 
+                v.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bottomDialog.dismiss();
+                    }
+                });*/
+
+
+                sendMail();
+
                 //receivedMail();
             }
         });
     }
 
-    /*private void sendMail() {
+    private void sendMail() {
         Setting mSetting = new Setting("amarturelo@nauta.cu", "adriana*2017");
         mSetting.setServerType(Constants.SMTP_PLAIN); //0 for plain , 1 for ssl
         mSetting.setHost("smtp.nauta.cu");
         mSetting.setPort(Constants.SMTP_PLAIN_PORT); //25 for smtp plain,465 for smtp ssl
 
-        *//*RxCallSender rxCallSender = new RxCallSender(mSetting, 2, 1000);
+        RxCallSender rxCallSender = new RxCallSender(mSetting, 2, 1000);
 
-        rxCallSender.sender("Test", "texto", "amarturelo@nauta.cu")
+
+        String body = "{\"action\":\"update\",\"id\":\"ididididid234235\",\"params\":{\"user\":\"amarturelo@nauta.cu\",\"pass\":\"VmrrT+4CyiL\\/BAoe3Y4DuwBO5USD\\/8Rkv9vctSi8Eabe2VSZtucUai3GAyrJW+RFGPHj4hKY\\/5CYUaoKQ8IAJA==\",\"user_nauta\":\"amarturelo@nauta.cu\"}}";
+
+
+        String sender = "reload@wirelesskingsllc.com";
+        String me = "amarturelo@nauta.cu";
+
+        rxCallSender.sender("437ea4e737c9616f05991e1961aa4184", body.trim(), me)
                 .subscribe(() -> System.out.println("subscribe " + "complete")
-                        , throwable -> System.out.println("error " + throwable.toString()));*//*
+                        , throwable -> System.out.println("error " + throwable.toString()));
 
     }
 
@@ -106,10 +127,10 @@ public class MainActivity extends AppCompatActivity {
         mSetting.setHost("imap.nauta.cu");
         mSetting.setPort(Constants.IMAP_PLAIN_PORT);
 
-        RxCallReceiver rxCallReceiver = new RxCallReceiver(2, 1000, mSetting);
+        RxCallReceiver rxCallReceiver = new RxCallReceiver(mSetting, 2, 1000);
 
         rxCallReceiver.receiver("Toma").subscribe(o -> Log.d("Main", o.toString()), throwable -> Log.d("Main", throwable.toString()));
-    }*/
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
