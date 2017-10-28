@@ -2,6 +2,12 @@ package com.wirelesskings.wkreload;
 
 import android.app.Application;
 
+import com.wirelesskings.data.model.RealmClient;
+import com.wirelesskings.data.model.RealmReload;
+import com.wirelesskings.data.model.RealmSeller;
+
+import java.util.Date;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -31,5 +37,30 @@ public class WKReload extends Application {
                 .build();
 
         Realm.setDefaultConfiguration(config);
+
+        insertData();
+    }
+
+    private void insertData() {
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.beginTransaction();
+
+        RealmReload realmReload = new RealmReload()
+                .setAmount(50)
+                .setId("20")
+                .setCount(2)
+                .setDate(new Date().getTime())
+                .setRealmClient(new RealmClient()
+                        .setName("Alberto")
+                        .setNumber("52950107"))
+                .setRealmSeller(new RealmSeller()
+                        .setName("Denis")
+                        .setAmount("2100"));
+
+        realm.insertOrUpdate(realmReload);
+        realm.commitTransaction();
+        realm.close();
+
     }
 }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.model.ReloadItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -23,8 +24,8 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
 
     private List<ReloadItem> reloadItems;
 
-    public ReloadAdapterRecyclerView(List<ReloadItem> reloadItems) {
-        this.reloadItems = reloadItems;
+    public ReloadAdapterRecyclerView() {
+        this.reloadItems = new ArrayList<>();
     }
 
     @Override
@@ -40,18 +41,18 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
         holder.client_number.setText(reloadItem.getClientNumber());
         holder.amount.setText(String.valueOf(reloadItem.getAmount()));
         holder.count.setText("x" + String.valueOf(reloadItem.getCount()));
-
-        switch (reloadItem.getStatus()) {
-            case SEND:
-                holder.status.setImageResource(R.drawable.ic_done_black_24dp);
-                break;
-            case INPROGRESS:
-                holder.status.setImageResource(R.drawable.ic_in_progress_black_24dp);
-                break;
-            case SUCCESS:
-                holder.status.setImageResource(R.drawable.ic_done_all_black_24dp);
-                break;
-        }
+        if (reloadItem.getStatus() != null)
+            switch (reloadItem.getStatus()) {
+                case SEND:
+                    holder.status.setImageResource(R.drawable.ic_done_black_24dp);
+                    break;
+                case INPROGRESS:
+                    holder.status.setImageResource(R.drawable.ic_in_progress_black_24dp);
+                    break;
+                case SUCCESS:
+                    holder.status.setImageResource(R.drawable.ic_done_all_black_24dp);
+                    break;
+            }
 
         holder.seller.setText(reloadItem.getSeller());
     }
@@ -88,4 +89,50 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
             ButterKnife.bind(this, itemView);
         }
     }
+
+    public void inserted(List<ReloadItem> items) {
+        reloadItems.clear();
+        for (ReloadItem reloadItem :
+                items) {
+            add(reloadItem);
+        }
+        notifyDataSetChanged();
+    }
+
+    private void add(ReloadItem reloadItem) {
+        reloadItems.add(reloadItem);
+    }
+
+    private void change(ReloadItem reloadItem) {
+        int i = reloadItems.indexOf(reloadItem);
+        if (i != -1) {
+            reloadItems.remove(reloadItem);
+            reloadItems.add(i, reloadItem);
+            notifyItemChanged(i);
+        }
+    }
+
+    private void deleted(ReloadItem reloadItem) {
+        int i = reloadItems.indexOf(reloadItem);
+        if (i != -1) {
+            reloadItems.remove(reloadItem);
+            notifyItemRemoved(i);
+        }
+    }
+
+    public void changed(List<ReloadItem> items) {
+        for (ReloadItem reloadItem :
+                items) {
+            change(reloadItem);
+        }
+    }
+
+    public void deleted(List<ReloadItem> items) {
+        for (ReloadItem reloadItem :
+                items) {
+            deleted(reloadItem);
+        }
+    }
+
+
 }

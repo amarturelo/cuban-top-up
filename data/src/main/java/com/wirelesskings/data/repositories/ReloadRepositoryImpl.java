@@ -1,5 +1,7 @@
 package com.wirelesskings.data.repositories;
 
+import android.util.Log;
+
 import com.wirelesskings.data.model.RealmReload;
 import com.wirelesskings.data.model.mapper.ReloadDataMapper;
 import com.wirelesskings.wkreload.domain.model.CollectionChange;
@@ -36,12 +38,14 @@ public class ReloadRepositoryImpl implements ReloadRepository {
     public Observable<CollectionChange<Reload>> reloads() {
         return Observable.create(new ObservableOnSubscribe<CollectionChange<Reload>>() {
             @Override
-            public void subscribe(@NonNull ObservableEmitter<CollectionChange<Reload>> e) throws Exception {
+            public void subscribe(@NonNull ObservableEmitter<CollectionChange<Reload>> emitter) throws Exception {
                 CollectionChange<Reload> collectionChange = new CollectionChange<Reload>();
 
 
                 Realm realm = Realm.getDefaultInstance();
-                realm.where(RealmReload.class).findAll().addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<RealmReload>>() {
+
+
+                realm.where(RealmReload.class).findAllAsync().addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<RealmReload>>() {
                     @Override
                     public void onChange(RealmResults<RealmReload> realmReloads, OrderedCollectionChangeSet changeSet) {
                         if (changeSet != null) {
@@ -50,7 +54,7 @@ public class ReloadRepositoryImpl implements ReloadRepository {
                                 List<Reload> insertions = new ArrayList<>();
                                 for (int i :
                                         changeSet.getInsertions()) {
-                                    insertions.add(reloadDataMapper.transform(realmReloads.get(i)));
+                                    insertions.add(reloadDataMapper.transform(realm.copyFromRealm(realmReloads.get(i))));
                                 }
                                 collectionChange.setInserted(insertions);
                             }
@@ -59,7 +63,7 @@ public class ReloadRepositoryImpl implements ReloadRepository {
                                 List<Reload> changed = new ArrayList<>();
                                 for (int i :
                                         changeSet.getChanges()) {
-                                    changed.add(reloadDataMapper.transform(realmReloads.get(i)));
+                                    changed.add(reloadDataMapper.transform(realm.copyFromRealm(realmReloads.get(i))));
                                 }
                                 collectionChange.setInserted(changed);
                             }
@@ -68,11 +72,16 @@ public class ReloadRepositoryImpl implements ReloadRepository {
                                 List<Reload> deletions = new ArrayList<>();
                                 for (int i :
                                         changeSet.getDeletions()) {
-                                    deletions.add(reloadDataMapper.transform(realmReloads.get(i)));
+                                    deletions.add(reloadDataMapper.transform(realm.copyFromRealm(realmReloads.get(i))));
                                 }
                                 collectionChange.setInserted(deletions);
                             }
+                        } else {
+                            List<Reload> insertions = new ArrayList<>();
+                            insertions.addAll(reloadDataMapper.transform(realm.copyFromRealm(realmReloads)));
+                            collectionChange.setInserted(insertions);
                         }
+                        emitter.onNext(collectionChange);
                     }
                 });
             }
