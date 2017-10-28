@@ -14,12 +14,10 @@ import com.wirelesskings.data.repositories.ReloadRepositoryImpl;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.adapter.DividerItemDecoration;
 import com.wirelesskings.wkreload.adapter.ReloadAdapterRecyclerView;
-import com.wirelesskings.wkreload.domain.interactors.ReloadsInteractors;
-import com.wirelesskings.wkreload.domain.model.Reload;
+import com.wirelesskings.wkreload.domain.interactors.ReloadsInteractor;
 import com.wirelesskings.wkreload.model.ReloadItem;
 import com.wirelesskings.wkreload.model.mapper.ReloadItemDataMapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,7 +50,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = new ReloadsPresenter(
-                new ReloadsInteractors(
+                new ReloadsInteractor(
                         new ReloadRepositoryImpl(
                                 new ReloadDataMapper()
                         )

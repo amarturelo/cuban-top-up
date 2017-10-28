@@ -13,12 +13,15 @@ import android.view.View;
 
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.wirelesskings.wkreload.R;
+import com.wirelesskings.wkreload.dialogs.ReloadBottomDialog;
 import com.wirelesskings.wkreload.mailmiddleware.mail.rx.RxCallReceiver;
 import com.wirelesskings.wkreload.mailmiddleware.mail.rx.RxCallSender;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Constants;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Setting;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ReloadBottomDialog reloadBottomDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +30,13 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        reloadBottomDialog = new ReloadBottomDialog(this);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                reloadBottomDialog.show();
                 /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
                 /*MaterialDialog mMaterialDialog = new MaterialDialog(MainActivity.this);
@@ -93,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 });*/
 
 
-                sendMail();
+                //sendMail();
 
                 //receivedMail();
             }

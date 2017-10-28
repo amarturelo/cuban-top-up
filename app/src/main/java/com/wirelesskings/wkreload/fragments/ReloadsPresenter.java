@@ -3,7 +3,7 @@ package com.wirelesskings.wkreload.fragments;
 import android.support.annotation.NonNull;
 
 import com.wirelesskings.wkreload.BackgroundLooper;
-import com.wirelesskings.wkreload.domain.interactors.ReloadsInteractors;
+import com.wirelesskings.wkreload.domain.interactors.ReloadsInteractor;
 import com.wirelesskings.wkreload.model.mapper.ReloadItemDataMapper;
 import com.wirelesskings.wkreload.presenter.BasePresenter;
 
@@ -16,18 +16,18 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
         implements ReloadsContract.Presenter {
 
-    private ReloadsInteractors reloadsInteractors;
+    private ReloadsInteractor reloadsInteractor;
 
     private ReloadItemDataMapper reloadItemDataMapper;
 
-    public ReloadsPresenter(ReloadsInteractors reloadsInteractors, ReloadItemDataMapper reloadItemDataMapper) {
-        this.reloadsInteractors = reloadsInteractors;
+    public ReloadsPresenter(ReloadsInteractor reloadsInteractor, ReloadItemDataMapper reloadItemDataMapper) {
+        this.reloadsInteractor = reloadsInteractor;
         this.reloadItemDataMapper = reloadItemDataMapper;
     }
 
     @Override
     public void onReloads() {
-        addSubscription(reloadsInteractors.reloads()
+        addSubscription(reloadsInteractor.reloads()
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(reloadCollectionChange -> {

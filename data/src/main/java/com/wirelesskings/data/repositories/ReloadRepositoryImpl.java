@@ -11,6 +11,9 @@ import com.wirelesskings.wkreload.domain.repositories.ReloadRepository;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.CompletableEmitter;
+import io.reactivex.CompletableOnSubscribe;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -84,6 +87,16 @@ public class ReloadRepositoryImpl implements ReloadRepository {
                         emitter.onNext(collectionChange);
                     }
                 });
+            }
+        });
+    }
+
+    @Override
+    public Completable reload(String client_name, String client_number, int count, int amount) {
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(@NonNull CompletableEmitter emitter) throws Exception {
+                emitter.onComplete();
             }
         });
     }
