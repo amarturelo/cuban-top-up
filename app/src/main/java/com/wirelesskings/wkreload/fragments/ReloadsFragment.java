@@ -1,5 +1,6 @@
 package com.wirelesskings.wkreload.fragments;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import com.wirelesskings.data.repositories.ReloadRepositoryImpl;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.adapter.DividerItemDecoration;
 import com.wirelesskings.wkreload.adapter.ReloadAdapterRecyclerView;
+import com.wirelesskings.wkreload.dialogs.ViewReloadDialog;
 import com.wirelesskings.wkreload.domain.interactors.ReloadsInteractor;
 import com.wirelesskings.wkreload.model.ReloadItem;
 import com.wirelesskings.wkreload.model.mapper.ReloadItemDataMapper;
@@ -26,7 +28,7 @@ import butterknife.ButterKnife;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ReloadsFragment extends Fragment implements ReloadsContract.View {
+public class ReloadsFragment extends Fragment implements ReloadsContract.View, ReloadAdapterRecyclerView.Listened {
 
     public ReloadsFragment() {
     }
@@ -49,6 +51,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewReloadDialog = new ViewReloadDialog(getActivity());
         presenter = new ReloadsPresenter(
                 new ReloadsInteractor(
                         new ReloadRepositoryImpl(
@@ -71,9 +74,8 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View {
 
         reloadList.setLayoutManager(new LinearLayoutManager(getContext()));
         reloadList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
-        reloadAdapterRecyclerView = new ReloadAdapterRecyclerView();
+        reloadAdapterRecyclerView = new ReloadAdapterRecyclerView(this);
         reloadList.setAdapter(reloadAdapterRecyclerView);
-
         initFragment(savedInstanceState);
 
     }
@@ -94,8 +96,35 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View {
     }
 
     @Override
+    public void renderDebit(long debit) {
+        if (listened != null)
+            listened.onDebit(debit);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnReloadsFragmentListened)
+            listened = (OnReloadsFragmentListened) context;
+
+    }
+
+    private OnReloadsFragmentListened listened;
+
+    private ViewReloadDialog viewReloadDialog;
+
+    @Override
+    public void onClickItem(String id) {
+        viewReloadDialog.show(id);
+    }
+
+    public interface OnReloadsFragmentListened {
+        void onDebit(long debit);
     }
 }

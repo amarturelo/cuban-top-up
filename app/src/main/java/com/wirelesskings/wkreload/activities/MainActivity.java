@@ -10,18 +10,23 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.dialogs.ReloadBottomDialog;
+import com.wirelesskings.wkreload.fragments.ReloadsFragment;
+import com.wirelesskings.wkreload.fragments.ReloadsPresenter;
 import com.wirelesskings.wkreload.mailmiddleware.mail.rx.RxCallReceiver;
 import com.wirelesskings.wkreload.mailmiddleware.mail.rx.RxCallSender;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Constants;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Setting;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ReloadsFragment.OnReloadsFragmentListened {
 
     private ReloadBottomDialog reloadBottomDialog;
+
+    private TextView tvDebit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,77 +38,8 @@ public class MainActivity extends AppCompatActivity {
         reloadBottomDialog = new ReloadBottomDialog(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reloadBottomDialog.show();
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
-                /*MaterialDialog mMaterialDialog = new MaterialDialog(MainActivity.this);
-                mMaterialDialog
-                        .setTitle("MaterialDialog")
-                        .setMessage("Hello world!")
-                        .setPositiveButton("OK", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mMaterialDialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton("CANCEL", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mMaterialDialog.dismiss();
-                            }
-                        });
-
-                mMaterialDialog.show();*/
-
-                /*MaterialDialog mMaterialDialog = new MaterialDialog(MainActivity.this)
-                        .setTitle("Nueva recarga")
-                        .setContentView(R.layout.layout_recharge)
-                        .setPositiveButton("ACEPTAR", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                            }
-                        })
-                        .setNegativeButton("CANCELAR", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                            }
-                        });
-
-                mMaterialDialog.show();*/
-
-                /*new BottomDialog.Builder(MainActivity.this)
-                        .setTitle("Awesome!")
-                        .setContent("What can we improve? Your feedback is always welcome.")
-                        .show();*/
-                /*View v = getLayoutInflater().inflate(R.layout.layout_recharge, null);
-                BottomDialog bottomDialog = new BottomDialog.Builder(MainActivity.this)
-                        .setTitle("Nueva recarga")
-                        .setContent("What can we improve? Your feedback is always welcome.")
-                        .setCustomView(v)
-                        .onPositive(new BottomDialog.ButtonCallback() {
-                            @Override
-                            public void onClick(BottomDialog dialog) {
-                                Log.d("BottomDialogs", "Do something!");
-                            }
-                        })
-                        .show();
-
-                v.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        bottomDialog.dismiss();
-                    }
-                });*/
-
-
-                //sendMail();
-
-                //receivedMail();
-            }
-        });
+        fab.setOnClickListener(view -> reloadBottomDialog.show());
+        tvDebit = (TextView) findViewById(R.id.tv_debit);
     }
 
     private void sendMail() {
@@ -163,5 +99,10 @@ public class MainActivity extends AppCompatActivity {
     public static Intent getCallingIntent(Context context) {
         Intent callingIntent = new Intent(context, MainActivity.class);
         return callingIntent;
+    }
+
+    @Override
+    public void onDebit(long debit) {
+        tvDebit.setText("$"+String.valueOf(debit));
     }
 }

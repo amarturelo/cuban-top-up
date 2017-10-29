@@ -93,7 +93,7 @@ public class ReloadBottomDialog implements ReloadContract.View {
 
         buttonOk.findViewById(R.id.btn_ok).setOnClickListener(v1 -> {
             if (check()) {
-                /*presenter.onReload(clientName.getText().toString().trim(),
+                /*presenter.onViewReload(clientName.getText().toString().trim(),
                         clientNumber.getText().toString().trim(),
                         50, 2);*/
                 loading();

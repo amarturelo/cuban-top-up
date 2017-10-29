@@ -8,6 +8,16 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class RealmReload extends RealmObject {
+    public static final String ID = "id";
+    public static final String CLIENT = "realmClient";
+    public static final String SELLER = "realmSeller";
+    public static final String COUNT = "count";
+    public static final String AMOUNT = "amount";
+    public static final String DATE = "date";
+    public static final String STATUS = "status";
+    public static final String APP = "app";
+
+
     @PrimaryKey
     private String id;
     private RealmClient realmClient;

@@ -18,10 +18,13 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
 import io.reactivex.annotations.NonNull;
 import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 /**
@@ -89,6 +92,39 @@ public class ReloadRepositoryImpl implements ReloadRepository {
                 });
             }
         });
+    }
+
+    @Override
+    public Observable<Long> debit() {
+        return Observable.create(new ObservableOnSubscribe<Long>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<Long> emitter) throws Exception {
+                Realm realm = Realm.getDefaultInstance();
+                RealmResults<RealmReload> result = realm.where(RealmReload.class).findAllAsync();
+
+                result.addChangeListener(new RealmChangeListener<RealmResults<RealmReload>>() {
+                    @Override
+                    public void onChange(RealmResults<RealmReload> realmReloads) {
+                        long debit = 0;
+
+                        for (RealmReload realmReload :
+                                realmReloads) {
+                            debit += realmReload.getAmount() * realmReload.getCount();
+                        }
+                        emitter.onNext(debit);
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public Single<Reload> reloadById(String id) {
+        return Single.create((SingleOnSubscribe<RealmReload>) emitter -> {
+            Realm realm = Realm.getDefaultInstance();
+            RealmResults<RealmReload> result = realm.where(RealmReload.class).findAll();
+            emitter.onSuccess(realm.copyFromRealm(result.first()));
+        }).map(realmReload -> reloadDataMapper.transform(realmReload));
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wirelesskings.wkreload.R;
+import com.wirelesskings.wkreload.dialogs.ViewReloadDialog;
 import com.wirelesskings.wkreload.model.ReloadItem;
 
 import java.util.ArrayList;
@@ -24,8 +25,16 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
 
     private List<ReloadItem> reloadItems;
 
-    public ReloadAdapterRecyclerView() {
+    public interface Listened {
+        void onClickItem(String id);
+    }
+
+    private Listened listened;
+
+
+    public ReloadAdapterRecyclerView(Listened listened) {
         this.reloadItems = new ArrayList<>();
+        this.listened = listened;
     }
 
     @Override
@@ -54,6 +63,14 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
                     break;
             }
 
+        holder.root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listened != null)
+                    listened.onClickItem(reloadItem.getId());
+            }
+        });
+
         holder.seller.setText(reloadItem.getSeller());
     }
 
@@ -65,6 +82,9 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_name)
         TextView client_name;
+
+        @BindView(R.id.root)
+        View root;
 
         @BindView(R.id.tv_number)
         TextView client_number;

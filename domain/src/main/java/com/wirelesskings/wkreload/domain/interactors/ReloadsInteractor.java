@@ -6,6 +6,8 @@ import com.wirelesskings.wkreload.domain.repositories.ReloadRepository;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Alberto on 28/10/2017.
@@ -24,5 +26,13 @@ public class ReloadsInteractor {
 
     public Completable reload(String client_name, String client_number, int count, int amount) {
         return reloadRepository.reload(client_name,client_number, count,amount);
+    }
+
+    public Single<Reload> reloadById(String id) {
+        return reloadRepository.reloadById(id);
+    }
+
+    public Observable<Long> debit() {
+        return reloadRepository.debit();
     }
 }

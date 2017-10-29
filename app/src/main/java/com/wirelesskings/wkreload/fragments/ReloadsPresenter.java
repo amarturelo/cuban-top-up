@@ -26,6 +26,14 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
     }
 
     @Override
+    public void onDebit() {
+        addSubscription(reloadsInteractor.debit()
+                .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aLong -> view.renderDebit(aLong)));
+    }
+
+    @Override
     public void onReloads() {
         addSubscription(reloadsInteractor.reloads()
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
@@ -44,5 +52,6 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
     public void bindView(@NonNull ReloadsContract.View view) {
         super.bindView(view);
         onReloads();
+        onDebit();
     }
 }

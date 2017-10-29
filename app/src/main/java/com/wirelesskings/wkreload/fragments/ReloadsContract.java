@@ -14,9 +14,13 @@ public interface ReloadsContract {
         void renderInsertions(List<ReloadItem> reloads);
         void renderDeletions(List<ReloadItem> reloads);
         void renderChanges(List<ReloadItem> reloads);
+
+        void renderDebit(long debit);
     }
 
     interface Presenter extends BaseContract.Presenter<ReloadsContract.View> {
         void onReloads();
+
+        void onDebit();
     }
 }
