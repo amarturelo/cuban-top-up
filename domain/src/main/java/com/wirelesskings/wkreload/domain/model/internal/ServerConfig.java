@@ -5,6 +5,7 @@ package com.wirelesskings.wkreload.domain.model.internal;
  */
 
 public class ServerConfig {
+
     private String email;
     private String password;
 

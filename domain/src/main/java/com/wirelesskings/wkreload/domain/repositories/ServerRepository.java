@@ -7,5 +7,5 @@ import io.reactivex.Completable;
  */
 
 public interface ServerRepository {
-    Completable update(String nauta_mail, String nauta_password, String wk_username, String wk_password);
+    Completable update(String nauta_mail, String wk_username, String wk_password);
 }

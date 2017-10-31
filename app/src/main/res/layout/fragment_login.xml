@@ -69,9 +69,11 @@
                 android:layout_toLeftOf="@+id/stub">
 
                 <EditText
+                    android:id="@+id/et_user"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_user" />
+                    android:hint="@string/hint_user"
+                    android:text="amarturelo@nauta.cu" />
             </android.support.design.widget.TextInputLayout>
 
         </RelativeLayout>
@@ -83,31 +85,13 @@
             android:layout_marginTop="8dp">
 
             <EditText
+                android:id="@+id/et_pass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_password"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:text="123456" />
         </android.support.design.widget.TextInputLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/login_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/yellow"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="18dp"
-            android:text="@string/login"
-            android:textAllCaps="true"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
     </LinearLayout>
 
 </RelativeLayout>

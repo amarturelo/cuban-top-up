@@ -8,6 +8,8 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class RealmCredentials extends RealmObject {
+    private int status; //0 invalid 1 valid
+
     @PrimaryKey
     private String username;
     private String password;

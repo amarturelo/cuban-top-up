@@ -38,7 +38,10 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
         reloadBottomDialog = new ReloadBottomDialog(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(view -> reloadBottomDialog.show());
+        fab.setOnClickListener(view -> {
+            sendMail();
+            receivedMail();
+        });
         tvDebit = (TextView) findViewById(R.id.tv_debit);
     }
 
@@ -51,13 +54,17 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
         RxCallSender rxCallSender = new RxCallSender(mSetting, 2, 1000);
 
 
-        String body = "{\"action\":\"update\",\"id\":\"ididididid234235\",\"params\":{\"user\":\"amarturelo@nauta.cu\",\"pass\":\"VmrrT+4CyiL\\/BAoe3Y4DuwBO5USD\\/8Rkv9vctSi8Eabe2VSZtucUai3GAyrJW+RFGPHj4hKY\\/5CYUaoKQ8IAJA==\",\"user_nauta\":\"amarturelo@nauta.cu\"}}";
+        String bodyReload = "{\"action\":\"reload\",\"id\":\"ididididid234ddd235\",\"params\":{\"user\":\"amarturelo@nauta.cu\",\"pass\":\"MZAtfDUMcYT12HikEYHuiI2JAgBB4PLp4egp\\/ZqRpQsPzMOleaFdhCT759I0cTHR1okwBQ9Q6djhMaxe+D5w0A==\",\"user_nauta\":\"amarturelo@nauta.cu\",\"client\":{\"number\":53192289,\"name\":\"albertini\"},\"reload\":{\"count\":1,\"amount\":20}}}";
+        String bodyUpdate = "{\"action\":\"update\",\"id\":\"ididididid234235\",\"params\":{\"user\":\"amarturelo@nauta.cu\",\"pass\":\"MZAtfDUMcYT12HikEYHuiI2JAgBB4PLp4egp\\/ZqRpQsPzMOleaFdhCT759I0cTHR1okwBQ9Q6djhMaxe+D5w0A==\",\"user_nauta\":\"amarturelo@nauta.cu\"}}";
 
 
         String sender = "reload@wirelesskingsllc.com";
         String me = "amarturelo@nauta.cu";
 
-        rxCallSender.sender("437ea4e737c9616f05991e1961aa4184", body.trim(), me)
+        String updateSubject = "2bafc6c3270b0ee8f002e48f5f57773b";
+        String reloadSubject = "c5cf025ef4457b0b61d527584ee689ed";
+
+        rxCallSender.sender(updateSubject, bodyUpdate.trim(), sender)
                 .subscribe(() -> System.out.println("subscribe " + "complete")
                         , throwable -> System.out.println("error " + throwable.toString()));
 
@@ -69,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
         mSetting.setHost("imap.nauta.cu");
         mSetting.setPort(Constants.IMAP_PLAIN_PORT);
 
-        RxCallReceiver rxCallReceiver = new RxCallReceiver(mSetting, 2, 1000);
+        RxCallReceiver rxCallReceiver = new RxCallReceiver(mSetting, 6, 1000);
 
         rxCallReceiver.receiver("Toma").subscribe(o -> Log.d("Main", o.toString()), throwable -> Log.d("Main", throwable.toString()));
     }
@@ -103,6 +110,6 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
 
     @Override
     public void onDebit(long debit) {
-        tvDebit.setText("$"+String.valueOf(debit));
+        tvDebit.setText("$" + String.valueOf(debit));
     }
 }

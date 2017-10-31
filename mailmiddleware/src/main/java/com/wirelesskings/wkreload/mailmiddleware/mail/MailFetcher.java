@@ -1,5 +1,6 @@
 package com.wirelesskings.wkreload.mailmiddleware.mail;
 
+import com.sun.mail.imap.IMAPMessage;
 import com.sun.mail.imap.IMAPStore;
 import com.wirelesskings.wkreload.mailmiddleware.mail.model.Email;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Constants;
@@ -95,14 +96,15 @@ public class MailFetcher {
             e.printStackTrace();
         }
     }
+
     public void closeConecction() {
         try {
             store.close();
-        }
-        catch (MessagingException e){
+        } catch (MessagingException e) {
 
         }
     }
+
     public ArrayList<Email> fetchMail(String criteria) throws IOException, MessagingException {
 
         ArrayList<Email> Emails = new ArrayList<Email>();
@@ -123,14 +125,13 @@ public class MailFetcher {
 //        String android_id = criteria1;
 //        String app_id = criteria2;
 
-        //ESTO ES PARA SINO SE PUEDE LO DE LOS FILTROS
         // creates a search criterion
         final String keyword = String.format("%s", criteria);
         SearchTerm searchCondition = new SearchTerm() {
             @Override
             public boolean match(Message message) {
                 try {
-                    if (message.getSubject()!=null && message.getSubject().contains(keyword)) {
+                    if (message.getSubject() != null && ((IMAPMessage) message).getSender().equals(keyword)) {
                         return true;
                     }
                 } catch (MessagingException ex) {

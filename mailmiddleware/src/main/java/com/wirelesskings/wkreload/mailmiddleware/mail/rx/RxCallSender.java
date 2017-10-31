@@ -1,5 +1,7 @@
 package com.wirelesskings.wkreload.mailmiddleware.mail.rx;
 
+import android.util.Log;
+
 import com.wirelesskings.wkreload.mailmiddleware.mail.async.CallSender;
 import com.wirelesskings.wkreload.mailmiddleware.mail.async.OnStateChangedListener;
 import com.wirelesskings.wkreload.mailmiddleware.mail.rx.funtions.RetryWithDelay;
@@ -50,6 +52,7 @@ public class RxCallSender {
 
             @Override
             public void onSuccess(ArrayList<?> list) {
+                //Log.d(RxCallSender.class.getSimpleName(), " onSuccess");
                 e.onComplete();
             }
 

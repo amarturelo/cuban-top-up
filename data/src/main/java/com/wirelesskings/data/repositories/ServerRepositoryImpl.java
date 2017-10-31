@@ -1,9 +1,21 @@
 package com.wirelesskings.data.repositories;
 
+import android.util.Log;
+
 import com.wirelesskings.wkreload.domain.repositories.ServerRepository;
+import com.wirelesskings.wkreload.mailmiddleware.Middleware;
+import com.wirelesskings.wkreload.mailmiddleware.WKField;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import io.reactivex.Completable;
+import io.reactivex.CompletableSource;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.BiConsumer;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 /**
  * Created by Alberto on 24/10/2017.
@@ -12,35 +24,29 @@ import io.reactivex.functions.BiConsumer;
 public class ServerRepositoryImpl implements ServerRepository {
 
 
-    public ServerRepositoryImpl() {
+    private Middleware middleware;
+
+    public ServerRepositoryImpl(Middleware middleware) {
+        this.middleware = middleware;
     }
 
     @Override
-    public Completable update(String nauta_mail, String nauta_password, String wk_username, String wk_password) {
-        /*Setting senderSettings = new Setting(nauta_mail, nauta_password);
-        senderSettings.setServerType(Constants.SMTP_PLAIN); //0 for plain , 1 for ssl
-        senderSettings.setHost("smtp.nauta.cu");
-        senderSettings.setPort(Constants.SMTP_PLAIN_PORT); //25 for smtp plain,465 for smtp ssl
+    public Completable update(String nauta_mail, String wk_username, String wk_password) {
+        Map<String, Object> params = new LinkedHashMap<>();
+        params.put("user", wk_username);
+        params.put("pass", wk_password);
+        params.put("user_nauta", nauta_mail);
 
-        Setting receivedSetting = new Setting("amarturelo@nauta.cu", "adriana*2017");
-        receivedSetting.setServerType(Constants.IMAP_PLAIN);
-        receivedSetting.setHost("imap.nauta.cu");
-        receivedSetting.setPort(Constants.IMAP_PLAIN_PORT);
-
-        RxCallSender rxCallSender = new RxCallSender(senderSettings, 3, 5000);
-
-        RxCallReceiver rxCallReceiver = new RxCallReceiver(3, 5000, receivedSetting);
-
-
-        return rxCallSender.sender("", "", "reload.wirelesskingllc.com").concatWith(rxCallReceiver.receiver("")
-                .doOnEvent(new BiConsumer() {
-                    @Override
-                    public void accept(Object o, Object o2) throws Exception {
-
-                    }
-                })
-
-                .toCompletable());*/
-        return null;
+        return middleware.call("update", params).doAfterSuccess(new Consumer<Map<String, Object>>() {
+            @Override
+            public void accept(Map<String, Object> stringObjectMap) throws Exception {
+                Log.d("","");
+            }
+        }).flatMapCompletable(new Function<Map<String, Object>, CompletableSource>() {
+            @Override
+            public CompletableSource apply(@NonNull Map<String, Object> stringObjectMap) throws Exception {
+                return Completable.complete();
+            }
+        });
     }
 }

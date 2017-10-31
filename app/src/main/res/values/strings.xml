@@ -44,4 +44,5 @@
     <string name="txt_seller_amount">Precio de venta</string>
     <string name="txt_sell">Venta</string>
     <string name="txt_status">Estado</string>
+    <string name="title_filter">Filtrar</string>
 </resources>

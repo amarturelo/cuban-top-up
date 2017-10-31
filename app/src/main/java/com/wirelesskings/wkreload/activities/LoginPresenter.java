@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.wirelesskings.wkreload.domain.executor.ThreadExecutor;
 import com.wirelesskings.wkreload.domain.interactors.ServerConfigInteractor;
+import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
 import com.wirelesskings.wkreload.presenter.BasePresenter;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -21,9 +22,22 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
 
     private ServerConfigInteractor serverConfigInteractor;
 
+    private ServerInteractor serverInteractor;
+
+    public LoginPresenter(ThreadExecutor threadExecutor, ServerConfigInteractor serverConfigInteractor, ServerInteractor serverInteractor) {
+        this.threadExecutor = threadExecutor;
+        this.serverConfigInteractor = serverConfigInteractor;
+        this.serverInteractor = serverInteractor;
+    }
+
     public LoginPresenter(ThreadExecutor threadExecutor, ServerConfigInteractor serverConfigInteractor) {
         this.threadExecutor = threadExecutor;
         this.serverConfigInteractor = serverConfigInteractor;
+    }
+
+    public LoginPresenter setServerInteractor(ServerInteractor serverInteractor) {
+        this.serverInteractor = serverInteractor;
+        return this;
     }
 
     @Override
@@ -43,7 +57,10 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
     }
 
     @Override
-    public void findUpdate(String nauta_mail, String nauta_password, String wk_username, String wk_password) {
-
+    public void login(String nauta_mail, String nauta_password, String wk_username, String wk_password) {
+        addSubscription(serverInteractor.login(nauta_mail, wk_username, wk_password)
+                .subscribeOn(Schedulers.from(threadExecutor))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> view.loginComplete()));
     }
 }

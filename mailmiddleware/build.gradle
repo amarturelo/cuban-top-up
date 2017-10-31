@@ -27,8 +27,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
+    compile 'com.google.code.gson:gson:2.8.2'
     compile 'io.reactivex.rxjava2:rxjava:2.1.4'
+    compile files('libs/mail.jar')
+    compile files('libs/additionnal.jar')
+    compile files('libs/activation.jar')
+    compile files('libs/commons-codec-1.7.jar')
 }

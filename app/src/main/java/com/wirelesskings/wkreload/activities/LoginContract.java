@@ -9,12 +9,14 @@ public interface LoginContract {
     interface View extends BaseContract.View {
 
         void showServerConfig(ServerConfig serverConfig);
+
+        void loginComplete();
     }
 
     interface Presenter extends BaseContract.Presenter<View> {
 
         void onHasCredentials();
 
-        void findUpdate(String nauta_mail, String nauta_password, String wk_username, String wk_password);
+        void login(String nauta_mail, String nauta_password, String wk_username, String wk_password);
     }
 }

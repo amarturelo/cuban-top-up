@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.wirelesskings.wkreload.R;
 
@@ -19,7 +20,9 @@ public class LoginFragment extends Fragment {
 
     public static final String ARGS_USERNAME = "args_username";
 
-    private OnFragmentLoginListened mListener;
+    public EditText mUser;
+    public EditText mPass;
+
 
     public LoginFragment() {
     }
@@ -33,34 +36,25 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
+
+        mUser = view.findViewById(R.id.et_user);
+        mPass = view.findViewById(R.id.et_pass);
+        return view;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof NautaSettingsFragment.OnFragmentNautaSettingsListened) {
-            mListener = (OnFragmentLoginListened) context;
-        } /*else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }*/
+
     }
 
-    public static LoginFragment newInstance(String email) {
+    public static LoginFragment newInstance() {
         Bundle args = new Bundle();
-        args.putString(ARGS_USERNAME, email);
+        //args.putString(ARGS_USERNAME, email);
         LoginFragment fragment = new LoginFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-
-    public interface OnFragmentLoginListened {
-        void onLoginSettings(String email, String password);
-    }
-
-    private String getArgsUsername() {
-        return getArguments().getString(ARGS_USERNAME);
-    }
 }
