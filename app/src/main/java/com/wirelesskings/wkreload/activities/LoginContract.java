@@ -10,6 +10,8 @@ public interface LoginContract {
 
         void showServerConfig(ServerConfig serverConfig);
 
+        void onLoginSend(String id);
+
         void loginComplete();
     }
 
@@ -17,6 +19,8 @@ public interface LoginContract {
 
         void onHasCredentials();
 
-        void login(String nauta_mail, String nauta_password, String wk_username, String wk_password);
+        void login(String nauta_mail, String wk_username, String wk_password);
+
+        void onResult(String result);
     }
 }

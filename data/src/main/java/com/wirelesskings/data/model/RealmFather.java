@@ -4,23 +4,22 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by Alberto on 23/10/2017.
+ * Created by Alberto on 01/11/2017.
  */
 
-public class RealmSeller extends RealmObject {
-
+public class RealmFather extends RealmObject {
     @PrimaryKey
     private String name;
     private String amount;
 
-    public RealmSeller() {
+    public RealmFather() {
     }
 
     public String getName() {
         return name;
     }
 
-    public RealmSeller setName(String name) {
+    public RealmFather setName(String name) {
         this.name = name;
         return this;
     }
@@ -29,7 +28,7 @@ public class RealmSeller extends RealmObject {
         return amount;
     }
 
-    public RealmSeller setAmount(String amount) {
+    public RealmFather setAmount(String amount) {
         this.amount = amount;
         return this;
     }

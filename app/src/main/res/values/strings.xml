@@ -45,4 +45,7 @@
     <string name="txt_sell">Venta</string>
     <string name="txt_status">Estado</string>
     <string name="title_filter">Filtrar</string>
+    <string name="loading">Cargando...</string>
+    <string name="waiting">Espere por favor</string>
+    <string name="loading_content">La espera esta en dependecia de la velocidad de su conección, si desea cancelar la operacion puede dar CLICK en CANCELAR</string>
 </resources>

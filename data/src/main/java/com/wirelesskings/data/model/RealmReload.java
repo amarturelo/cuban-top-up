@@ -20,8 +20,8 @@ public class RealmReload extends RealmObject {
 
     @PrimaryKey
     private String id;
-    private RealmClient realmClient;
-    private RealmSeller realmSeller;
+    private RealmClient client;
+    private RealmSeller seller;
     private int count;
     private int amount;
     private long date;
@@ -41,20 +41,20 @@ public class RealmReload extends RealmObject {
     }
 
     public RealmClient getRealmClient() {
-        return realmClient;
+        return client;
     }
 
-    public RealmReload setRealmClient(RealmClient realmClient) {
-        this.realmClient = realmClient;
+    public RealmReload setRealmClient(RealmClient client) {
+        this.client = client;
         return this;
     }
 
     public RealmSeller getRealmSeller() {
-        return realmSeller;
+        return seller;
     }
 
     public RealmReload setRealmSeller(RealmSeller realmSeller) {
-        this.realmSeller = realmSeller;
+        this.seller = realmSeller;
         return this;
     }
 

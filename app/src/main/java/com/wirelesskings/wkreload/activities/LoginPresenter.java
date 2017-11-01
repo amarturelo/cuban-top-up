@@ -52,15 +52,21 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(serverConfig -> view.showServerConfig(serverConfig));
-
         addSubscription(subscription);
     }
 
     @Override
-    public void login(String nauta_mail, String nauta_password, String wk_username, String wk_password) {
-        addSubscription(serverInteractor.login(nauta_mail, wk_username, wk_password)
+    public void login(String nauta_mail, String wk_username, String wk_password) {
+        Disposable subscription = serverInteractor.update(wk_username, wk_password, nauta_mail)
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> view.loginComplete()));
+                .subscribe(() -> view.loginComplete());
+        addSubscription(subscription);
     }
+
+    @Override
+    public void onResult(String result) {
+
+    }
+
 }

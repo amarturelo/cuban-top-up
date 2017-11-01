@@ -9,23 +9,23 @@ import io.realm.RealmObject;
 
 public class RealmPromotion extends RealmObject {
 
-    private String promotion;
+    private String title;
 
     private long sdate;
 
     private long edate;
 
-    private RealmList<RealmReload> realmReloads;
+    private RealmList<RealmReload> reloads;
 
     public RealmPromotion() {
     }
 
     public String getPromotion() {
-        return promotion;
+        return title;
     }
 
     public RealmPromotion setPromotion(String promotion) {
-        this.promotion = promotion;
+        this.title = promotion;
         return this;
     }
 
@@ -48,11 +48,11 @@ public class RealmPromotion extends RealmObject {
     }
 
     public RealmList<RealmReload> getRealmReloads() {
-        return realmReloads;
+        return reloads;
     }
 
     public RealmPromotion setRealmReloads(RealmList<RealmReload> realmReloads) {
-        this.realmReloads = realmReloads;
+        this.reloads = realmReloads;
         return this;
     }
 }

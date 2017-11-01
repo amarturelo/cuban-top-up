@@ -12,6 +12,7 @@ import com.wirelesskings.data.model.mapper.ServerConfigDataMapper;
 import com.wirelesskings.data.repositories.RealmServerConfigRepository;
 import com.wirelesskings.data.repositories.ServerRepositoryImpl;
 import com.wirelesskings.wkreload.R;
+import com.wirelesskings.wkreload.dialogs.LoadingDialog;
 import com.wirelesskings.wkreload.domain.interactors.ServerConfigInteractor;
 import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
 import com.wirelesskings.wkreload.domain.model.internal.Credentials;
@@ -30,6 +31,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import me.drakeet.materialdialog.MaterialDialog;
+
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View {
 
@@ -44,6 +47,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     private NautaSettingsFragment nautaSettingsFragment;
     private LoginFragment loginFragment;
+
+    private LoadingDialog loadingDialog;
 
 
     @Override
@@ -64,6 +69,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     private void initComponents() {
+        loadingDialog = new LoadingDialog(this);
         buttom = findViewById(R.id.login_bottom);
         tvLoginBottom = (TextView) findViewById(R.id.tv_login_bottom);
         buttom.setOnClickListener(v -> {
@@ -88,6 +94,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         else {
             showLogin();
         }
+    }
+
+    @Override
+    public void onLoginSend(String id) {
+
     }
 
     private void showConfig() {
@@ -152,18 +163,28 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             params.put("pass", crypto);
             params.put("user_nauta", serverConfig.getEmail());
 
-            middleware.call("update", params, new ResultListener() {
+            loginPresenter.login(serverConfig.getEmail(),
+                    serverConfig.getCredentials().getUsername(),
+                    crypto
+            );
+
+
+            /*String id = middleware.call("update", params, new ResultListener() {
                 @Override
                 public void onSuccess(String result) {
                     Log.d(LoginActivity.class.getSimpleName(), result);
+                    loginPresenter.onResult(result);
+                    loadingDialog.dismiss();
                 }
 
                 @Override
                 public void onError(String error, String reason, String details) {
                     Log.d(LoginActivity.class.getSimpleName(), error);
+                    loadingDialog.dismiss();
                 }
             });
-            //loginPresenter.login(serverConfig.getEmail(), serverConfig.getPassword(), serverConfig.getCredentials().getUsername(), crypto);
+
+            loadingDialog.show(() -> middleware.cancel(id));*/
         }
 
     }
@@ -173,6 +194,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         finish();
         goToMain();
     }
+
 
     private void goToMain() {
         Intent intent = new Intent(this, MainActivity.class);

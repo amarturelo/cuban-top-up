@@ -1,5 +1,7 @@
 package com.wirelesskings.wkreload.mailmiddleware.mail.rx;
 
+import android.util.Log;
+
 import com.wirelesskings.wkreload.mailmiddleware.mail.async.CallReceiver;
 import com.wirelesskings.wkreload.mailmiddleware.mail.async.OnStateChangedListener;
 import com.wirelesskings.wkreload.mailmiddleware.mail.model.Email;
@@ -40,6 +42,7 @@ public class RxCallReceiver {
         return Single.create(e -> callReceiver.execute(filter, new OnStateChangedListener() {
             @Override
             public void onExecuting() {
+                Log.d(RxCallReceiver.class.getSimpleName(), "onExecuting");
             }
 
             @Override
@@ -49,12 +52,16 @@ public class RxCallReceiver {
 
             @Override
             public void onError(int code, String msg) {
+                Log.d(RxCallReceiver.class.getSimpleName(), "onError " + msg);
+
                 e.onError(new Exception(msg));
             }
 
             @Override
             public void onCanceled() {
                 e.onError(new Exception("onCanceled"));
+                Log.d(RxCallReceiver.class.getSimpleName(), "onCanceled");
+
             }
         }));
     }

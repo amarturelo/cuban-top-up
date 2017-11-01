@@ -59,7 +59,7 @@ public class ReloadBottomDialog implements ReloadContract.View {
     private Button buttonCancel;
 
     public ReloadBottomDialog(Context context) {
-        v = LayoutInflater.from(context).inflate(R.layout.layout_recharge, null);
+        v = LayoutInflater.from(context).inflate(R.layout.layout_view_recharge, null);
 
         presenter = new ReloadPresenter(
                 new ReloadsInteractor(

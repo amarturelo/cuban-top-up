@@ -118,7 +118,7 @@ public class Middleware {
         }
     }
 
-    public void call(String name, Map<String, Object> params, ResultListener listener) {
+    public String call(String name, Map<String, Object> params, ResultListener listener) {
         final String callId = nextId();
         Map<String, Object> data = new LinkedHashMap<>();
         data.put(WKField.ACTION, name);
@@ -138,6 +138,8 @@ public class Middleware {
                 listener.onError(error, reason, details);
             }
         });
+
+        return callId;
     }
 
     private void send(Map<String, Object> data, SuccessListened listened) {
@@ -184,4 +186,7 @@ public class Middleware {
         return UUID.randomUUID().toString();
     }
 
+    public void cancel(String id) {
+        removedListener(id);
+    }
 }
