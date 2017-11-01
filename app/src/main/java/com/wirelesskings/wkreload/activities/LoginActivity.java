@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.wirelesskings.data.model.mapper.ServerConfigDataMapper;
 import com.wirelesskings.data.repositories.RealmServerConfigRepository;
@@ -19,11 +20,15 @@ import com.wirelesskings.wkreload.executor.JobExecutor;
 import com.wirelesskings.wkreload.fragments.LoginFragment;
 import com.wirelesskings.wkreload.fragments.NautaSettingsFragment;
 import com.wirelesskings.wkreload.mailmiddleware.Middleware;
+import com.wirelesskings.wkreload.mailmiddleware.ResultListener;
 import com.wirelesskings.wkreload.mailmiddleware.crypto.Crypto;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Constants;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Setting;
 
 import org.apache.commons.codec.digest.DigestUtils;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View {
@@ -33,6 +38,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private ServerConfig serverConfig;
 
     private View buttom;
+    private TextView tvLoginBottom;
 
     private int mode = 0;
 
@@ -59,7 +65,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     private void initComponents() {
         buttom = findViewById(R.id.login_bottom);
-
+        tvLoginBottom = (TextView) findViewById(R.id.tv_login_bottom);
         buttom.setOnClickListener(v -> {
             if (mode == 0) {
                 setNautaSettings(nautaSettingsFragment.mUserNauta.getText().toString(), nautaSettingsFragment.mNautaPass.getText().toString());
@@ -86,11 +92,13 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     private void showConfig() {
         mode = 0;
+        tvLoginBottom.setText(R.string.next);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, nautaSettingsFragment).commit();
     }
 
     private void showLogin() {
         mode = 1;
+        tvLoginBottom.setText(R.string.login);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, loginFragment).commit();
     }
 
@@ -108,8 +116,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 loginComplete();
             }
         } else {
-
-            //Log.d("test",Crypto.md5Hex("pinga"));
             Setting out = new Setting("amarturelo@nauta.cu", "adriana*2017");
             out.setServerType(Constants.SMTP_PLAIN); //0 for plain , 1 for ssl
             out.setHost("smtp.nauta.cu");
@@ -136,13 +142,35 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                     )
             ));
             serverConfig.setCredentials(new Credentials().setUsername(email).setPassword(password));
-            loginPresenter.login(serverConfig.getEmail(), serverConfig.getPassword(), serverConfig.getCredentials().getUsername(), crypto);
+
+            Middleware.init(in, out, Crypto.md5(salt));
+            Middleware middleware = Middleware.getInstance();
+
+
+            Map<String, Object> params = new LinkedHashMap<>();
+            params.put("user", serverConfig.getCredentials().getUsername());
+            params.put("pass", crypto);
+            params.put("user_nauta", serverConfig.getEmail());
+
+            middleware.call("update", params, new ResultListener() {
+                @Override
+                public void onSuccess(String result) {
+                    Log.d(LoginActivity.class.getSimpleName(), result);
+                }
+
+                @Override
+                public void onError(String error, String reason, String details) {
+                    Log.d(LoginActivity.class.getSimpleName(), error);
+                }
+            });
+            //loginPresenter.login(serverConfig.getEmail(), serverConfig.getPassword(), serverConfig.getCredentials().getUsername(), crypto);
         }
 
     }
 
     @Override
     public void loginComplete() {
+        finish();
         goToMain();
     }
 

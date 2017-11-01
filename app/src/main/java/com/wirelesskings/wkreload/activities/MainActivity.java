@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
         mSetting.setHost("imap.nauta.cu");
         mSetting.setPort(Constants.IMAP_PLAIN_PORT);
 
-        RxCallReceiver rxCallReceiver = new RxCallReceiver(mSetting, 6, 1000);
+        RxCallReceiver rxCallReceiver = new RxCallReceiver(mSetting, 0, 6000);
 
         rxCallReceiver.receiver("Toma").subscribe(o -> Log.d("Main", o.toString()), throwable -> Log.d("Main", throwable.toString()));
     }

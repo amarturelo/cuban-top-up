@@ -6,15 +6,16 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 
-public class RetryWithDelay implements Function<Flowable<? extends Throwable>, Publisher<?>> {
+public class ReceivedRetryWithDelay implements Function<Observable<? extends Throwable>, ObservableSource<?>> {
     private final int maxRetries;
     private final int retryDelayMillis;
     private int retryCount;
 
-    public RetryWithDelay(final int maxRetries, final int retryDelayMillis) {
+    public ReceivedRetryWithDelay(final int maxRetries, final int retryDelayMillis) {
         this.maxRetries = maxRetries;
         this.retryDelayMillis = retryDelayMillis;
         this.retryCount = 0;
@@ -22,20 +23,20 @@ public class RetryWithDelay implements Function<Flowable<? extends Throwable>, P
 
 
     @Override
-    public Publisher<?> apply(@NonNull Flowable<? extends Throwable> flowable) throws Exception {
+    public ObservableSource<?> apply(@NonNull Observable<? extends Throwable> flowable) throws Exception {
         return flowable
-                .flatMap(new Function<Throwable, Flowable<?>>() {
+                .flatMap(new Function<Throwable, ObservableSource<?>>() {
                     @Override
-                    public Flowable<?> apply(final Throwable throwable) {
-                        if (++retryCount < maxRetries) {
+                    public Observable<?> apply(final Throwable throwable) {
+                        if (maxRetries == 0 || ++retryCount < maxRetries) {
                             // When this Observable calls onNext, the original
                             // Observable will be retried (i.e. re-subscribed).
-                            return Flowable.timer(retryDelayMillis,
+                            return Observable.timer(retryDelayMillis,
                                     TimeUnit.MILLISECONDS);
                         }
 
                         // Max retries hit. Just pass the error along.
-                        return Flowable.error(throwable);
+                        return Observable.error(throwable);
                     }
                 });
     }

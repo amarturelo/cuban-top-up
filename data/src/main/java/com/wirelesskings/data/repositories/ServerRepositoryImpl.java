@@ -2,6 +2,7 @@ package com.wirelesskings.data.repositories;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.wirelesskings.wkreload.domain.repositories.ServerRepository;
 import com.wirelesskings.wkreload.mailmiddleware.Middleware;
 import com.wirelesskings.wkreload.mailmiddleware.WKField;
@@ -37,9 +38,14 @@ public class ServerRepositoryImpl implements ServerRepository {
         params.put("pass", wk_password);
         params.put("user_nauta", nauta_mail);
 
-        return middleware.call("update", params).doAfterSuccess(new Consumer<Map<String, Object>>() {
+        /*return middleware.call("update", params).doAfterSuccess(new Consumer<Map<String, Object>>() {
             @Override
             public void accept(Map<String, Object> stringObjectMap) throws Exception {
+                Gson gson = new Gson();
+//                Type listType = new TypeToken<List<>>() {
+//                }.getType();
+
+                //gson.toJson(stringObjectMap,);
                 Log.d("","");
             }
         }).flatMapCompletable(new Function<Map<String, Object>, CompletableSource>() {
@@ -47,6 +53,7 @@ public class ServerRepositoryImpl implements ServerRepository {
             public CompletableSource apply(@NonNull Map<String, Object> stringObjectMap) throws Exception {
                 return Completable.complete();
             }
-        });
+        });*/
+        return null;
     }
 }

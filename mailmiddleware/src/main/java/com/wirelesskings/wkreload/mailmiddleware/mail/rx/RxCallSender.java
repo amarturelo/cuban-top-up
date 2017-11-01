@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.wirelesskings.wkreload.mailmiddleware.mail.async.CallSender;
 import com.wirelesskings.wkreload.mailmiddleware.mail.async.OnStateChangedListener;
-import com.wirelesskings.wkreload.mailmiddleware.mail.rx.funtions.RetryWithDelay;
+import com.wirelesskings.wkreload.mailmiddleware.mail.rx.funtions.SenderRetryWithDelay;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Setting;
 
 import org.reactivestreams.Publisher;
@@ -12,10 +12,7 @@ import org.reactivestreams.Publisher;
 import java.util.ArrayList;
 
 import io.reactivex.Completable;
-import io.reactivex.CompletableEmitter;
-import io.reactivex.CompletableOnSubscribe;
 import io.reactivex.Flowable;
-import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 
@@ -41,28 +38,31 @@ public class RxCallSender {
     }
 
     public Completable sender(String subject, String body, String receiver) {
-        return doSender(subject, body, receiver).retryWhen(new RetryWithDelay(t, time));
+        return doSender(subject, body, receiver).retryWhen(new SenderRetryWithDelay(t, time));
     }
 
     private Completable doSender(final String subject, final String body, final String receiver) {
         return Completable.create(e -> mSender.execute(subject, body, receiver, new OnStateChangedListener() {
             @Override
             public void onExecuting() {
+                Log.d(RxCallSender.class.getSimpleName(), " onExecuting");
             }
 
             @Override
             public void onSuccess(ArrayList<?> list) {
-                //Log.d(RxCallSender.class.getSimpleName(), " onSuccess");
+                Log.d(RxCallSender.class.getSimpleName(), " onSuccess");
                 e.onComplete();
             }
 
             @Override
             public void onError(int code, String msg) {
+                Log.d(RxCallSender.class.getSimpleName(), " onError");
                 e.onError(new Exception(msg));
             }
 
             @Override
             public void onCanceled() {
+                Log.d(RxCallSender.class.getSimpleName(), " onCanceled");
                 e.onError(new Exception("Canceled"));
             }
         }));

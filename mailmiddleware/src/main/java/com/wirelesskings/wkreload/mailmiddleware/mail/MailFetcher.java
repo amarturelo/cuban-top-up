@@ -26,6 +26,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.search.SearchTerm;
 
+
 public class MailFetcher {
 
     InternetAddress host;
@@ -131,7 +132,7 @@ public class MailFetcher {
             @Override
             public boolean match(Message message) {
                 try {
-                    if (message.getSubject() != null && ((IMAPMessage) message).getSender().equals(keyword)) {
+                    if (message.getSubject() != null && ((IMAPMessage) message).getSender().toString().equals(keyword)) {
                         return true;
                     }
                 } catch (MessagingException ex) {
