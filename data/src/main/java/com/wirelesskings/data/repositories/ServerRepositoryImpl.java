@@ -1,9 +1,12 @@
 package com.wirelesskings.data.repositories;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.wirelesskings.data.model.RealmFather;
 import com.wirelesskings.data.model.RealmOwner;
 import com.wirelesskings.data.model.RealmPromotion;
+import com.wirelesskings.data.model.mapper.OwerDataMapper;
 import com.wirelesskings.wkreload.domain.model.Owner;
 import com.wirelesskings.wkreload.domain.repositories.ServerRepository;
 import com.wirelesskings.wkreload.mailmiddleware.Middleware;
@@ -37,9 +40,12 @@ public class ServerRepositoryImpl implements ServerRepository {
 
     private Gson gson;
 
-    public ServerRepositoryImpl(Middleware middleware) {
+    private OwerDataMapper owerDataMapper;
+
+    public ServerRepositoryImpl(Middleware middleware, OwerDataMapper owerDataMapper) {
         this.middleware = middleware;
-        gson = new Gson();
+        this.owerDataMapper = owerDataMapper;
+        this.gson = new Gson();
     }
 
     @Override
@@ -50,7 +56,7 @@ public class ServerRepositoryImpl implements ServerRepository {
         params.put("user_nauta", nauta_mail);
 
         final String[] id = new String[1];
-        return Single.create(new SingleOnSubscribe<String>() {
+        return /*Single.create(new SingleOnSubscribe<String>() {
             @Override
             public void subscribe(@NonNull SingleEmitter<String> e) throws Exception {
                 id[0] = middleware.call("update", params, new ResultListener() {
@@ -65,24 +71,63 @@ public class ServerRepositoryImpl implements ServerRepository {
                     }
                 });
             }
-        }).map(new Function<String, RealmOwner>() {
-            @Override
-            public RealmOwner apply(@NonNull String s) throws Exception {
-                RealmOwner owner = gson.fromJson(s, RealmOwner.class);
-                Realm realm = Realm.getDefaultInstance();
-                realm.beginTransaction();
-                realm.insertOrUpdate(owner);
-                realm.commitTransaction();
-                realm.close();
-                return owner;
-            }
-        })
-                .map(new Function<RealmOwner, Owner>() {
-                    @Override
-                    public Owner apply(@NonNull RealmOwner realmOwner) throws Exception {
-                        return null;
-                    }
-                })
+        })*/Single.just("{\n" +
+                "    \"father\": {\n" +
+                "        \"name\": \"dlespinosa\",\n" +
+                "        \"amount\": 2860\n" +
+                "    },\n" +
+                "    \"promotion\": {\n" +
+                "        \"title\": \"promocion de pruebas 20 para  50\",\n" +
+                "        \"sdate\": \"2017-10-25 16:10:00\",\n" +
+                "        \"edate\": \"2017-11-01 23:00:00\",\n" +
+                "        \"reloads\": [\n" +
+                "            {\n" +
+                "                \"id\": 1,\n" +
+                "                \"client\": {\n" +
+                "                    \"number\": \"53192289\",\n" +
+                "                    \"name\": \"albertini\"\n" +
+                "                },\n" +
+                "                \"seller\": {\n" +
+                "                    \"name\": \"amarturelo\",\n" +
+                "                    \"amount\": 2860\n" +
+                "                },\n" +
+                "                \"count\": 1,\n" +
+                "                \"amount\": 20,\n" +
+                "                \"date\": \"2017-10-30 18:19:30\",\n" +
+                "                \"status\": \"inprogress\",\n" +
+                "                \"app\": \"mobile\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"id\": 2,\n" +
+                "                \"client\": {\n" +
+                "                    \"number\": \"53192289\",\n" +
+                "                    \"name\": \"albertini\"\n" +
+                "                },\n" +
+                "                \"seller\": {\n" +
+                "                    \"name\": \"amarturelo\",\n" +
+                "                    \"amount\": 2860\n" +
+                "                },\n" +
+                "                \"count\": 1,\n" +
+                "                \"amount\": 20,\n" +
+                "                \"date\": \"2017-10-30 18:25:01\",\n" +
+                "                \"status\": \"inprogress\",\n" +
+                "                \"app\": \"mobile\"\n" +
+                "            }\n" +
+                "        ]\n" +
+                "    },\n" +
+                "    \"user_nauta\": \"amarturelo@nauta.cu\",\n" +
+                "    \"nauta_active\": true\n" +
+                "}").map(s -> {
+            JsonParser parser = new JsonParser();
+            JsonElement mJson =  parser.parse(s.trim());
+            RealmOwner owner = gson.fromJson(mJson, RealmOwner.class);
+            Realm realm = Realm.getDefaultInstance();
+            realm.beginTransaction();
+            realm.insertOrUpdate(owner);
+            realm.commitTransaction();
+            realm.close();
+            return owner;
+        }).map(realmOwner -> owerDataMapper.transform(realmOwner))
                 .doOnDispose(() -> middleware.cancel(id[0]))
                 ;
     }

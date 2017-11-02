@@ -1,12 +1,14 @@
 package com.wirelesskings.data.model;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Alberto on 01/11/2017.
  */
 
 public class RealmOwner extends RealmObject {
+    @PrimaryKey
     private String user_nauta;
     private String nauta_active;
     private RealmPromotion promotion;

@@ -47,13 +47,13 @@ public class RxCallReceiver {
 
             @Override
             public void onSuccess(ArrayList<?> list) {
+                Log.d(RxCallReceiver.class.getSimpleName(), "onSuccess " + list.size());
                 e.onSuccess((List<Email>) list);
             }
 
             @Override
             public void onError(int code, String msg) {
                 Log.d(RxCallReceiver.class.getSimpleName(), "onError " + msg);
-
                 e.onError(new Exception(msg));
             }
 

@@ -13,6 +13,12 @@ public interface LoginContract {
         void onLoginSend(String id);
 
         void loginComplete();
+
+        void showLoading();
+
+        void hideLoading();
+
+        void showError(Exception e);
     }
 
     interface Presenter extends BaseContract.Presenter<View> {
@@ -21,6 +27,5 @@ public interface LoginContract {
 
         void login(String nauta_mail, String wk_username, String wk_password);
 
-        void onResult(String result);
     }
 }

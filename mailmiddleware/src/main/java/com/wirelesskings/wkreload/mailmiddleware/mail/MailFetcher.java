@@ -55,6 +55,10 @@ public class MailFetcher {
                     properties.put("mail.pop3.host", this.host.getAddress());
                     properties.put("mail.pop3.port", port);
 
+                    properties.setProperty("mail.pop3.connectionpooltimeout", "3000");
+                    properties.setProperty("mail.pop3.connectiontimeout", "3000");
+                    properties.setProperty("mail.pop3.timeout", "3000");
+
                     // Get session object
                     session = Session.getInstance(properties);
                     storeType = "pop3";
@@ -66,6 +70,10 @@ public class MailFetcher {
                     properties.put("mail.pop3.port", port);
                     properties.put("mail.pop3.starttls.enable", "true");
 
+                    properties.setProperty("mail.pop3.connectionpooltimeout", "3000");
+                    properties.setProperty("mail.pop3.connectiontimeout", "3000");
+                    properties.setProperty("mail.pop3.timeout", "3000");
+
                     session = Session.getInstance(properties);
                     storeType = "pop3";
                     break;
@@ -76,6 +84,11 @@ public class MailFetcher {
                     properties.put("mail.imap.port", port);
                     properties.put("mail.imap.partialfetch", "false");
 
+                    properties.setProperty("mail.imap.connectionpooltimeout", "3000");
+                    properties.setProperty("mail.imap.connectiontimeout", "3000");
+                    properties.setProperty("mail.imap.timeout", "3000");
+
+
                     session = Session.getDefaultInstance(properties);
                     storeType = "imap";
                     break;
@@ -85,6 +98,11 @@ public class MailFetcher {
                     properties.put("mail.imaps.host", this.host.getAddress());
                     properties.put("mail.imaps.port", port);
                     properties.put("mail.imap.partialfetch", "false");
+
+                    properties.setProperty("mail.imap.connectionpooltimeout", "3000");
+                    properties.setProperty("mail.imap.connectiontimeout", "3000");
+                    properties.setProperty("mail.imap.timeout", "3000");
+
 
                     session = Session.getDefaultInstance(properties);
                     storeType = "imaps"; // this set enabled ssl auth
@@ -109,7 +127,6 @@ public class MailFetcher {
     public ArrayList<Email> fetchMail(String criteria) throws IOException, MessagingException {
 
         ArrayList<Email> Emails = new ArrayList<Email>();
-
         store.connect(this.host.getAddress(), this.user, this.password);
 
         // create the folder object and open it

@@ -7,7 +7,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.wirelesskings.data.model.mapper.FatherDataMapper;
+import com.wirelesskings.data.model.mapper.OwerDataMapper;
+import com.wirelesskings.data.model.mapper.PromotionDataMapper;
+import com.wirelesskings.data.model.mapper.ReloadDataMapper;
 import com.wirelesskings.data.model.mapper.ServerConfigDataMapper;
 import com.wirelesskings.data.repositories.RealmServerConfigRepository;
 import com.wirelesskings.data.repositories.ServerRepositoryImpl;
@@ -149,13 +154,16 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                     new ServerRepositoryImpl(
                             new Middleware(
                                     in, out, Crypto.md5(salt)
+                            ),
+                            new OwerDataMapper(
+                                    new FatherDataMapper(),
+                                    new PromotionDataMapper(
+                                            new ReloadDataMapper()
+                                    )
                             )
                     )
             ));
             serverConfig.setCredentials(new Credentials().setUsername(email).setPassword(password));
-
-            Middleware.init(in, out, Crypto.md5(salt));
-            Middleware middleware = Middleware.getInstance();
 
 
             Map<String, Object> params = new LinkedHashMap<>();
@@ -187,6 +195,22 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             loadingDialog.show(() -> middleware.cancel(id));*/
         }
 
+    }
+
+
+    @Override
+    public void showError(Exception e) {
+        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void hideLoading() {
+        loadingDialog.dismiss();
+    }
+
+    @Override
+    public void showLoading() {
+        loadingDialog.show(() -> loginPresenter.cancel());
     }
 
     @Override

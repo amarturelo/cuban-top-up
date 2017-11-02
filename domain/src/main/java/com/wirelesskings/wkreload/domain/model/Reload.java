@@ -11,7 +11,7 @@ public class Reload {
     private Seller seller;
     private int count;
     private int amount;
-    private long date;
+    private String date;
     private String status;
     private String app;
 
@@ -63,11 +63,11 @@ public class Reload {
         return this;
     }
 
-    public long getDate() {
+    public String getDate() {
         return date;
     }
 
-    public Reload setDate(long date) {
+    public Reload setDate(String date) {
         this.date = date;
         return this;
     }

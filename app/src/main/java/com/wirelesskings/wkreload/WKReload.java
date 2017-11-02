@@ -38,7 +38,7 @@ public class WKReload extends Application {
 
         Realm.setDefaultConfiguration(config);
 
-        insertData();
+        //insertData();
     }
 
     private void insertData() {
@@ -50,7 +50,7 @@ public class WKReload extends Application {
                 .setAmount(50)
                 .setId("20")
                 .setCount(2)
-                .setDate(new Date().getTime())
+                .setDate("")
                 .setRealmClient(new RealmClient()
                         .setName("Alberto")
                         .setNumber("52950107"))

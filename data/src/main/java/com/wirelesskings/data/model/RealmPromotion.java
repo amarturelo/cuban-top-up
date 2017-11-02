@@ -11,9 +11,9 @@ public class RealmPromotion extends RealmObject {
 
     private String title;
 
-    private long sdate;
+    private String sdate;
 
-    private long edate;
+    private String edate;
 
     private RealmList<RealmReload> reloads;
 
@@ -29,20 +29,20 @@ public class RealmPromotion extends RealmObject {
         return this;
     }
 
-    public long getSdate() {
+    public String getSdate() {
         return sdate;
     }
 
-    public RealmPromotion setSdate(long sdate) {
+    public RealmPromotion setSdate(String sdate) {
         this.sdate = sdate;
         return this;
     }
 
-    public long getEdate() {
+    public String getEdate() {
         return edate;
     }
 
-    public RealmPromotion setEdate(long edate) {
+    public RealmPromotion setEdate(String edate) {
         this.edate = edate;
         return this;
     }

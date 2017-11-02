@@ -57,16 +57,23 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
 
     @Override
     public void login(String nauta_mail, String wk_username, String wk_password) {
+        view.showLoading();
         Disposable subscription = serverInteractor.update(wk_username, wk_password, nauta_mail)
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> view.loginComplete());
+                .subscribe(owner -> {
+                    view.hideLoading();
+                    if (owner.getNauta_active().equals("true"))
+                        view.loginComplete();
+                    else
+                        view.showError(new Exception("User not active"));
+                });
         addSubscription(subscription);
     }
 
-    @Override
-    public void onResult(String result) {
-
+    public void cancel() {
+        clearSubscriptions();
     }
+
 
 }

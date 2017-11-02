@@ -11,9 +11,9 @@ public class Promotion {
 
     private String promotion;
 
-    private long sdate;
+    private String sdate;
 
-    private long edate;
+    private String edate;
 
     private List<Reload> reloads;
 
@@ -29,20 +29,20 @@ public class Promotion {
         return this;
     }
 
-    public long getSdate() {
+    public String getSdate() {
         return sdate;
     }
 
-    public Promotion setSdate(long sdate) {
+    public Promotion setSdate(String sdate) {
         this.sdate = sdate;
         return this;
     }
 
-    public long getEdate() {
+    public String getEdate() {
         return edate;
     }
 
-    public Promotion setEdate(long edate) {
+    public Promotion setEdate(String edate) {
         this.edate = edate;
         return this;
     }

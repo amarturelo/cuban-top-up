@@ -24,7 +24,7 @@ public class RealmReload extends RealmObject {
     private RealmSeller seller;
     private int count;
     private int amount;
-    private long date;
+    private String date;
     private String status;
     private String app;
 
@@ -76,11 +76,11 @@ public class RealmReload extends RealmObject {
         return this;
     }
 
-    public long getDate() {
+    public String getDate() {
         return date;
     }
 
-    public RealmReload setDate(long date) {
+    public RealmReload setDate(String date) {
         this.date = date;
         return this;
     }
