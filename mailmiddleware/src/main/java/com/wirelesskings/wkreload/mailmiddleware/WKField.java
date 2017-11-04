@@ -5,6 +5,8 @@ package com.wirelesskings.wkreload.mailmiddleware;
  */
 
 public class WKField {
+    public static final String SUCCESS = "success";
+    public static final String ERRORS = "errors";
     public static String ID = "id";
     public static String ACTION = "action";
     public static String PARAMS = "params";

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.wirelesskings.wkreload.R;
 
@@ -19,6 +20,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename and change types of parameters
     private EditText mUserNauta;
     private EditText mNautaPass;
+    private TextView msTub;
     private View mNextBottom;
 
 
@@ -40,6 +42,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         mUserNauta = view.findViewById(R.id.et_user_nauta);
         mNautaPass = view.findViewById(R.id.et_pass_nauta);
         mNextBottom = view.findViewById(R.id.next_bottom);
+        msTub = view.findViewById(R.id.stub);
         mNextBottom.setOnClickListener(this);
         return view;
     }
@@ -80,12 +83,27 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     private void clickNext() {
         if (check())
             settingsListened.onSettingsCallback(
-                    mUserNauta.getText().toString(),
+                    mUserNauta.getText().toString() + msTub.getText().toString(),
                     mNautaPass.getText().toString());
     }
 
     private boolean check() {
-        return true;
+        boolean check = true;
+
+        if (mUserNauta.getText().toString().isEmpty()) {
+            mUserNauta.setError("El correo nauna no puede estar vacio");
+            check = false;
+        } else if (mUserNauta.getText().toString().contains("@")) {
+            mUserNauta.setError("No es necesario poner @nauta.cu, nosotros lo hacemos por ti");
+            check = false;
+        }
+        if (mNautaPass.getText().toString().isEmpty()) {
+            mNautaPass.setError("Debe espesificar su contraseña nauta");
+            check = false;
+        }
+
+
+        return check;
     }
 
     public interface OnFragmentSettingsListened {

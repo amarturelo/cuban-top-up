@@ -1,5 +1,6 @@
 package com.wirelesskings.wkreload;
 
+import com.wirelesskings.data.model.internal.RealmCredentials;
 import com.wirelesskings.data.model.internal.RealmServerConfig;
 
 import io.realm.Realm;
@@ -16,10 +17,14 @@ public class CredentialsStore {
 
     public RealmServerConfig getCredentials() {
         Realm realm = Realm.getDefaultInstance();
-        return realm.copyFromRealm(realm.where(RealmServerConfig.class).findFirst());
+        RealmServerConfig result = realm.where(RealmServerConfig.class).findFirst();
+        if (result != null)
+            return realm.copyFromRealm(realm.where(RealmServerConfig.class).findFirst());
+        return null;
     }
 
     public void put(RealmServerConfig realmServerConfig) {
+        clear();
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         realm.insertOrUpdate(realmServerConfig);
@@ -29,7 +34,10 @@ public class CredentialsStore {
 
     public void clear() {
         Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
         realm.delete(RealmServerConfig.class);
+        realm.delete(RealmCredentials.class);
+        realm.commitTransaction();
         realm.close();
     }
 }

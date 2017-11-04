@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.domain.model.internal.Credentials;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
+import com.wirelesskings.wkreload.mailmiddleware.crypto.Crypto;
 
 
 /**
@@ -99,11 +100,20 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private void clickLogin() {
         if (check()) {
+
+            String crypto = null;
+            try {
+                crypto = Crypto.hashPassword(mPass.getText().toString(),
+                        mToken.getText().toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             serverConfig.setCredentials(
                     new Credentials()
-                            .setToken(mToken.getText().toString())
+                            .setToken(Crypto.md5(mToken.getText().toString()))
                             .setUsername(mUser.getText().toString())
-                            .setPassword(mPass.getText().toString())
+                            .setPassword(crypto)
             );
             onLoginFragmentListener.onLoginCallback(serverConfig);
         }
@@ -111,7 +121,22 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     //TODO hace validacion
     private boolean check() {
-        return true;
+        boolean check = true;
+
+        if (mUser.getText().toString().trim().isEmpty()) {
+            mUser.setError("Debe espesificar su usuario");
+            check = false;
+        }
+        if (mPass.getText().toString().trim().isEmpty()) {
+            mPass.setError("Debe espesificar su contraseña");
+            check = false;
+        }
+        if (mToken.getText().toString().trim().isEmpty()) {
+            mToken.setError("Debe espesificar su token de accesso");
+            check = false;
+        }
+
+        return check;
     }
 
     private OnLoginFragmentListener onLoginFragmentListener;

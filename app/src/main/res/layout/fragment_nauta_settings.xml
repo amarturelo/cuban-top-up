@@ -71,7 +71,7 @@
 
                 <EditText
                     android:id="@+id/et_user_nauta"
-                    android:text="amarturelo@nauta.cu"
+                    android:text="amarturelo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_user" />

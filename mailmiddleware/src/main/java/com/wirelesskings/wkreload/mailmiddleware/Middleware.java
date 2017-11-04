@@ -93,7 +93,10 @@ public class Middleware {
         //TODO falta comprobar el md5 del asunto
         if (listener != null && listener instanceof ResultListener) {
             removedListener(id);
-            ((ResultListener) listener).onSuccess(gson.toJson(node.get(WKField.RESULT)));
+            if (node.get(WKField.SUCCESS).toString().equals("false")) {
+                ((ResultListener) listener).onError(node.get(WKField.ERRORS).toString(),"","");
+            } else
+                ((ResultListener) listener).onSuccess(gson.toJson(node.get(WKField.RESULT)));
         }
     }
 
@@ -115,7 +118,7 @@ public class Middleware {
         data.put(WKField.ID, callId);
         data.put(WKField.PARAMS, params);
 
-        send(data,token, new SuccessListened() {
+        send(data, token, new SuccessListened() {
             @Override
             public void onSuccess() {
                 if (listener != null) {

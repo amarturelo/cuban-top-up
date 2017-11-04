@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wirelesskings.data.cache.OwnerCacheImp;
+import com.wirelesskings.data.model.internal.RealmCredentials;
 import com.wirelesskings.data.model.internal.RealmServerConfig;
 import com.wirelesskings.data.model.mapper.FatherDataMapper;
 import com.wirelesskings.data.model.mapper.OwerDataMapper;
@@ -19,6 +20,7 @@ import com.wirelesskings.wkreload.CredentialsStore;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.dialogs.LoadingDialog;
 import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
+import com.wirelesskings.wkreload.domain.model.internal.Credentials;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 import com.wirelesskings.wkreload.executor.JobExecutor;
 import com.wirelesskings.wkreload.fragments.LoginFragment;
@@ -40,6 +42,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private LoadingDialog loadingDialog;
 
     private CredentialsStore credentialsStore;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +91,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         in.setServerType(Constants.IMAP_PLAIN);
         in.setHost("imap.nauta.cu");
         in.setPort(Constants.IMAP_PLAIN_PORT);
-        String salt = "U33756-AMARTURELO";
 
         loginPresenter = new LoginPresenter(
                 JobExecutor.getInstance(),
@@ -113,6 +115,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void showError(Exception e) {
+        hideLoading();
         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
     }
 
@@ -128,14 +131,28 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void loginComplete() {
-        finish();
+        saveCredentials();
         goToMain();
     }
 
+    private void saveCredentials() {
+        RealmServerConfig realmServerConfig = new RealmServerConfig()
+                .setEmail(serverConfig.getEmail())
+                .setPassword(serverConfig.getPassword())
+                .setRealmCredentials(new RealmCredentials()
+                        .setUsername(serverConfig.getCredentials().getUsername())
+                        .setPassword(serverConfig.getCredentials().getPassword())
+                        .setToken(serverConfig.getCredentials().getToken()));
+
+        credentialsStore.put(realmServerConfig);
+    }
 
     private void goToMain() {
+
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
+
     }
 
     @Override
@@ -143,19 +160,36 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         doLogin(serverConfig);
     }
 
-    private void doLogin(ServerConfig serverConfig) {
-        String crypto = null;
-        try {
-            crypto = Crypto.hashPassword(serverConfig.getCredentials().getPassword(),
-                    serverConfig.getCredentials().getToken());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    ServerConfig serverConfig;
 
-        loginPresenter.update(serverConfig.getEmail(),
-                serverConfig.getCredentials().getUsername(),
-                crypto,
-                Crypto.md5(serverConfig.getCredentials().getToken()));
+    private void doLogin(ServerConfig serverConfig) {
+        this.serverConfig = serverConfig;
+        RealmServerConfig realmServerConfig = credentialsStore.getCredentials();
+        ServerConfig local = null;
+        if (realmServerConfig != null)
+            local = new ServerConfig()
+                    .setEmail(realmServerConfig.getEmail())
+                    .setPassword(realmServerConfig.getPassword())
+                    .setCredentials(new Credentials()
+                            .setUsername(realmServerConfig
+                                    .getRealmCredentials()
+                                    .getUsername())
+                            .setPassword(realmServerConfig
+                                    .getRealmCredentials()
+                                    .getPassword())
+                            .setToken(realmServerConfig
+                                    .getRealmCredentials()
+                                    .getToken()));
+
+
+        if (local != null && local.equals(serverConfig))
+            goToMain();
+        else {
+            loginPresenter.update(serverConfig.getEmail(),
+                    serverConfig.getCredentials().getUsername(),
+                    serverConfig.getCredentials().getPassword(),
+                    serverConfig.getCredentials().getToken());
+        }
     }
 
     @Override
