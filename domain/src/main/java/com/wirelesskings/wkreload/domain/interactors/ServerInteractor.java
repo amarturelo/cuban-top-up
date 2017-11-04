@@ -18,7 +18,7 @@ public class ServerInteractor {
         this.serverRepository = serverRepository;
     }
 
-    public Single<Owner> update(String wk_user, String wk_pass, String nauta_user) {
-        return serverRepository.update(nauta_user, wk_user, wk_pass);
+    public Single<Owner> update(String wk_user, String wk_pass, String nauta_user, String token) {
+        return serverRepository.update(nauta_user, wk_user, wk_pass, token);
     }
 }

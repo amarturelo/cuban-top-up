@@ -32,7 +32,9 @@ public class Middleware {
 
     protected final Map<String, Listener> mListeners;
 
-    public static String RECEIVER = "reload@wirelesskingsllc.com";
+    public static String me = "amarturelo@gmail.com";
+    public static String wk = "reload@wirelesskingsllc.com";
+    public static String RECEIVER = wk;
 
     private RxCallReceiver receiver;
 
@@ -40,24 +42,8 @@ public class Middleware {
 
     private Gson gson;
 
-    private String tokenMD5 = "";
-
-    private Disposable disposable;
 
     private CompositeDisposable compositeSubscription = new CompositeDisposable();
-
-    private static Middleware ourInstance = null;
-
-    public static Middleware getInstance() {
-        return ourInstance;
-    }
-
-    public static void init(Setting in, Setting out, String tokenMD5) {
-        if (ourInstance != null) {
-            ourInstance.clearSubscriptions();
-        }
-        ourInstance = new Middleware(in, out, tokenMD5);
-    }
 
     protected void addSubscription(Disposable subscription) {
         compositeSubscription.add(subscription);
@@ -68,8 +54,7 @@ public class Middleware {
     }
 
 
-    public Middleware(Setting in, Setting out, String tokenMD5) {
-        this.tokenMD5 = tokenMD5;
+    public Middleware(Setting in, Setting out) {
         receiver = new RxCallReceiver(in, 0, 5000);
         sender = new RxCallSender(out, 5, 5000);
         gson = new Gson();
@@ -78,10 +63,12 @@ public class Middleware {
 
     private void addListener(String callId, Listener listener) {
         mListeners.put(callId, listener);
-        if (disposable == null || disposable.isDisposed()) {
+        /*if (disposable == null || disposable.isDisposed()) {
             disposable = receiver();
             addSubscription(disposable);
-        }
+        }*/
+
+        addSubscription(receiver());
     }
 
     private Disposable receiver() {
@@ -112,20 +99,23 @@ public class Middleware {
 
     private void removedListener(String id) {
         mListeners.remove(id);
-        if (mListeners.size() == 0 && disposable != null || !disposable.isDisposed()) {
+        /*if (mListeners.size() == 0 && disposable != null || !disposable.isDisposed()) {
             disposable.dispose();
             compositeSubscription.remove(disposable);
+        }*/
+        if (mListeners.size() == 0) {
+            clearSubscriptions();
         }
     }
 
-    public String call(String name, Map<String, Object> params, ResultListener listener) {
+    public String call(String name, String token, Map<String, Object> params, ResultListener listener) {
         final String callId = nextId();
         Map<String, Object> data = new LinkedHashMap<>();
         data.put(WKField.ACTION, name);
         data.put(WKField.ID, callId);
         data.put(WKField.PARAMS, params);
 
-        send(data, new SuccessListened() {
+        send(data,token, new SuccessListened() {
             @Override
             public void onSuccess() {
                 if (listener != null) {
@@ -142,41 +132,12 @@ public class Middleware {
         return callId;
     }
 
-    private void send(Map<String, Object> data, SuccessListened listened) {
-        String subject = Crypto.md5(Structure.fetch(data) + tokenMD5);
+    private void send(Map<String, Object> data, String token, SuccessListened listened) {
+        String subject = Crypto.md5(Structure.fetch(data) + token);
         addSubscription(sender.sender(subject, toJson(data), RECEIVER)
                 .subscribe(() -> listened.onSuccess(),
                         throwable -> listened.onError(throwable.getMessage(), throwable.getCause().getMessage(), "")));
     }
-
-    /*public Maybe<Map<String, Object>> call(String name, Map<String, Object> params) {
-        String id = String.valueOf(nextId());
-
-        Map<String, Object> node = new LinkedHashMap<>();
-        node.put(WKField.ACTION, name);
-        node.put(WKField.ID, id);
-        node.put(WKField.PARAMS, params);
-
-
-        String subject = Crypto.md5(Structure.fetch(node) + tokenMD5);
-
-        return sender.sender(subject, gson.toJson(node), RECEIVER)
-                .andThen(receiver.receiver(RECEIVER)).map(new Function<List<Email>, Map<String, Object>>() {
-                    @Override
-                    public Map<String, Object> apply(@NonNull List<Email> emails) throws Exception {
-                        for (Email email :
-                                emails) {
-                            Map<String, Object> node = gson.fromJson(email.getBody(), LinkedHashMap.class);
-                            if (node.get(WKField.ID).equals(id)) {
-                                String subject = Crypto.md5(Structure.fetch(node) + tokenMD5);
-                                //if (subject.equals(email.getSubject()))
-                                return (Map<String, Object>) node.get(WKField.RESULT);
-                            }
-                        }
-                        return new LinkedHashMap<>();
-                    }
-                });
-    }*/
 
     private String toJson(Object o) {
         return gson.toJson(o);

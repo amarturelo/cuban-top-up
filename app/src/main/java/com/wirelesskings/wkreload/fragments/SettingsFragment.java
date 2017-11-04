@@ -1,7 +1,6 @@
 package com.wirelesskings.wkreload.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,18 +10,19 @@ import android.widget.EditText;
 
 import com.wirelesskings.wkreload.R;
 
-public class NautaSettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    public EditText mUserNauta;
-    public EditText mNautaPass;
+    private EditText mUserNauta;
+    private EditText mNautaPass;
+    private View mNextBottom;
 
 
-    public NautaSettingsFragment() {
+    public SettingsFragment() {
         // Required empty public constructor
     }
 
@@ -39,29 +39,56 @@ public class NautaSettingsFragment extends Fragment {
 
         mUserNauta = view.findViewById(R.id.et_user_nauta);
         mNautaPass = view.findViewById(R.id.et_pass_nauta);
+        mNextBottom = view.findViewById(R.id.next_bottom);
+        mNextBottom.setOnClickListener(this);
         return view;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof OnFragmentSettingsListened)
+            settingsListened = (OnFragmentSettingsListened) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        settingsListened = null;
     }
 
-    public static NautaSettingsFragment newInstance() {
+    public static SettingsFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        NautaSettingsFragment fragment = new NautaSettingsFragment();
+        SettingsFragment fragment = new SettingsFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public interface OnFragmentNautaSettingsListened {
-        void onNautaSettings(String email, String password);
+    private OnFragmentSettingsListened settingsListened;
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.next_bottom:
+                clickNext();
+                break;
+        }
+    }
+
+    private void clickNext() {
+        if (check())
+            settingsListened.onSettingsCallback(
+                    mUserNauta.getText().toString(),
+                    mNautaPass.getText().toString());
+    }
+
+    private boolean check() {
+        return true;
+    }
+
+    public interface OnFragmentSettingsListened {
+        void onSettingsCallback(String email, String password);
     }
 }

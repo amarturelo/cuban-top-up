@@ -48,18 +48,21 @@ public class RxCallReceiver {
             @Override
             public void onSuccess(ArrayList<?> list) {
                 Log.d(RxCallReceiver.class.getSimpleName(), "onSuccess " + list.size());
-                e.onSuccess((List<Email>) list);
+                if (!e.isDisposed())
+                    e.onSuccess((List<Email>) list);
             }
 
             @Override
             public void onError(int code, String msg) {
                 Log.d(RxCallReceiver.class.getSimpleName(), "onError " + msg);
-                e.onError(new Exception(msg));
+                if (!e.isDisposed())
+                    e.onError(new Exception(msg));
             }
 
             @Override
             public void onCanceled() {
-                e.onError(new Exception("onCanceled"));
+                if (!e.isDisposed())
+                    e.onError(new Exception("onCanceled"));
                 Log.d(RxCallReceiver.class.getSimpleName(), "onCanceled");
 
             }

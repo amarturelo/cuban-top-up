@@ -10,5 +10,5 @@ import io.reactivex.Single;
  */
 
 public interface ServerRepository {
-    Single<Owner> update(String nauta_mail, String wk_username, String wk_password);
+    Single<Owner> update(String nauta_mail, String wk_username, String wk_password, String token);
 }

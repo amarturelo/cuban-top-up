@@ -8,11 +8,11 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class RealmCredentials extends RealmObject {
-    private int status; //0 invalid 1 valid
 
     @PrimaryKey
     private String username;
     private String password;
+    private String token;
 
     public RealmCredentials() {
     }
@@ -37,6 +37,15 @@ public class RealmCredentials extends RealmObject {
 
     public RealmCredentials setPassword(String password) {
         this.password = password;
+        return this;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public RealmCredentials setToken(String token) {
+        this.token = token;
         return this;
     }
 }

@@ -4,24 +4,31 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.wirelesskings.wkreload.R;
+import com.wirelesskings.wkreload.domain.model.internal.Credentials;
+import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment implements View.OnClickListener {
 
-    public static final String ARGS_USERNAME = "args_username";
+    public static final String ARGS_NAUTA_USER = "args_username";
+    public static final String ARGS_NAUTA_PASS = "args_pass";
 
-    public EditText mUser;
-    public EditText mPass;
+    private EditText mUser;
+    private EditText mPass;
+    private EditText mToken;
+
+    private View buttom;
+
+    private ServerConfig serverConfig;
 
 
     public LoginFragment() {
@@ -31,6 +38,11 @@ public class LoginFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        serverConfig = new ServerConfig();
+
+        serverConfig.setEmail(getUserNauta())
+                .setPassword(getPassNauta());
     }
 
     @Override
@@ -40,21 +52,71 @@ public class LoginFragment extends Fragment {
 
         mUser = view.findViewById(R.id.et_user);
         mPass = view.findViewById(R.id.et_pass);
+        mToken = view.findViewById(R.id.et_token);
+        buttom = view.findViewById(R.id.login_bottom);
+        buttom.setOnClickListener(this);
         return view;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
+        if (context instanceof OnLoginFragmentListener)
+            onLoginFragmentListener = (OnLoginFragmentListener) context;
     }
 
-    public static LoginFragment newInstance() {
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        onLoginFragmentListener = null;
+    }
+
+    public static LoginFragment newInstance(String email, String pass) {
         Bundle args = new Bundle();
-        //args.putString(ARGS_USERNAME, email);
+        args.putString(ARGS_NAUTA_USER, email);
+        args.putString(ARGS_NAUTA_PASS, pass);
         LoginFragment fragment = new LoginFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
+    public String getUserNauta() {
+        return getArguments().getString(ARGS_NAUTA_USER);
+    }
+
+    public String getPassNauta() {
+        return getArguments().getString(ARGS_NAUTA_PASS);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.login_bottom:
+                clickLogin();
+                break;
+        }
+    }
+
+    private void clickLogin() {
+        if (check()) {
+            serverConfig.setCredentials(
+                    new Credentials()
+                            .setToken(mToken.getText().toString())
+                            .setUsername(mUser.getText().toString())
+                            .setPassword(mPass.getText().toString())
+            );
+            onLoginFragmentListener.onLoginCallback(serverConfig);
+        }
+    }
+
+    //TODO hace validacion
+    private boolean check() {
+        return true;
+    }
+
+    private OnLoginFragmentListener onLoginFragmentListener;
+
+    public interface OnLoginFragmentListener {
+        void onLoginCallback(ServerConfig serverConfig);
+    }
 }

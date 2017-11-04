@@ -5,10 +5,11 @@ package com.wirelesskings.wkreload.domain.model.internal;
  */
 
 public class Credentials {
-    private int status; //0 invalid 1 valid
 
     private String username;
     private String password;
+
+    private String token;
 
     public Credentials() {
     }
@@ -31,7 +32,12 @@ public class Credentials {
         return this;
     }
 
-    public int getStatus() {
-        return status;
+    public String getToken() {
+        return token;
+    }
+
+    public Credentials setToken(String token) {
+        this.token = token;
+        return this;
     }
 }

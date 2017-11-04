@@ -4,199 +4,112 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wirelesskings.data.cache.OwnerCacheImp;
+import com.wirelesskings.data.model.internal.RealmServerConfig;
 import com.wirelesskings.data.model.mapper.FatherDataMapper;
 import com.wirelesskings.data.model.mapper.OwerDataMapper;
 import com.wirelesskings.data.model.mapper.PromotionDataMapper;
 import com.wirelesskings.data.model.mapper.ReloadDataMapper;
-import com.wirelesskings.data.model.mapper.ServerConfigDataMapper;
-import com.wirelesskings.data.repositories.RealmServerConfigRepository;
 import com.wirelesskings.data.repositories.ServerRepositoryImpl;
+import com.wirelesskings.wkreload.CredentialsStore;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.dialogs.LoadingDialog;
-import com.wirelesskings.wkreload.domain.interactors.ServerConfigInteractor;
 import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
-import com.wirelesskings.wkreload.domain.model.internal.Credentials;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 import com.wirelesskings.wkreload.executor.JobExecutor;
 import com.wirelesskings.wkreload.fragments.LoginFragment;
-import com.wirelesskings.wkreload.fragments.NautaSettingsFragment;
+import com.wirelesskings.wkreload.fragments.SettingsFragment;
 import com.wirelesskings.wkreload.mailmiddleware.Middleware;
-import com.wirelesskings.wkreload.mailmiddleware.ResultListener;
 import com.wirelesskings.wkreload.mailmiddleware.crypto.Crypto;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Constants;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Setting;
 
-import org.apache.commons.codec.digest.DigestUtils;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import me.drakeet.materialdialog.MaterialDialog;
-
-
-public class LoginActivity extends AppCompatActivity implements LoginContract.View {
+public class LoginActivity extends AppCompatActivity implements LoginContract.View,
+        LoginFragment.OnLoginFragmentListener,
+        SettingsFragment.OnFragmentSettingsListened {
 
     private LoginPresenter loginPresenter;
 
-    private ServerConfig serverConfig;
-
-    private View buttom;
-    private TextView tvLoginBottom;
-
     private int mode = 0;
-
-    private NautaSettingsFragment nautaSettingsFragment;
-    private LoginFragment loginFragment;
 
     private LoadingDialog loadingDialog;
 
+    private CredentialsStore credentialsStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        nautaSettingsFragment = NautaSettingsFragment.newInstance();
-        loginFragment = LoginFragment.newInstance();
-
-        loginPresenter = new LoginPresenter(JobExecutor.getInstance(),
-                new ServerConfigInteractor(
-                        new RealmServerConfigRepository(
-                                new ServerConfigDataMapper())));
+        credentialsStore = new CredentialsStore();
         initComponents();
+
+        if (credentialsStore.hasCredentials()) {
+            RealmServerConfig realmServerConfig = credentialsStore.getCredentials();
+            showLogin(realmServerConfig.getEmail(), realmServerConfig.getPassword());
+        } else
+            showConfig();
     }
 
     private void initComponents() {
         loadingDialog = new LoadingDialog(this);
-        buttom = findViewById(R.id.login_bottom);
-        tvLoginBottom = (TextView) findViewById(R.id.tv_login_bottom);
-        buttom.setOnClickListener(v -> {
-            if (mode == 0) {
-                setNautaSettings(nautaSettingsFragment.mUserNauta.getText().toString(), nautaSettingsFragment.mNautaPass.getText().toString());
-            } else {
-                doLoginSettings(loginFragment.mUser.getText().toString(), loginFragment.mPass.getText().toString());
-            }
-        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loginPresenter.bindView(this);
     }
 
-    @Override
-    public void showServerConfig(ServerConfig serverConfig) {
-        if (serverConfig.isEmpty())
-            showConfig();
-        else {
-            showLogin();
-        }
-    }
-
-    @Override
-    public void onLoginSend(String id) {
-
-    }
 
     private void showConfig() {
         mode = 0;
-        tvLoginBottom.setText(R.string.next);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, nautaSettingsFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, SettingsFragment.newInstance()).commit();
     }
 
-    private void showLogin() {
+    private void showLogin(String email, String password) {
         mode = 1;
-        tvLoginBottom.setText(R.string.login);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, loginFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, LoginFragment.newInstance(email, password)).commit();
+        initPresenter(email, password);
     }
 
-    public void setNautaSettings(String email, String password) {
-        if (serverConfig == null)
-            serverConfig = new ServerConfig();
-        serverConfig.setEmail(email)
-                .setPassword(password);
-        showLogin();
+    private void initPresenter(String email, String password) {
+        Setting out = new Setting(email, password);
+        out.setServerType(Constants.SMTP_PLAIN); //0 for plain , 1 for ssl
+        out.setHost("smtp.nauta.cu");
+        out.setPort(Constants.SMTP_PLAIN_PORT); //25 for smtp plain,465 for smtp ssl.
+
+
+        Setting in = new Setting(email, password);
+        in.setServerType(Constants.IMAP_PLAIN);
+        in.setHost("imap.nauta.cu");
+        in.setPort(Constants.IMAP_PLAIN_PORT);
+        String salt = "U33756-AMARTURELO";
+
+        loginPresenter = new LoginPresenter(
+                JobExecutor.getInstance(),
+                new ServerInteractor(
+                        new ServerRepositoryImpl(
+                                new Middleware(
+                                        in, out
+                                ),
+                                new OwerDataMapper(
+                                        new FatherDataMapper(),
+                                        new PromotionDataMapper(
+                                                new ReloadDataMapper()
+                                        )
+                                ),
+                                new OwnerCacheImp()
+                        )
+                )
+        );
+
+        loginPresenter.bindView(this);
     }
-
-    public void doLoginSettings(String email, String password) {
-        if (serverConfig.getCredentials() != null && serverConfig.getCredentials().getStatus() == 1) {
-            if (serverConfig.getCredentials().getUsername().equals(email) && serverConfig.getCredentials().getPassword().equals(password)) {
-                loginComplete();
-            }
-        } else {
-            Setting out = new Setting("amarturelo@nauta.cu", "adriana*2017");
-            out.setServerType(Constants.SMTP_PLAIN); //0 for plain , 1 for ssl
-            out.setHost("smtp.nauta.cu");
-            out.setPort(Constants.SMTP_PLAIN_PORT); //25 for smtp plain,465 for smtp ssl.
-
-
-            Setting in = new Setting("amarturelo@nauta.cu", "adriana*2017");
-            in.setServerType(Constants.IMAP_PLAIN);
-            in.setHost("imap.nauta.cu");
-            in.setPort(Constants.IMAP_PLAIN_PORT);
-            String salt = "U33756-AMARTURELO";
-            String crypto = null;
-            try {
-                crypto = Crypto.hashPassword(password, salt);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            loginPresenter.setServerInteractor(new ServerInteractor(
-                    new ServerRepositoryImpl(
-                            new Middleware(
-                                    in, out, Crypto.md5(salt)
-                            ),
-                            new OwerDataMapper(
-                                    new FatherDataMapper(),
-                                    new PromotionDataMapper(
-                                            new ReloadDataMapper()
-                                    )
-                            )
-                    )
-            ));
-            serverConfig.setCredentials(new Credentials().setUsername(email).setPassword(password));
-
-
-            Map<String, Object> params = new LinkedHashMap<>();
-            params.put("user", serverConfig.getCredentials().getUsername());
-            params.put("pass", crypto);
-            params.put("user_nauta", serverConfig.getEmail());
-
-            loginPresenter.login(serverConfig.getEmail(),
-                    serverConfig.getCredentials().getUsername(),
-                    crypto
-            );
-
-
-            /*String id = middleware.call("update", params, new ResultListener() {
-                @Override
-                public void onSuccess(String result) {
-                    Log.d(LoginActivity.class.getSimpleName(), result);
-                    loginPresenter.onResult(result);
-                    loadingDialog.dismiss();
-                }
-
-                @Override
-                public void onError(String error, String reason, String details) {
-                    Log.d(LoginActivity.class.getSimpleName(), error);
-                    loadingDialog.dismiss();
-                }
-            });
-
-            loadingDialog.show(() -> middleware.cancel(id));*/
-        }
-
-    }
-
 
     @Override
     public void showError(Exception e) {
@@ -223,5 +136,30 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private void goToMain() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onLoginCallback(ServerConfig serverConfig) {
+        doLogin(serverConfig);
+    }
+
+    private void doLogin(ServerConfig serverConfig) {
+        String crypto = null;
+        try {
+            crypto = Crypto.hashPassword(serverConfig.getCredentials().getPassword(),
+                    serverConfig.getCredentials().getToken());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        loginPresenter.update(serverConfig.getEmail(),
+                serverConfig.getCredentials().getUsername(),
+                crypto,
+                Crypto.md5(serverConfig.getCredentials().getToken()));
+    }
+
+    @Override
+    public void onSettingsCallback(String email, String password) {
+        showLogin(email, password);
     }
 }
