@@ -18,7 +18,11 @@ public class ServerInteractor {
         this.serverRepository = serverRepository;
     }
 
-    public Single<Owner> update(String wk_user, String wk_pass, String nauta_user, String token) {
-        return serverRepository.update(nauta_user, wk_user, wk_pass, token);
+    public Single<Owner> update(String wk_user, String wk_pass, String nauta_user) {
+        return serverRepository.update(nauta_user, wk_user, wk_pass);
+    }
+
+    public Single<Owner> reload(String wk_user, String wk_pass, String nauta_user, String client_name, String client_number, String reload_count, String reload_amount){
+        return serverRepository.reload(wk_user, wk_pass, nauta_user, client_name, client_number, reload_count, reload_amount);
     }
 }

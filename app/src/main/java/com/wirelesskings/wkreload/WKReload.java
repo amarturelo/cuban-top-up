@@ -20,7 +20,6 @@ public class WKReload extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         realmInit();
     }
 

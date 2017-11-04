@@ -6,13 +6,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.javiersantos.bottomdialogs.BottomDialog;
+import com.wirelesskings.data.cache.OwnerCacheImp;
+import com.wirelesskings.data.model.mapper.FatherDataMapper;
+import com.wirelesskings.data.model.mapper.OwerDataMapper;
+import com.wirelesskings.data.model.mapper.PromotionDataMapper;
 import com.wirelesskings.data.model.mapper.ReloadDataMapper;
 import com.wirelesskings.data.repositories.ReloadRepositoryImpl;
+import com.wirelesskings.data.repositories.ServerRepositoryImpl;
 import com.wirelesskings.wkreload.R;
+import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.custom.MultiStateView;
 import com.wirelesskings.wkreload.domain.interactors.ReloadsInteractor;
+import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
+import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 
 /**
  * Created by Alberto on 28/10/2017.
@@ -23,6 +32,13 @@ public class ReloadBottomDialog implements ReloadContract.View {
     private final Button buttonOk;
 
     @Override
+    public void hideLoading() {
+        bottomDialog.dismiss();
+        buttonOk.setVisibility(View.VISIBLE);
+        multiStateView.setViewState(MultiStateView.VIEW_STATE_CONTENT);
+    }
+
+    @Override
     public void loading() {
         buttonOk.setVisibility(View.GONE);
         multiStateView.setViewState(MultiStateView.VIEW_STATE_LOADING);
@@ -30,14 +46,13 @@ public class ReloadBottomDialog implements ReloadContract.View {
 
     @Override
     public void complete() {
-        bottomDialog.dismiss();
-        buttonOk.setVisibility(View.VISIBLE);
-        multiStateView.setViewState(MultiStateView.VIEW_STATE_CONTENT);
+        hideLoading();
     }
 
     @Override
     public void error(Throwable throwable) {
-
+        hideLoading();
+        Toast.makeText(v.getContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     private MultiStateView multiStateView;
@@ -62,9 +77,16 @@ public class ReloadBottomDialog implements ReloadContract.View {
         v = LayoutInflater.from(context).inflate(R.layout.layout_view_recharge, null);
 
         presenter = new ReloadPresenter(
-                new ReloadsInteractor(
-                        new ReloadRepositoryImpl(
-                                new ReloadDataMapper()
+                new ServerInteractor(
+                        new ServerRepositoryImpl(
+                                WK.getInstance().getMiddleware(),
+                                new OwerDataMapper(
+                                        new FatherDataMapper(),
+                                        new PromotionDataMapper(
+                                                new ReloadDataMapper()
+                                        )
+                                ),
+                                new OwnerCacheImp()
                         )
                 )
         );
@@ -73,7 +95,6 @@ public class ReloadBottomDialog implements ReloadContract.View {
 
         bottomDialog = new BottomDialog.Builder(context)
                 .setTitle("Nueva recarga")
-                .setContent("What can we improve? Your feedback is always welcome.")
                 .setCustomView(v)
                 .setCancelable(false)
                 .build();
@@ -81,9 +102,7 @@ public class ReloadBottomDialog implements ReloadContract.View {
         buttonCancel = v.findViewById(R.id.btn_cancel);
         buttonOk = v.findViewById(R.id.btn_ok);
 
-        buttonCancel.setOnClickListener(v1 -> {
-                    complete();
-                }
+        buttonCancel.setOnClickListener(v1 -> cancel()
         );
         clientName = v.findViewById(R.id.client_name);
         clientNumber = v.findViewById(R.id.client_number);
@@ -91,15 +110,26 @@ public class ReloadBottomDialog implements ReloadContract.View {
         spCount = v.findViewById(R.id.sp_count);
         multiStateView = v.findViewById(R.id.multiStateView);
 
+        ServerConfig serverConfig = WK.getInstance().getCredentials();
+
         buttonOk.findViewById(R.id.btn_ok).setOnClickListener(v1 -> {
             if (check()) {
-                /*presenter.onViewReload(clientName.getText().toString().trim(),
+                presenter.onReload(
+                        serverConfig.getCredentials().getUsername(),
+                        serverConfig.getCredentials().getPassword(),
+                        serverConfig.getEmail(),
+                        clientName.getText().toString().trim(),
                         clientNumber.getText().toString().trim(),
-                        50, 2);*/
+                        spAmount.getSelectedItem().toString(), spCount.getSelectedItem().toString());
                 loading();
             }
         });
 
+    }
+
+    private void cancel() {
+        hideLoading();
+        presenter.cancel();
     }
 
     public void show() {

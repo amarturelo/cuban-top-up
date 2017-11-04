@@ -11,12 +11,14 @@ public interface ReloadContract {
     interface View extends BaseContract.View {
         void loading();
 
+        void hideLoading();
+
         void complete();
 
         void error(Throwable throwable);
     }
 
     interface Presenter extends BaseContract.Presenter<ReloadContract.View> {
-        void onReload(String clientName, String clintNumber, int amount, int count);
+        void onReload(String wk_user, String wk_pass, String nauta_user, String client_name, String client_number, String reload_count, String reload_amount);
     }
 }

@@ -9,5 +9,5 @@ import com.wirelesskings.wkreload.mailmiddleware.Listener;
 public interface SuccessListened extends Listener {
     void onSuccess();
 
-    void onError(String error, String reason, String details);
+    void onError(Exception e);
 }

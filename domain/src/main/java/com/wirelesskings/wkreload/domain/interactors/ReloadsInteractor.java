@@ -24,10 +24,6 @@ public class ReloadsInteractor {
         return reloadRepository.reloads();
     }
 
-    public Completable reload(String client_name, String client_number, int count, int amount) {
-        return reloadRepository.reload(client_name,client_number, count,amount);
-    }
-
     public Single<Reload> reloadById(String id) {
         return reloadRepository.reloadById(id);
     }

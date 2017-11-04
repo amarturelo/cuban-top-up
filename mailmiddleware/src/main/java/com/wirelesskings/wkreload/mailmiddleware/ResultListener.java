@@ -4,6 +4,6 @@ public interface ResultListener extends Listener {
 
 	void onSuccess(String result);
 
-	void onError(String error, String reason, String details);
+	void onError(Exception e);
 
 }

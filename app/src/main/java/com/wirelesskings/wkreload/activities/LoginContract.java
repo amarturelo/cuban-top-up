@@ -19,7 +19,7 @@ public interface LoginContract {
     interface Presenter extends BaseContract.Presenter<View> {
 
 
-        void update(String nauta_mail, String wk_username, String wk_password, String token);
+        void update(String nauta_mail, String wk_username, String wk_password);
 
     }
 }

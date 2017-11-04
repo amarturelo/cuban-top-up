@@ -54,11 +54,12 @@ public class Middleware {
     }
 
 
-    public Middleware(Setting in, Setting out) {
+    public Middleware(Setting in, Setting out, String token) {
         receiver = new RxCallReceiver(in, 0, 5000);
         sender = new RxCallSender(out, 5, 5000);
         gson = new Gson();
         mListeners = new HashMap<>();
+        this.token = token;
     }
 
     private void addListener(String callId, Listener listener) {
@@ -94,7 +95,7 @@ public class Middleware {
         if (listener != null && listener instanceof ResultListener) {
             removedListener(id);
             if (node.get(WKField.SUCCESS).toString().equals("false")) {
-                ((ResultListener) listener).onError(node.get(WKField.ERRORS).toString(),"","");
+                ((ResultListener) listener).onError(new Exception(node.get(WKField.ERRORS).toString()));
             } else
                 ((ResultListener) listener).onSuccess(gson.toJson(node.get(WKField.RESULT)));
         }
@@ -111,7 +112,9 @@ public class Middleware {
         }
     }
 
-    public String call(String name, String token, Map<String, Object> params, ResultListener listener) {
+    private String token;
+
+    public String call(String name, Map<String, Object> params, ResultListener listener) {
         final String callId = nextId();
         Map<String, Object> data = new LinkedHashMap<>();
         data.put(WKField.ACTION, name);
@@ -127,8 +130,8 @@ public class Middleware {
             }
 
             @Override
-            public void onError(String error, String reason, String details) {
-                listener.onError(error, reason, details);
+            public void onError(Exception e) {
+                listener.onError(e);
             }
         });
 
@@ -139,7 +142,7 @@ public class Middleware {
         String subject = Crypto.md5(Structure.fetch(data) + token);
         addSubscription(sender.sender(subject, toJson(data), RECEIVER)
                 .subscribe(() -> listened.onSuccess(),
-                        throwable -> listened.onError(throwable.getMessage(), throwable.getCause().getMessage(), "")));
+                        throwable -> listened.onError((Exception) throwable)));
     }
 
     private String toJson(Object o) {

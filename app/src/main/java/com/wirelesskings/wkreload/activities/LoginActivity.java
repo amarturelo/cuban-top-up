@@ -18,6 +18,7 @@ import com.wirelesskings.data.model.mapper.ReloadDataMapper;
 import com.wirelesskings.data.repositories.ServerRepositoryImpl;
 import com.wirelesskings.wkreload.CredentialsStore;
 import com.wirelesskings.wkreload.R;
+import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.dialogs.LoadingDialog;
 import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
 import com.wirelesskings.wkreload.domain.model.internal.Credentials;
@@ -37,24 +38,23 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     private LoginPresenter loginPresenter;
 
-    private int mode = 0;
-
     private LoadingDialog loadingDialog;
 
     private CredentialsStore credentialsStore;
+
+    private WK wk;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        wk = WK.getInstance();
         credentialsStore = new CredentialsStore();
         initComponents();
 
-        if (credentialsStore.hasCredentials()) {
-            RealmServerConfig realmServerConfig = credentialsStore.getCredentials();
-            showLogin(realmServerConfig.getEmail(), realmServerConfig.getPassword());
+        if (wk.hasCredentials()) {
+            showLogin(wk.getCredentials().getEmail(), wk.getCredentials().getPassword());
         } else
             showConfig();
     }
@@ -70,47 +70,16 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
 
     private void showConfig() {
-        mode = 0;
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, SettingsFragment.newInstance()).commit();
     }
 
     private void showLogin(String email, String password) {
-        mode = 1;
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, LoginFragment.newInstance(email, password)).commit();
         initPresenter(email, password);
     }
 
     private void initPresenter(String email, String password) {
-        Setting out = new Setting(email, password);
-        out.setServerType(Constants.SMTP_PLAIN); //0 for plain , 1 for ssl
-        out.setHost("smtp.nauta.cu");
-        out.setPort(Constants.SMTP_PLAIN_PORT); //25 for smtp plain,465 for smtp ssl.
 
-
-        Setting in = new Setting(email, password);
-        in.setServerType(Constants.IMAP_PLAIN);
-        in.setHost("imap.nauta.cu");
-        in.setPort(Constants.IMAP_PLAIN_PORT);
-
-        loginPresenter = new LoginPresenter(
-                JobExecutor.getInstance(),
-                new ServerInteractor(
-                        new ServerRepositoryImpl(
-                                new Middleware(
-                                        in, out
-                                ),
-                                new OwerDataMapper(
-                                        new FatherDataMapper(),
-                                        new PromotionDataMapper(
-                                                new ReloadDataMapper()
-                                        )
-                                ),
-                                new OwnerCacheImp()
-                        )
-                )
-        );
-
-        loginPresenter.bindView(this);
     }
 
     @Override
@@ -136,23 +105,13 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     private void saveCredentials() {
-        RealmServerConfig realmServerConfig = new RealmServerConfig()
-                .setEmail(serverConfig.getEmail())
-                .setPassword(serverConfig.getPassword())
-                .setRealmCredentials(new RealmCredentials()
-                        .setUsername(serverConfig.getCredentials().getUsername())
-                        .setPassword(serverConfig.getCredentials().getPassword())
-                        .setToken(serverConfig.getCredentials().getToken()));
-
-        credentialsStore.put(realmServerConfig);
+        wk.saveCredentials(serverConfig);
     }
 
     private void goToMain() {
-
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
-
     }
 
     @Override
@@ -168,32 +127,50 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     ServerConfig serverConfig;
 
     private void doLogin(ServerConfig serverConfig) {
+        Setting out = new Setting(serverConfig.getEmail(), serverConfig.getPassword());
+        out.setServerType(Constants.SMTP_PLAIN); //0 for plain , 1 for ssl
+        out.setHost("smtp.nauta.cu");
+        out.setPort(Constants.SMTP_PLAIN_PORT); //25 for smtp plain,465 for smtp ssl.
+
+
+        Setting in = new Setting(serverConfig.getEmail(), serverConfig.getPassword());
+        in.setServerType(Constants.IMAP_PLAIN);
+        in.setHost("imap.nauta.cu");
+        in.setPort(Constants.IMAP_PLAIN_PORT);
+
+        wk.setMiddleware(new Middleware(
+                in, out, serverConfig.getCredentials().getToken()
+        ));
+
+        loginPresenter = new LoginPresenter(
+                JobExecutor.getInstance(),
+                new ServerInteractor(
+                        new ServerRepositoryImpl(
+                                wk.getMiddleware(),
+                                new OwerDataMapper(
+                                        new FatherDataMapper(),
+                                        new PromotionDataMapper(
+                                                new ReloadDataMapper()
+                                        )
+                                ),
+                                new OwnerCacheImp()
+                        )
+                )
+        );
+
+        loginPresenter.bindView(this);
+
+
         this.serverConfig = serverConfig;
-        RealmServerConfig realmServerConfig = credentialsStore.getCredentials();
         ServerConfig local = null;
-        if (realmServerConfig != null)
-            local = new ServerConfig()
-                    .setEmail(realmServerConfig.getEmail())
-                    .setPassword(realmServerConfig.getPassword())
-                    .setCredentials(new Credentials()
-                            .setUsername(realmServerConfig
-                                    .getRealmCredentials()
-                                    .getUsername())
-                            .setPassword(realmServerConfig
-                                    .getRealmCredentials()
-                                    .getPassword())
-                            .setToken(realmServerConfig
-                                    .getRealmCredentials()
-                                    .getToken()));
-
-
+        if (wk.hasCredentials())
+            local = wk.getCredentials();
         if (local != null && local.equals(serverConfig))
             goToMain();
         else {
             loginPresenter.update(serverConfig.getEmail(),
                     serverConfig.getCredentials().getUsername(),
-                    serverConfig.getCredentials().getPassword(),
-                    serverConfig.getCredentials().getToken());
+                    serverConfig.getCredentials().getPassword());
         }
     }
 

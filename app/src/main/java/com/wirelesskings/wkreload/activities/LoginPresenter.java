@@ -33,9 +33,9 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
     }
 
     @Override
-    public void update(String nauta_mail, String wk_username, String wk_password, String token) {
+    public void update(String nauta_mail, String wk_username, String wk_password) {
         view.showLoading();
-        Disposable subscription = serverInteractor.update(wk_username, wk_password, nauta_mail,token)
+        Disposable subscription = serverInteractor.update(wk_username, wk_password, nauta_mail)
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(owner -> {
