@@ -160,6 +160,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         doLogin(serverConfig);
     }
 
+    @Override
+    public void onBackSettings() {
+        showConfig();
+    }
+
     ServerConfig serverConfig;
 
     private void doLogin(ServerConfig serverConfig) {

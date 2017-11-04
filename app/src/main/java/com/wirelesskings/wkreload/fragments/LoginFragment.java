@@ -26,6 +26,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private EditText mUser;
     private EditText mPass;
     private EditText mToken;
+    private View mBackToSettings;
 
     private View buttom;
 
@@ -55,6 +56,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         mPass = view.findViewById(R.id.et_pass);
         mToken = view.findViewById(R.id.et_token);
         buttom = view.findViewById(R.id.login_bottom);
+        mBackToSettings = view.findViewById(R.id.back_to_settings);
+        mBackToSettings.setOnClickListener(this);
         buttom.setOnClickListener(this);
         return view;
     }
@@ -95,7 +98,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             case R.id.login_bottom:
                 clickLogin();
                 break;
+            case R.id.back_to_settings:
+                backToSettings();
+                break;
         }
+    }
+
+    private void backToSettings() {
+        if(onLoginFragmentListener!=null)
+            onLoginFragmentListener.onBackSettings();
     }
 
     private void clickLogin() {
@@ -143,5 +154,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     public interface OnLoginFragmentListener {
         void onLoginCallback(ServerConfig serverConfig);
+
+        void onBackSettings();
     }
 }
