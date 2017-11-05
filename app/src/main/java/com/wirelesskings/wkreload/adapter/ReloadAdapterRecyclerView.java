@@ -1,6 +1,7 @@
 package com.wirelesskings.wkreload.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,16 +51,19 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
         holder.client_number.setText(reloadItem.getClientNumber());
         holder.amount.setText(String.valueOf(reloadItem.getAmount()));
         holder.count.setText("x" + String.valueOf(reloadItem.getCount()));
+
+        holder.date.setText(DateUtils.formatDateTime(holder.itemView.getContext(),reloadItem.getDate().getTime(),
+                DateUtils.FORMAT_SHOW_DATE|DateUtils.FORMAT_SHOW_TIME));
         if (reloadItem.getStatus() != null)
             switch (reloadItem.getStatus()) {
-                case SEND:
+                /*case SEND:
                     holder.status.setImageResource(R.drawable.ic_done_black_24dp);
-                    break;
+                    break;*/
                 case INPROGRESS:
                     holder.status.setImageResource(R.drawable.ic_in_progress_black_24dp);
                     break;
                 case SUCCESS:
-                    holder.status.setImageResource(R.drawable.ic_done_all_black_24dp);
+                    holder.status.setImageResource(R.drawable.ic_done_black_24dp);
                     break;
             }
 

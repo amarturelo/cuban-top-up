@@ -137,6 +137,16 @@ public class ReloadBottomDialog implements ReloadContract.View {
     }
 
     private boolean check() {
-        return true;
+        boolean check = true;
+        if (clientName.getText().toString().isEmpty()) {
+            clientName.setError("Debe espesificar el nombre del cliente");
+            check = false;
+        }
+        if (clientNumber.getText().toString().isEmpty()) {
+            clientNumber.setError("Debe espesificar el númbero a recargar");
+            check = false;
+        }
+
+        return check;
     }
 }

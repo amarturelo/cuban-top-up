@@ -16,7 +16,12 @@ import io.realm.Realm;
 public class OwnerCacheImp implements OwnerCache {
     @Override
     public void put(RealmOwner realmOwner) {
-
+        clear();
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.insertOrUpdate(realmOwner);
+        realm.commitTransaction();
+        realm.close();
     }
 
     @Override

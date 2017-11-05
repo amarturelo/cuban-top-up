@@ -1,6 +1,8 @@
 package com.wirelesskings.wkreload.domain.model;
 
 
+import java.util.Date;
+
 /**
  * Created by Alberto on 23/10/2017.
  */
@@ -11,7 +13,7 @@ public class Reload {
     private Seller seller;
     private int count;
     private int amount;
-    private String date;
+    private Date date;
     private String status;
     private String app;
 
@@ -63,11 +65,11 @@ public class Reload {
         return this;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public Reload setDate(String date) {
+    public Reload setDate(Date date) {
         this.date = date;
         return this;
     }

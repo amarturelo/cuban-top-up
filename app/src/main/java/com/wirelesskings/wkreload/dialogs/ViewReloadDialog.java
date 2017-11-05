@@ -1,6 +1,7 @@
 package com.wirelesskings.wkreload.dialogs;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -27,12 +28,14 @@ public class ViewReloadDialog implements ViewReloadContract.View {
     private TextView seller;
     private TextView sellerAmount;
     private TextView tvBuy;
+    private TextView tvStatusReload;
+    private TextView tvDateReload;
     private MultiStateView multiStateView;
-
+    private View v;
 
     public ViewReloadDialog(Context context) {
 
-        View v = LayoutInflater.from(context).inflate(R.layout.layout_view_reload, null);
+        v = LayoutInflater.from(context).inflate(R.layout.layout_view_reload, null);
 
         bottomDialog = new BottomDialog.Builder(context)
                 .setTitle("Detalles de la recarga")
@@ -51,6 +54,8 @@ public class ViewReloadDialog implements ViewReloadContract.View {
         sellerAmount = v.findViewById(R.id.tv_seller_amount);
         multiStateView = v.findViewById(R.id.multiStateView);
         tvBuy = v.findViewById(R.id.tv_buy);
+        tvStatusReload = v.findViewById(R.id.tv_status_reload);
+        tvDateReload = v.findViewById(R.id.tv_date_reload);
 
         presenter.bindView(this);
     }
@@ -71,7 +76,9 @@ public class ViewReloadDialog implements ViewReloadContract.View {
         clientName.setText(reload.getClient().getName());
         clientNumber.setText(reload.getClient().getNumber());
         seller.setText(reload.getSeller().getName());
-        sellerAmount.setText(reload.getSeller().getAmount());
-        tvBuy.setText(reload.getAmount()+"x"+reload.getCount());
+        sellerAmount.setText(String.valueOf(Double.valueOf(reload.getSeller().getAmount()) / 100));
+        tvBuy.setText(reload.getAmount() + "x" + reload.getCount());
+        tvStatusReload.setText(reload.getStatus());
+        tvDateReload.setText(DateUtils.formatDateTime(v.getContext(), reload.getDate().getTime(), 0));
     }
 }

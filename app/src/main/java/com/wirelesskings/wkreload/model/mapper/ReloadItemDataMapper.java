@@ -1,5 +1,7 @@
 package com.wirelesskings.wkreload.model.mapper;
 
+import android.text.format.DateUtils;
+
 import com.wirelesskings.data.model.mapper.DataMapper;
 import com.wirelesskings.wkreload.domain.model.Reload;
 import com.wirelesskings.wkreload.model.ReloadItem;
@@ -35,7 +37,15 @@ public class ReloadItemDataMapper implements DataMapper<Reload, ReloadItem> {
                     .setClientNumber(reload.getClient().getNumber())
                     .setCount(reload.getCount())
                     .setSeller(reload.getSeller().getName())
+                    .setDate(reload.getDate())
                     .setId(reload.getId());
+            switch (reload.getStatus()) {
+                case "inprogress":
+                    reloadItem.setStatus(ReloadItem.STATUS.INPROGRESS);
+                    break;
+            }
+
+
         }
         return reloadItem;
     }

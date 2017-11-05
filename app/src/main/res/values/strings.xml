@@ -50,4 +50,5 @@
     <string name="loading_content">La espera esta en dependecia de la velocidad de su conección, si desea cancelar la operacion puede dar CLICK en CANCELAR</string>
     <string name="hint_token">Token</string>
     <string name="action_change_settings">Cambiar configuración nauta</string>
+    <string name="txt_date">Fecha</string>
 </resources>

@@ -64,12 +64,9 @@ public class Middleware {
 
     private void addListener(String callId, Listener listener) {
         mListeners.put(callId, listener);
-        /*if (disposable == null || disposable.isDisposed()) {
-            disposable = receiver();
-            addSubscription(disposable);
-        }*/
-
-        addSubscription(receiver());
+        if (compositeSubscription.isDisposed()) {
+            addSubscription(receiver());
+        }
     }
 
     private Disposable receiver() {
@@ -103,10 +100,6 @@ public class Middleware {
 
     private void removedListener(String id) {
         mListeners.remove(id);
-        /*if (mListeners.size() == 0 && disposable != null || !disposable.isDisposed()) {
-            disposable.dispose();
-            compositeSubscription.remove(disposable);
-        }*/
         if (mListeners.size() == 0) {
             clearSubscriptions();
         }

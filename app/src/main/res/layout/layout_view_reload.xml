@@ -131,7 +131,25 @@
                     android:id="@+id/tv_status_reload"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="INPROGRESS"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_date" />
+
+                <TextView
+                    android:id="@+id/tv_date_reload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
             </LinearLayout>

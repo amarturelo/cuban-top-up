@@ -5,6 +5,8 @@ import com.wirelesskings.wkreload.domain.model.Client;
 import com.wirelesskings.wkreload.domain.model.Reload;
 import com.wirelesskings.wkreload.domain.model.Seller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,9 +38,17 @@ public class ReloadDataMapper implements DataMapper<RealmReload, Reload> {
                     .setClient(new Client()
                             .setName(realmReload.getRealmClient().getName())
                             .setNumber(realmReload.getRealmClient().getNumber()))
-                    .setCount(realmReload.getCount())
-                    .setDate(realmReload.getDate())
-                    .setId(realmReload.getId())
+                    .setCount(realmReload.getCount());
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            try {
+                reload.setDate(format.parse(realmReload.getDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            reload.setId(realmReload.getId())
                     .setStatus(realmReload.getStatus())
                     .setSeller(new Seller()
                             .setName(realmReload.getRealmSeller().getName())

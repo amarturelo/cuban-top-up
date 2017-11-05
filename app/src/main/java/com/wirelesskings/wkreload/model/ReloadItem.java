@@ -1,5 +1,7 @@
 package com.wirelesskings.wkreload.model;
 
+import java.util.Date;
+
 /**
  * Created by Alberto on 18/10/2017.
  */
@@ -12,6 +14,8 @@ public class ReloadItem {
     private String clientNumber;
     private String clientName;
     private STATUS status;
+
+    private Date date;
 
     public ReloadItem() {
     }
@@ -70,6 +74,15 @@ public class ReloadItem {
         return this;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public ReloadItem setDate(Date date) {
+        this.date = date;
+        return this;
+    }
+
     public STATUS getStatus() {
         return status;
     }
@@ -79,8 +92,8 @@ public class ReloadItem {
         return this;
     }
 
-    public enum STATUS{
-        SEND,INPROGRESS,SUCCESS
+    public enum STATUS {
+        INPROGRESS, SUCCESS
     }
 
     @Override
