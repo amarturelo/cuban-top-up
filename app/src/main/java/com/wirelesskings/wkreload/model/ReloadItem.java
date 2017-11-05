@@ -93,7 +93,7 @@ public class ReloadItem {
     }
 
     public enum STATUS {
-        INPROGRESS, SUCCESS
+        INPROGRESS, SUCCESS, DENIED
     }
 
     @Override

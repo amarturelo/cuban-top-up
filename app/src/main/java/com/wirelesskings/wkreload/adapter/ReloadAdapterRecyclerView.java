@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wirelesskings.wkreload.R;
-import com.wirelesskings.wkreload.dialogs.ViewReloadDialog;
 import com.wirelesskings.wkreload.model.ReloadItem;
 
 import java.util.ArrayList;
@@ -56,9 +55,9 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
                 DateUtils.FORMAT_SHOW_DATE|DateUtils.FORMAT_SHOW_TIME));
         if (reloadItem.getStatus() != null)
             switch (reloadItem.getStatus()) {
-                /*case SEND:
-                    holder.status.setImageResource(R.drawable.ic_done_black_24dp);
-                    break;*/
+                case DENIED:
+                    holder.status.setImageResource(R.drawable.ic_error_black_24dp);
+                    break;
                 case INPROGRESS:
                     holder.status.setImageResource(R.drawable.ic_in_progress_black_24dp);
                     break;

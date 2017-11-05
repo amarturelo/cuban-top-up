@@ -51,19 +51,22 @@ public class RxCallSender {
             @Override
             public void onSuccess(ArrayList<?> list) {
                 Log.d(RxCallSender.class.getSimpleName(), " onSuccess");
-                e.onComplete();
+                if (!e.isDisposed())
+                    e.onComplete();
             }
 
             @Override
             public void onError(int code, String msg) {
                 Log.d(RxCallSender.class.getSimpleName(), " onError");
-                e.onError(new Exception(msg));
+                if (!e.isDisposed())
+                    e.onError(new Exception(msg));
             }
 
             @Override
             public void onCanceled() {
                 Log.d(RxCallSender.class.getSimpleName(), " onCanceled");
-                e.onError(new Exception("Canceled"));
+                if (!e.isDisposed())
+                    e.onError(new Exception("Canceled"));
             }
         }));
     }

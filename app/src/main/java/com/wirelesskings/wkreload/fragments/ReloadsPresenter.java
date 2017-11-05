@@ -43,9 +43,9 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
     public void update() {
         view.showLoading();
         Disposable subscription = serverInteractor.update(
-                WK.getInstance().getCredentials().getEmail(),
-                WK.getInstance().getCredentials().getPassword(),
-                WK.getInstance().getCredentials().getCredentials().getUsername())
+                WK.getInstance().getCredentials().getCredentials().getUsername(),
+                WK.getInstance().getCredentials().getCredentials().getPassword(),
+                WK.getInstance().getCredentials().getEmail())
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(owner -> {
@@ -58,6 +58,8 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
                         throwable -> view.showError((Exception) throwable));
         addSubscription(subscription);
     }
+
+
 
     @Override
     public void onDebit() {

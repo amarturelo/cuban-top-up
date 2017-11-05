@@ -43,6 +43,12 @@ public class ReloadItemDataMapper implements DataMapper<Reload, ReloadItem> {
                 case "inprogress":
                     reloadItem.setStatus(ReloadItem.STATUS.INPROGRESS);
                     break;
+                case "denied":
+                    reloadItem.setStatus(ReloadItem.STATUS.INPROGRESS);
+                    break;
+                case "success":
+                    reloadItem.setStatus(ReloadItem.STATUS.INPROGRESS);
+                    break;
             }
 
 

@@ -33,15 +33,21 @@ public class ReloadBottomDialog implements ReloadContract.View {
 
     @Override
     public void hideLoading() {
-        bottomDialog.dismiss();
-        buttonOk.setVisibility(View.VISIBLE);
         multiStateView.setViewState(MultiStateView.VIEW_STATE_CONTENT);
+        bottomDialog.dismiss();
     }
 
     @Override
     public void loading() {
-        buttonOk.setVisibility(View.GONE);
         multiStateView.setViewState(MultiStateView.VIEW_STATE_LOADING);
+        multiStateView.getView(MultiStateView.VIEW_STATE_LOADING).findViewById(R.id.btn_cancel).setOnClickListener(v1 -> cancel());
+        bottomDialog.dismiss();
+        bottomDialog = bottomDialog.getBuilder()
+                .setTitle(R.string.waiting)
+                .setContent(R.string.loading_content)
+                .setCancelable(false)
+                .build();
+        bottomDialog.show();
     }
 
     @Override
@@ -96,7 +102,6 @@ public class ReloadBottomDialog implements ReloadContract.View {
         bottomDialog = new BottomDialog.Builder(context)
                 .setTitle("Nueva recarga")
                 .setCustomView(v)
-                .setCancelable(false)
                 .build();
 
         buttonCancel = v.findViewById(R.id.btn_cancel);
@@ -120,7 +125,8 @@ public class ReloadBottomDialog implements ReloadContract.View {
                         serverConfig.getEmail(),
                         clientName.getText().toString().trim(),
                         clientNumber.getText().toString().trim(),
-                        spAmount.getSelectedItem().toString(), spCount.getSelectedItem().toString());
+                        spCount.getSelectedItem().toString(),
+                        spAmount.getSelectedItem().toString());
                 loading();
             }
         });

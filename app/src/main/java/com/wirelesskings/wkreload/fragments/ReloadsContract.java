@@ -15,6 +15,8 @@ public interface ReloadsContract {
         void renderDeletions(List<ReloadItem> reloads);
         void renderChanges(List<ReloadItem> reloads);
 
+        void renderReloads(List<ReloadItem> reloads);
+
         void renderDebit(long debit);
 
         void hideLoading();

@@ -28,10 +28,13 @@ public class ViewReloadPresenter extends BasePresenter<ViewReloadContract.View>
 
     @Override
     public void onViewReload(String id) {
-        view.loading();
+        view.showLoading();
         addSubscription(reloadsInteractor.reloadById(id)
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(reload -> view.renderReload(reload)));
+                .subscribe(reload -> {
+                    view.hideLoading();
+                    view.renderReload(reload);
+                }));
     }
 }

@@ -100,6 +100,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
         }
     }
 
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -128,6 +129,11 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     }
 
     @Override
+    public void renderReloads(List<ReloadItem> reloads) {
+        reloadAdapterRecyclerView.inserted(reloads);
+    }
+
+    @Override
     public void hideLoading() {
         loadingDialog.dismiss();
     }
@@ -135,6 +141,12 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     @Override
     public void updateComplete() {
         Toast.makeText(getContext(), "Update Complete", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        presenter.release();
     }
 
     @Override

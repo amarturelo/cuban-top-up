@@ -10,8 +10,8 @@ import com.wirelesskings.wkreload.presenter.BaseContract;
 public interface ViewReloadContract {
 
     interface View extends BaseContract.View {
-        void loading();
-
+        void showLoading();
+void hideLoading();
         void renderReload(Reload reload);
     }
 

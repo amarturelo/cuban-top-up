@@ -50,14 +50,14 @@ public class ServerRepositoryImpl implements ServerRepository {
         params.put("user_nauta", nauta_user);
 
         Map<String, Object> client = new LinkedHashMap<>();
-        client.put("name", client_name);
         client.put("number", client_number);
+        client.put("name", client_name);
 
         params.put("client", client);
 
         Map<String, Object> reload = new LinkedHashMap<>();
-        client.put("count", reload_count);
-        client.put("amount", reload_amount);
+        reload.put("count", reload_count);
+        reload.put("amount", reload_amount);
 
         params.put("reload", reload);
 

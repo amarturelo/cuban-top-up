@@ -9,7 +9,7 @@
         android:id="@+id/multiStateView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:msv_loadingView="@layout/layout_loading"
+        app:msv_loadingView="@layout/layout_view_loading"
         app:msv_viewState="content">
 
         <LinearLayout

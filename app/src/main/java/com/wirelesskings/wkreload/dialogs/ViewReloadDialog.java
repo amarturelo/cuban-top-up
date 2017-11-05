@@ -66,13 +66,36 @@ public class ViewReloadDialog implements ViewReloadContract.View {
     }
 
     @Override
-    public void loading() {
+    public void showLoading() {
+        bottomDialog.dismiss();
         multiStateView.setViewState(MultiStateView.VIEW_STATE_LOADING);
+        multiStateView.getView(MultiStateView.VIEW_STATE_LOADING).findViewById(R.id.btn_cancel).setOnClickListener(v1 -> cancel());
+        bottomDialog = bottomDialog.getBuilder()
+                .setTitle(R.string.waiting)
+                .setContent(R.string.loading_content)
+                .setCancelable(false)
+                .build();
+        bottomDialog.show();
+    }
+
+    @Override
+    public void hideLoading() {
+        multiStateView.setViewState(MultiStateView.VIEW_STATE_CONTENT);
+        bottomDialog.dismiss();
+        bottomDialog = bottomDialog.getBuilder()
+                .setTitle("Detalles de la recarga")
+                .setContent("")
+                .setCancelable(true)
+                .build();
+        bottomDialog.show();
+    }
+
+    private void cancel() {
+        bottomDialog.dismiss();
     }
 
     @Override
     public void renderReload(Reload reload) {
-        multiStateView.setViewState(MultiStateView.VIEW_STATE_CONTENT);
         clientName.setText(reload.getClient().getName());
         clientNumber.setText(reload.getClient().getNumber());
         seller.setText(reload.getSeller().getName());

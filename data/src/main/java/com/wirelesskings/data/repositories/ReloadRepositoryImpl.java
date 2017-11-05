@@ -49,7 +49,7 @@ public class ReloadRepositoryImpl implements ReloadRepository {
 
 
                 Realm realm = Realm.getDefaultInstance();
-
+                RealmResults<RealmReload> result = realm.where(RealmReload.class).findAllAsync();
 
                 realm.where(RealmReload.class).findAllAsync().addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<RealmReload>>() {
                     @Override

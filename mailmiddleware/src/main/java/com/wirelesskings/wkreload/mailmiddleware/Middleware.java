@@ -64,7 +64,7 @@ public class Middleware {
 
     private void addListener(String callId, Listener listener) {
         mListeners.put(callId, listener);
-        if (compositeSubscription.isDisposed()) {
+        if (!compositeSubscription.isDisposed()) {
             addSubscription(receiver());
         }
     }

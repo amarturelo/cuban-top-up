@@ -27,14 +27,14 @@ public class OwnerCacheImp implements OwnerCache {
     @Override
     public void clear() {
         Realm realm = Realm.getDefaultInstance();
-        //realm.beginTransaction();
+        realm.beginTransaction();
         realm.delete(RealmOwner.class);
         realm.delete(RealmPromotion.class);
         realm.delete(RealmFather.class);
         realm.delete(RealmReload.class);
         realm.delete(RealmClient.class);
         realm.delete(RealmSeller.class);
-        //realm.commitTransaction();
-        //realm.close();
+        realm.commitTransaction();
+        realm.close();
     }
 }

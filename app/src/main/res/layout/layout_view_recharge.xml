@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<com.wirelesskings.wkreload.custom.MultiStateView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/multiStateView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    app:msv_loadingView="@layout/layout_loading"
+    android:layout_height="wrap_content"
+    app:msv_loadingView="@layout/layout_view_loading"
     app:msv_viewState="content">
 
-    <com.wirelesskings.wkreload.custom.MultiStateView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/multiStateView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:msv_loadingView="@layout/layout_loading"
-        app:msv_viewState="content">
+        android:orientation="vertical">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -39,7 +38,8 @@
                         android:id="@+id/client_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_client_name" />
+                        android:hint="@string/hint_client_name"
+                        android:text="Alberto" />
 
                 </LinearLayout>
 
@@ -83,7 +83,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="########"
-                                android:inputType="phone" />
+                                android:inputType="phone"
+                                android:text="52950107" />
 
                         </LinearLayout>
 
@@ -141,38 +142,32 @@
 
         </ScrollView>
 
-    </com.wirelesskings.wkreload.custom.MultiStateView>
-
-    <RelativeLayout
-        android:id="@+id/l_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/l_button"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:orientation="horizontal">
+            android:layout_alignParentBottom="true">
 
-            <Button
-                android:id="@+id/btn_cancel"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:text="@string/txt_cancel"
-                android:textColor="@color/yellow" />
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btn_ok"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:text="@string/txt_reload" />
-        </LinearLayout>
-    </RelativeLayout>
+                <Button
+                    android:id="@+id/btn_ok"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_reload" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
 
-</LinearLayout>
+</com.wirelesskings.wkreload.custom.MultiStateView>
+
+
+
+
 
 
 
