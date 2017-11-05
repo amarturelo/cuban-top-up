@@ -90,7 +90,7 @@ public class ServerRepositoryImpl implements ServerRepository {
         params.put("user_nauta", nauta_mail);
 
         final String[] id = new String[1];
-        return /*Single.create((SingleOnSubscribe<String>) emitter -> id[0] = middleware.call("update", params, new ResultListener() {
+        return Single.create((SingleOnSubscribe<String>) emitter -> id[0] = middleware.call("update", params, new ResultListener() {
             @Override
             public void onSuccess(String result) {
                 emitter.onSuccess(result);
@@ -100,7 +100,7 @@ public class ServerRepositoryImpl implements ServerRepository {
             public void onError(Exception e) {
                 emitter.onError(e);
             }
-        }))*/Single.just("" +
+        }))/*Single.just("" +
                 "{\n" +
                 "    \"father\": {\n" +
                 "        \"name\": \"dlespinosa\",\n" +
@@ -563,7 +563,7 @@ public class ServerRepositoryImpl implements ServerRepository {
                 "    },\n" +
                 "    \"user_nauta\": \"amarturelo@nauta.cu\",\n" +
                 "    \"nauta_active\": true\n" +
-                "}").map(s -> {
+                "}")*/.map(s -> {
             JsonParser parser = new JsonParser();
             JsonElement mJson = parser.parse(s.trim());
             return gson.fromJson(mJson, RealmOwner.class);

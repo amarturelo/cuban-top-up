@@ -4,19 +4,30 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.wirelesskings.data.cache.OwnerCacheImp;
+import com.wirelesskings.data.model.mapper.FatherDataMapper;
+import com.wirelesskings.data.model.mapper.OwerDataMapper;
+import com.wirelesskings.data.model.mapper.PromotionDataMapper;
 import com.wirelesskings.data.model.mapper.ReloadDataMapper;
 import com.wirelesskings.data.repositories.ReloadRepositoryImpl;
+import com.wirelesskings.data.repositories.ServerRepositoryImpl;
 import com.wirelesskings.wkreload.R;
+import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.adapter.DividerItemDecoration;
 import com.wirelesskings.wkreload.adapter.ReloadAdapterRecyclerView;
+import com.wirelesskings.wkreload.dialogs.LoadingDialog;
 import com.wirelesskings.wkreload.dialogs.ViewReloadDialog;
 import com.wirelesskings.wkreload.domain.interactors.ReloadsInteractor;
+import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
 import com.wirelesskings.wkreload.model.ReloadItem;
 import com.wirelesskings.wkreload.model.mapper.ReloadItemDataMapper;
 
@@ -24,11 +35,16 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ReloadsFragment extends Fragment implements ReloadsContract.View, ReloadAdapterRecyclerView.Listened {
+public class ReloadsFragment extends Fragment implements ReloadsContract.View,
+        ReloadAdapterRecyclerView.Listened,
+        LoadingDialog.LoadingListener {
 
     public ReloadsFragment() {
     }
@@ -40,17 +56,21 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View, R
 
     private ReloadsPresenter presenter;
 
+    private LoadingDialog loadingDialog;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
+        loadingDialog = new LoadingDialog(getActivity());
         return view;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         viewReloadDialog = new ViewReloadDialog(getActivity());
         presenter = new ReloadsPresenter(
                 new ReloadsInteractor(
@@ -58,7 +78,19 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View, R
                                 new ReloadDataMapper()
                         )
                 ),
-                new ReloadItemDataMapper());
+                new ReloadItemDataMapper(),
+                new ServerInteractor(
+                        new ServerRepositoryImpl(
+                                WK.getInstance().getMiddleware(),
+                                new OwerDataMapper(
+                                        new FatherDataMapper(),
+                                        new PromotionDataMapper(
+                                                new ReloadDataMapper()
+                                        )
+                                ),
+                                new OwnerCacheImp()
+                        )
+                ));
 
     }
 
@@ -96,6 +128,27 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View, R
     }
 
     @Override
+    public void hideLoading() {
+        loadingDialog.dismiss();
+    }
+
+    @Override
+    public void updateComplete() {
+        Toast.makeText(getContext(), "Update Complete", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showLoading() {
+        loadingDialog.show(this);
+    }
+
+    @Override
+    public void showError(Exception e) {
+        hideLoading();
+        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
     public void renderDebit(long debit) {
         if (listened != null)
             listened.onDebit(debit);
@@ -112,7 +165,6 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View, R
         super.onAttach(context);
         if (context instanceof OnReloadsFragmentListened)
             listened = (OnReloadsFragmentListened) context;
-
     }
 
     private OnReloadsFragmentListened listened;
@@ -124,7 +176,32 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View, R
         viewReloadDialog.show(id);
     }
 
+    private void refresh() {
+        presenter.update();
+    }
+
+    @Override
+    public void onCancel() {
+        presenter.cancel();
+    }
+
     public interface OnReloadsFragmentListened {
         void onDebit(long debit);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_update:
+                update();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void update() {
+        presenter.update();
+    }
+
+
 }

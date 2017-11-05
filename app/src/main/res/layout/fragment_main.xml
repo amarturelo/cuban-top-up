@@ -6,12 +6,12 @@
     tools:context="com.wirelesskings.wkreload.fragments.ReloadsFragment"
     tools:showIn="@layout/activity_main">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/reload_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="4dp"
-        android:paddingTop="4dp"
-        tools:listitem="@layout/reload_list_item" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/reload_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            tools:listitem="@layout/reload_list_item" />
 
 </RelativeLayout>

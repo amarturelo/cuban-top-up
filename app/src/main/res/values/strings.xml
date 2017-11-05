@@ -51,4 +51,5 @@
     <string name="hint_token">Token</string>
     <string name="action_change_settings">Cambiar configuración nauta</string>
     <string name="txt_date">Fecha</string>
+    <string name="action_update">Actualizar</string>
 </resources>

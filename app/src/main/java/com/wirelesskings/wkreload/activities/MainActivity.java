@@ -102,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
         if (id == R.id.action_settings) {
             return true;
         }
+        if(id==R.id.action_update){
+
+        }
 
         return super.onOptionsItemSelected(item);
     }

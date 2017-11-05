@@ -16,11 +16,23 @@ public interface ReloadsContract {
         void renderChanges(List<ReloadItem> reloads);
 
         void renderDebit(long debit);
+
+        void hideLoading();
+
+        void updateComplete();
+
+        void showError(Exception e);
+
+        void showLoading();
     }
 
     interface Presenter extends BaseContract.Presenter<ReloadsContract.View> {
         void onReloads();
 
         void onDebit();
+
+        void update();
+
+        void cancel();
     }
 }
