@@ -7,11 +7,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.github.javiersantos.bottomdialogs.BottomDialog;
+import com.wirelesskings.data.model.mapper.FatherDataMapper;
+import com.wirelesskings.data.model.mapper.OwnerDataMapper;
+import com.wirelesskings.data.model.mapper.PromotionDataMapper;
 import com.wirelesskings.data.model.mapper.ReloadDataMapper;
-import com.wirelesskings.data.repositories.ReloadRepositoryImpl;
+import com.wirelesskings.data.repositories.OwnerRepositoryImpl;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.custom.MultiStateView;
-import com.wirelesskings.wkreload.domain.interactors.ReloadsInteractor;
+import com.wirelesskings.wkreload.domain.interactors.OwnerInteractor;
 import com.wirelesskings.wkreload.domain.model.Reload;
 
 /**
@@ -42,9 +45,15 @@ public class ViewReloadDialog implements ViewReloadContract.View {
                 .setCustomView(v)
                 .build();
 
-        presenter = new ViewReloadPresenter(new ReloadsInteractor(
-                new ReloadRepositoryImpl(
-                        new ReloadDataMapper()
+        presenter = new ViewReloadPresenter(new OwnerInteractor(
+                new OwnerRepositoryImpl(
+                        new ReloadDataMapper(),
+                        new OwnerDataMapper(
+                                new FatherDataMapper(),
+                                new PromotionDataMapper(
+                                        new ReloadDataMapper()
+                                )
+                        )
                 )
         ));
 

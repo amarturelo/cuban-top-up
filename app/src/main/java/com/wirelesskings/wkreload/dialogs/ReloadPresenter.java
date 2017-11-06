@@ -3,10 +3,7 @@ package com.wirelesskings.wkreload.dialogs;
 import android.support.annotation.NonNull;
 
 import com.wirelesskings.wkreload.BackgroundLooper;
-import com.wirelesskings.wkreload.domain.interactors.ReloadsInteractor;
 import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
-import com.wirelesskings.wkreload.domain.model.Reload;
-import com.wirelesskings.wkreload.domain.repositories.ServerRepository;
 import com.wirelesskings.wkreload.presenter.BasePresenter;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;

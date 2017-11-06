@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.wirelesskings.data.cache.OwnerCache;
 import com.wirelesskings.data.model.RealmOwner;
-import com.wirelesskings.data.model.mapper.OwerDataMapper;
+import com.wirelesskings.data.model.mapper.OwnerDataMapper;
 import com.wirelesskings.wkreload.domain.model.Owner;
 import com.wirelesskings.wkreload.domain.repositories.ServerRepository;
 import com.wirelesskings.wkreload.mailmiddleware.Middleware;
@@ -15,10 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 
 /**
  * Created by Alberto on 24/10/2017.
@@ -31,11 +28,11 @@ public class ServerRepositoryImpl implements ServerRepository {
 
     private Gson gson;
 
-    private OwerDataMapper owerDataMapper;
+    private OwnerDataMapper owerDataMapper;
 
     private OwnerCache ownerCache;
 
-    public ServerRepositoryImpl(Middleware middleware, OwerDataMapper owerDataMapper, OwnerCache ownerCache) {
+    public ServerRepositoryImpl(Middleware middleware, OwnerDataMapper owerDataMapper, OwnerCache ownerCache) {
         this.middleware = middleware;
         this.owerDataMapper = owerDataMapper;
         this.ownerCache = ownerCache;

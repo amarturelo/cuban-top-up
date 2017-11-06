@@ -17,7 +17,7 @@ public interface ReloadsContract {
 
         void renderReloads(List<ReloadItem> reloads);
 
-        void renderDebit(long debit);
+        void renderDebit(String debit);
 
         void hideLoading();
 
@@ -30,8 +30,6 @@ public interface ReloadsContract {
 
     interface Presenter extends BaseContract.Presenter<ReloadsContract.View> {
         void onReloads();
-
-        void onDebit();
 
         void update();
 

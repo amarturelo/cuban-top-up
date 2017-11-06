@@ -11,15 +11,13 @@ import android.widget.Toast;
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.wirelesskings.data.cache.OwnerCacheImp;
 import com.wirelesskings.data.model.mapper.FatherDataMapper;
-import com.wirelesskings.data.model.mapper.OwerDataMapper;
+import com.wirelesskings.data.model.mapper.OwnerDataMapper;
 import com.wirelesskings.data.model.mapper.PromotionDataMapper;
 import com.wirelesskings.data.model.mapper.ReloadDataMapper;
-import com.wirelesskings.data.repositories.ReloadRepositoryImpl;
 import com.wirelesskings.data.repositories.ServerRepositoryImpl;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.custom.MultiStateView;
-import com.wirelesskings.wkreload.domain.interactors.ReloadsInteractor;
 import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 
@@ -86,7 +84,7 @@ public class ReloadBottomDialog implements ReloadContract.View {
                 new ServerInteractor(
                         new ServerRepositoryImpl(
                                 WK.getInstance().getMiddleware(),
-                                new OwerDataMapper(
+                                new OwnerDataMapper(
                                         new FatherDataMapper(),
                                         new PromotionDataMapper(
                                                 new ReloadDataMapper()

@@ -12,12 +12,12 @@ import java.util.List;
  * Created by Alberto on 02/11/2017.
  */
 
-public class OwerDataMapper implements DataMapper<RealmOwner, Owner> {
+public class OwnerDataMapper implements DataMapper<RealmOwner, Owner> {
 
     private FatherDataMapper fatherDataMapper;
     private PromotionDataMapper promotionDataMapper;
 
-    public OwerDataMapper(FatherDataMapper fatherDataMapper, PromotionDataMapper promotionDataMapper) {
+    public OwnerDataMapper(FatherDataMapper fatherDataMapper, PromotionDataMapper promotionDataMapper) {
         this.fatherDataMapper = fatherDataMapper;
         this.promotionDataMapper = promotionDataMapper;
     }

@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
     }
 
     @Override
-    public void onDebit(long debit) {
+    public void onDebit(String debit) {
         tvDebit.setText("$" + String.valueOf(debit));
     }
 }

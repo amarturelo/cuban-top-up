@@ -3,7 +3,7 @@ package com.wirelesskings.wkreload.dialogs;
 import android.support.annotation.NonNull;
 
 import com.wirelesskings.wkreload.BackgroundLooper;
-import com.wirelesskings.wkreload.domain.interactors.ReloadsInteractor;
+import com.wirelesskings.wkreload.domain.interactors.OwnerInteractor;
 import com.wirelesskings.wkreload.presenter.BasePresenter;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -15,9 +15,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 public class ViewReloadPresenter extends BasePresenter<ViewReloadContract.View>
         implements ViewReloadContract.Presenter {
 
-    private ReloadsInteractor reloadsInteractor;
+    private OwnerInteractor reloadsInteractor;
 
-    public ViewReloadPresenter(ReloadsInteractor reloadsInteractor) {
+    public ViewReloadPresenter(OwnerInteractor reloadsInteractor) {
         this.reloadsInteractor = reloadsInteractor;
     }
 

@@ -1,12 +1,13 @@
 package com.wirelesskings.data.repositories;
 
-import android.util.Log;
-
+import com.wirelesskings.data.model.RealmOwner;
 import com.wirelesskings.data.model.RealmReload;
+import com.wirelesskings.data.model.mapper.OwnerDataMapper;
 import com.wirelesskings.data.model.mapper.ReloadDataMapper;
 import com.wirelesskings.wkreload.domain.model.CollectionChange;
+import com.wirelesskings.wkreload.domain.model.Owner;
 import com.wirelesskings.wkreload.domain.model.Reload;
-import com.wirelesskings.wkreload.domain.repositories.ReloadRepository;
+import com.wirelesskings.wkreload.domain.repositories.OwnerRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,26 +19,31 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
 import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
+import io.realm.RealmModel;
 import io.realm.RealmResults;
 
 /**
  * Created by Alberto on 28/10/2017.
  */
 
-public class ReloadRepositoryImpl implements ReloadRepository {
+public class OwnerRepositoryImpl implements OwnerRepository {
 
     private ReloadDataMapper reloadDataMapper;
+    private OwnerDataMapper ownerDataMapper;
+
+    RealmResults<RealmOwner> owner;
 
 
-    public ReloadRepositoryImpl(ReloadDataMapper reloadDataMapper) {
+    public OwnerRepositoryImpl(ReloadDataMapper reloadDataMapper, OwnerDataMapper ownerDataMapper) {
         this.reloadDataMapper = reloadDataMapper;
+        this.ownerDataMapper = ownerDataMapper;
     }
 
     @Override
@@ -95,6 +101,26 @@ public class ReloadRepositoryImpl implements ReloadRepository {
     }
 
     @Override
+    public Observable<Owner> owner() {
+        return Observable.create(new ObservableOnSubscribe<RealmOwner>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<RealmOwner> emitter) throws Exception {
+                Realm realm = Realm.getDefaultInstance();
+                owner = realm.where(RealmOwner.class).findAllAsync();
+                owner.addChangeListener(new RealmChangeListener<RealmResults<RealmOwner>>() {
+                    @Override
+                    public void onChange(RealmResults<RealmOwner> realmOwners) {
+                        if (realmOwners.size() > 0)
+                            emitter.onNext(realm.copyFromRealm(realmOwners.first()));
+                        else
+                            emitter.onNext(new RealmOwner());
+                    }
+                });
+            }
+        }).map(realmOwner -> ownerDataMapper.transform(realmOwner));
+    }
+
+    @Override
     public Observable<Long> debit() {
         return Observable.create(new ObservableOnSubscribe<Long>() {
             @Override
@@ -125,15 +151,5 @@ public class ReloadRepositoryImpl implements ReloadRepository {
             RealmResults<RealmReload> result = realm.where(RealmReload.class).findAll();
             emitter.onSuccess(realm.copyFromRealm(result.first()));
         }).map(realmReload -> reloadDataMapper.transform(realmReload));
-    }
-
-    @Override
-    public Completable reload(String client_name, String client_number, int count, int amount) {
-        return Completable.create(new CompletableOnSubscribe() {
-            @Override
-            public void subscribe(@NonNull CompletableEmitter emitter) throws Exception {
-                emitter.onComplete();
-            }
-        });
     }
 }
