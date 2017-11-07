@@ -64,7 +64,12 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(owner -> {
-                    view.renderInsertions(reloadItemDataMapper.transform(owner.getPromotion().getReloads()));
+                    if (owner.getPromotion() != null) {
+                        view.hasPromotions(true);
+                        view.renderInsertions(reloadItemDataMapper.transform(owner.getPromotion().getReloads()));
+                    }
+                    else
+                        view.hasPromotions(false);
                     view.renderDebit(owner.getFather().getAmount());
                 }));
     }

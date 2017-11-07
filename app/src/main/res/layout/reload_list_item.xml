@@ -33,7 +33,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@+id/ll_status"
-                    android:text="Alberto"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -59,7 +59,7 @@
                         android:layout_centerVertical="true"
                         android:layout_gravity="center_vertical"
                         android:paddingLeft="4dp"
-                        android:text="Jan.22, 2015"
+                        android:text=""
                         android:textSize="16sp" />
                 </LinearLayout>
 
@@ -88,7 +88,7 @@
                         android:id="@+id/tv_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="52950107"
+                        android:text=""
                         android:textSize="14sp" />
 
                     <TextView
@@ -136,7 +136,7 @@
                             android:id="@+id/tv_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="$50"
+                            android:text=""
                             android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -146,7 +146,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="4dp"
-                            android:text="x5"
+                            android:text=""
                             android:textColor="@color/red"
                             android:textSize="16sp"
                             android:textStyle="bold" />

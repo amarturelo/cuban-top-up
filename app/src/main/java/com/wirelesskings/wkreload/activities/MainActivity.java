@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
 
     private TextView tvDebit;
 
+    FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
 
         reloadBottomDialog = new ReloadBottomDialog(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         tvDebit = (TextView) findViewById(R.id.tv_debit);
 
         fab.setOnClickListener(view -> showReload());
@@ -48,42 +50,6 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
         reloadBottomDialog.show();
     }
 
-    /*  private void sendMail() {
-          Setting mSetting = new Setting("amarturelo@nauta.cu", "adriana*2017");
-          mSetting.setServerType(Constants.SMTP_PLAIN); //0 for plain , 1 for ssl
-          mSetting.setHost("smtp.nauta.cu");
-          mSetting.setPort(Constants.SMTP_PLAIN_PORT); //25 for smtp plain,465 for smtp ssl
-
-          RxCallSender rxCallSender = new RxCallSender(mSetting, 2, 1000);
-
-
-          String bodyReload = "{\"action\":\"reload\",\"id\":\"ididididid234ddd235\",\"params\":{\"user\":\"amarturelo@nauta.cu\",\"pass\":\"MZAtfDUMcYT12HikEYHuiI2JAgBB4PLp4egp\\/ZqRpQsPzMOleaFdhCT759I0cTHR1okwBQ9Q6djhMaxe+D5w0A==\",\"user_nauta\":\"amarturelo@nauta.cu\",\"client\":{\"number\":53192289,\"name\":\"albertini\"},\"reload\":{\"count\":1,\"amount\":20}}}";
-          String bodyUpdate = "{\"action\":\"update\",\"id\":\"ididididid234235\",\"params\":{\"user\":\"amarturelo@nauta.cu\",\"pass\":\"MZAtfDUMcYT12HikEYHuiI2JAgBB4PLp4egp\\/ZqRpQsPzMOleaFdhCT759I0cTHR1okwBQ9Q6djhMaxe+D5w0A==\",\"user_nauta\":\"amarturelo@nauta.cu\"}}";
-
-
-          String sender = "reload@wirelesskingsllc.com";
-          String me = "amarturelo@nauta.cu";
-
-          String updateSubject = "2bafc6c3270b0ee8f002e48f5f57773b";
-          String reloadSubject = "c5cf025ef4457b0b61d527584ee689ed";
-
-          rxCallSender.sender(updateSubject, bodyUpdate.trim(), sender)
-                  .subscribe(() -> System.out.println("subscribe " + "complete")
-                          , throwable -> System.out.println("error " + throwable.toString()));
-
-      }
-
-      private void receivedMail() {
-          Setting mSetting = new Setting("amarturelo@nauta.cu", "adriana*2017");
-          mSetting.setServerType(Constants.IMAP_PLAIN);
-          mSetting.setHost("imap.nauta.cu");
-          mSetting.setPort(Constants.IMAP_PLAIN_PORT);
-
-          RxCallReceiver rxCallReceiver = new RxCallReceiver(mSetting, 0, 6000);
-
-          rxCallReceiver.receiver("Toma").subscribe(o -> Log.d("Main", o.toString()), throwable -> Log.d("Main", throwable.toString()));
-      }
-  */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -102,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
         if (id == R.id.action_settings) {
             return true;
         }
-        if(id==R.id.action_update){
+        if (id == R.id.action_update) {
 
         }
 
@@ -112,6 +78,14 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
     public static Intent getCallingIntent(Context context) {
         Intent callingIntent = new Intent(context, MainActivity.class);
         return callingIntent;
+    }
+
+    @Override
+    public void visibilityBottom(boolean b) {
+        if (b)
+            fab.show();
+        else
+            fab.hide();
     }
 
     @Override

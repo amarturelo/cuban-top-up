@@ -1,9 +1,11 @@
 package com.wirelesskings.wkreload.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -34,6 +36,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.drakeet.materialdialog.MaterialDialog;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -152,6 +155,26 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     }
 
     @Override
+    public void hasPromotions(boolean b) {
+        if (!b) {
+
+            AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.app_name)
+                    .setMessage(R.string.txt_not_promotions)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .show();
+
+        }
+        listened.visibilityBottom(b);
+
+    }
+
+    @Override
     public void showLoading() {
         loadingDialog.show(this);
     }
@@ -196,6 +219,8 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
 
     public interface OnReloadsFragmentListened {
         void onDebit(String debit);
+
+        void visibilityBottom(boolean b);
     }
 
     @Override

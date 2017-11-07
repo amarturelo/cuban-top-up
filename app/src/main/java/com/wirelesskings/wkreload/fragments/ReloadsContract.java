@@ -26,6 +26,8 @@ public interface ReloadsContract {
         void showError(Exception e);
 
         void showLoading();
+
+        void hasPromotions(boolean b);
     }
 
     interface Presenter extends BaseContract.Presenter<ReloadsContract.View> {
