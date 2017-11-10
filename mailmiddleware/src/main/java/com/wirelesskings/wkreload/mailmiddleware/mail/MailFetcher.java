@@ -218,6 +218,8 @@ public class MailFetcher {
 
             message.setFlag(Flags.Flag.DELETED, true);
 
+
+
             Email mEmail = new Email(from, to, asunto, messageContent);
             Emails.add(mEmail);
 
@@ -230,7 +232,7 @@ public class MailFetcher {
                 break;
             }
         }
-        inboxFolder.close(false);
+        inboxFolder.close(true);
         store.close();
 
         return Emails;

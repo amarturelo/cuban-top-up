@@ -83,19 +83,24 @@ public class Middleware {
 
     private void emailReceived(Email email) {
         Map<String, Object> node = gson.fromJson(email.getBody(), LinkedHashMap.class);
+        if (checkMD5()) {
+            String id = (String) node.get(WKField.ID);
 
-        String id = (String) node.get(WKField.ID);
+            final Listener listener = mListeners.get(id);
 
-        final Listener listener = mListeners.get(id);
-
-        //TODO falta comprobar el md5 del asunto
-        if (listener != null && listener instanceof ResultListener) {
-            removedListener(id);
-            if (node.get(WKField.SUCCESS).toString().equals("false")) {
-                ((ResultListener) listener).onError(new Exception(node.get(WKField.ERRORS).toString()));
-            } else
-                ((ResultListener) listener).onSuccess(gson.toJson(node.get(WKField.RESULT)));
+            //TODO falta comprobar el md5 del asunto
+            if (listener != null && listener instanceof ResultListener) {
+                removedListener(id);
+                if (node.get(WKField.SUCCESS).toString().equals("false")) {
+                    ((ResultListener) listener).onError(new Exception(node.get(WKField.ERRORS).toString()));
+                } else
+                    ((ResultListener) listener).onSuccess(gson.toJson(node.get(WKField.RESULT)));
+            }
         }
+    }
+
+    private boolean checkMD5() {
+        return false;
     }
 
     private void removedListener(String id) {
