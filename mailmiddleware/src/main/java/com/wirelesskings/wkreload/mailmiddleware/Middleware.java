@@ -100,7 +100,7 @@ public class Middleware {
     }
 
     private boolean checkMD5() {
-        return false;
+        return true;
     }
 
     private void removedListener(String id) {
