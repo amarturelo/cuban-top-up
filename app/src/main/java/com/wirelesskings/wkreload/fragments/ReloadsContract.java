@@ -1,5 +1,6 @@
 package com.wirelesskings.wkreload.fragments;
 
+import com.wirelesskings.wkreload.domain.model.Father;
 import com.wirelesskings.wkreload.model.ReloadItem;
 import com.wirelesskings.wkreload.presenter.BaseContract;
 
@@ -17,7 +18,7 @@ public interface ReloadsContract {
 
         void renderReloads(List<ReloadItem> reloads);
 
-        void renderDebit(String debit);
+        void renderFather(Father father);
 
         void hideLoading();
 

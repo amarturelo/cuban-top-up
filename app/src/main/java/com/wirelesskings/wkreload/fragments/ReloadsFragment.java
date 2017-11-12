@@ -29,6 +29,7 @@ import com.wirelesskings.wkreload.dialogs.LoadingDialog;
 import com.wirelesskings.wkreload.dialogs.ViewReloadDialog;
 import com.wirelesskings.wkreload.domain.interactors.OwnerInteractor;
 import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
+import com.wirelesskings.wkreload.domain.model.Father;
 import com.wirelesskings.wkreload.model.ReloadItem;
 import com.wirelesskings.wkreload.model.mapper.ReloadItemDataMapper;
 
@@ -186,9 +187,9 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     }
 
     @Override
-    public void renderDebit(String debit) {
+    public void renderFather(Father father) {
         if (listened != null)
-            listened.onDebit(debit);
+            listened.onFather(father);
     }
 
     @Override
@@ -218,7 +219,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     }
 
     public interface OnReloadsFragmentListened {
-        void onDebit(String debit);
+        void onFather(Father father);
 
         void visibilityBottom(boolean b);
     }

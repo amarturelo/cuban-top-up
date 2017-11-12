@@ -1,6 +1,7 @@
 package com.wirelesskings.wkreload.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.wirelesskings.wkreload.R;
+import com.wirelesskings.wkreload.activities.LoginActivity;
+import com.wirelesskings.wkreload.activities.MainActivity;
 import com.wirelesskings.wkreload.domain.model.internal.Credentials;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 import com.wirelesskings.wkreload.mailmiddleware.crypto.Crypto;
@@ -151,6 +154,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private OnLoginFragmentListener onLoginFragmentListener;
+
+
 
     public interface OnLoginFragmentListener {
         void onLoginCallback(ServerConfig serverConfig);

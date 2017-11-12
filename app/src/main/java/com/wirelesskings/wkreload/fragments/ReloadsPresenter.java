@@ -70,7 +70,7 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
                     }
                     else
                         view.hasPromotions(false);
-                    view.renderDebit(owner.getFather().getAmount());
+                    view.renderFather(owner.getFather());
                 }));
     }
 

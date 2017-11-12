@@ -53,4 +53,6 @@
     <string name="txt_date">Fecha</string>
     <string name="action_update">Actualizar</string>
     <string name="txt_not_promotions">Lo sentimos, pero en estos momentos no hay promociones</string>
+    <string name="action_try">Reintentar</string>
+    <string name="title_not_reload">No hay recargas aun</string>
 </resources>

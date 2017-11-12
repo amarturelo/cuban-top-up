@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.dialogs.ReloadBottomDialog;
+import com.wirelesskings.wkreload.domain.model.Father;
 import com.wirelesskings.wkreload.fragments.ReloadsFragment;
 import com.wirelesskings.wkreload.fragments.ReloadsPresenter;
 import com.wirelesskings.wkreload.mailmiddleware.mail.rx.RxCallReceiver;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
     private ReloadBottomDialog reloadBottomDialog;
 
     private TextView tvDebit;
+    private TextView tvFatherName;
+    private TextView tvFatherCost;
 
     FloatingActionButton fab;
 
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         tvDebit = (TextView) findViewById(R.id.tv_debit);
+        tvFatherName = (TextView) findViewById(R.id.tv_father);
+        tvFatherCost = (TextView) findViewById(R.id.tv_cost);
 
         fab.setOnClickListener(view -> showReload());
 
@@ -91,5 +96,12 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
     @Override
     public void onDebit(String debit) {
         tvDebit.setText("$" + String.valueOf(debit));
+    }
+
+    @Override
+    public void onFather(Father father) {
+        tvDebit.setText("$" + String.valueOf(father.getAmount()));
+        tvFatherCost.setText("$" + String.valueOf(father.getCost()));
+        tvFatherName.setText(String.valueOf(father.getName()));
     }
 }

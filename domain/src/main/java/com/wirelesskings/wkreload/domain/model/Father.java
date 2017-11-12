@@ -7,12 +7,22 @@ package com.wirelesskings.wkreload.domain.model;
 public class Father {
     private String name;
     private String amount;
+    private String cost;
 
     public Father() {
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getCost() {
+        return cost;
+    }
+
+    public Father setCost(String cost) {
+        this.cost = cost;
+        return this;
     }
 
     public Father setName(String name) {

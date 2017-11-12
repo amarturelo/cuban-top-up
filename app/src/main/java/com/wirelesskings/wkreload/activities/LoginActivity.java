@@ -1,5 +1,6 @@
 package com.wirelesskings.wkreload.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -165,6 +166,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                     serverConfig.getCredentials().getUsername(),
                     serverConfig.getCredentials().getPassword());
         }
+    }
+
+    public static Intent getCallingIntent(Context context) {
+        Intent callingIntent = new Intent(context, LoginActivity.class);
+        return callingIntent;
     }
 
     @Override
