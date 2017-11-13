@@ -63,9 +63,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/layout_description"
-                android:layout_marginTop="8dp"
                 android:orientation="vertical"
-                android:padding="32dp">
+                android:padding="16dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -78,15 +77,50 @@
                         android:layout_toLeftOf="@+id/stub">
 
                         <EditText
-                            android:id="@+id/et_user"
+                            android:id="@+id/et_user_nauta"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/hint_user"
-                            android:text="amarturelo@nauta.cu" />
+                            android:hint="@string/hint_user_nauta"
+                            android:text="amarturelo" />
                     </android.support.design.widget.TextInputLayout>
 
+                    <TextView
+                        android:id="@+id/stub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:text="@string/stub_mail" />
                 </RelativeLayout>
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <EditText
+                        android:id="@+id/et_pass_nauta"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_password_nauta"
+                        android:inputType="textPassword"
+                        android:text="adriana*2017" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_toLeftOf="@+id/stub">
+
+                    <EditText
+                        android:id="@+id/et_user"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_user_wk"
+                        android:text="amarturelo@nauta.cu" />
+                </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -97,9 +131,8 @@
                         android:id="@+id/et_pass"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_password"
-                        android:inputType="textPassword"
-                        android:text="123456" />
+                        android:hint="@string/hint_password_wk"
+                        android:inputType="textPassword" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -116,16 +149,6 @@
                         android:text="U33756-AMARTURELO" />
                 </android.support.design.widget.TextInputLayout>
 
-                <TextView
-                    android:id="@+id/back_to_settings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:linksClickable="true"
-                    android:paddingTop="24dp"
-                    android:text="@string/action_change_settings"
-                    android:textColor="@color/yellow"
-                    />
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>

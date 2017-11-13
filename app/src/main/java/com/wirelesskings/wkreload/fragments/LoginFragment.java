@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.activities.LoginActivity;
@@ -31,11 +32,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private EditText mUser;
     private EditText mPass;
     private EditText mToken;
-    private View mBackToSettings;
+
+    private EditText mUserNauta;
+    private EditText mNautaPass;
+    private TextView msTub;
 
     private View buttom;
-
-    private ServerConfig serverConfig;
 
 
     public LoginFragment() {
@@ -45,11 +47,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        serverConfig = new ServerConfig();
-
-        serverConfig.setEmail(getUserNauta())
-                .setPassword(getPassNauta());
     }
 
     @Override
@@ -62,9 +59,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         mPass = view.findViewById(R.id.et_pass);
         mToken = view.findViewById(R.id.et_token);
         mToken.setText(getWKToken());
+        mUserNauta = view.findViewById(R.id.et_user_nauta);
+        mUserNauta.setText(getUserNauta());
+        mNautaPass = view.findViewById(R.id.et_pass_nauta);
+        mNautaPass.setText(getPassNauta());
+
         buttom = view.findViewById(R.id.login_bottom);
-        mBackToSettings = view.findViewById(R.id.back_to_settings);
-        mBackToSettings.setOnClickListener(this);
         buttom.setOnClickListener(this);
         return view;
     }
@@ -94,11 +94,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     public String getUserNauta() {
-        return getArguments().getString(ARGS_NAUTA_USER);
+        String email = getArguments().getString(ARGS_NAUTA_USER, "");
+        if (email.contains("@"))
+            return email.split("@")[0];
+        return email;
     }
 
     public String getPassNauta() {
-        return getArguments().getString(ARGS_NAUTA_PASS);
+        return getArguments().getString(ARGS_NAUTA_PASS, "");
     }
 
     public String getWKUser() {
@@ -115,19 +118,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             case R.id.login_bottom:
                 clickLogin();
                 break;
-            case R.id.back_to_settings:
-                backToSettings();
-                break;
         }
     }
 
-    private void backToSettings() {
-        if (onLoginFragmentListener != null)
-            onLoginFragmentListener.onBackSettings(serverConfig.getEmail(),serverConfig.getPassword());
-    }
 
     private void clickLogin() {
         if (check()) {
+
+            ServerConfig serverConfig = new ServerConfig();
 
             String crypto = null;
             try {
@@ -137,12 +135,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 e.printStackTrace();
             }
 
-            serverConfig.setCredentials(
-                    new Credentials()
-                            .setToken(mToken.getText().toString())
-                            .setUsername(mUser.getText().toString())
-                            .setPassword(crypto)
-            );
+            serverConfig
+                    .setEmail(mUserNauta.getText().toString() + "@nauta.cu")
+                    .setPassword(mNautaPass.getText().toString())
+                    .setCredentials(
+                            new Credentials()
+                                    .setToken(mToken.getText().toString())
+                                    .setUsername(mUser.getText().toString())
+                                    .setPassword(crypto)
+                    );
             onLoginFragmentListener.onLoginCallback(serverConfig);
         }
     }
@@ -163,6 +164,17 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             mToken.setError("Debe espesificar su token de accesso");
             check = false;
         }
+        if (mUserNauta.getText().toString().isEmpty()) {
+            mUserNauta.setError("El correo nauna no puede estar vacio");
+            check = false;
+        } else if (mUserNauta.getText().toString().contains("@")) {
+            mUserNauta.setError("No es necesario poner @nauta.cu, nosotros lo hacemos por ti");
+            check = false;
+        }
+        if (mNautaPass.getText().toString().isEmpty()) {
+            mNautaPass.setError("Debe espesificar su contraseña nauta");
+            check = false;
+        }
 
         return check;
     }
@@ -173,6 +185,5 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public interface OnLoginFragmentListener {
         void onLoginCallback(ServerConfig serverConfig);
 
-        void onBackSettings(String email, String password);
     }
 }

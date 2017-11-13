@@ -50,8 +50,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         if (wk.hasCredentials()) {
             showLogin(wk.getCredentials().getEmail(), wk.getCredentials().getPassword(), wk.getCredentials().getCredentials().getUsername(), wk.getCredentials().getCredentials().getToken());
-        } else
-            showConfig("", "");
+        } else {
+            showLogin("", "", "", "");
+        }
     }
 
     private void initComponents() {
@@ -61,11 +62,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-
-    private void showConfig(String email, String pass) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, SettingsFragment.newInstance(email, pass)).commit();
     }
 
     private void showLogin(String email, String password, String username, String token) {
@@ -114,12 +110,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         doLogin(serverConfig);
     }
 
-    @Override
-    public void onBackSettings(String email, String password) {
-        showConfig(email, password);
-    }
 
-    ServerConfig serverConfig;
+    private ServerConfig serverConfig;
 
     private void doLogin(ServerConfig serverConfig) {
         Setting out = new Setting(serverConfig.getEmail(), serverConfig.getPassword());
@@ -174,10 +166,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         return callingIntent;
     }
 
-    //TODO ponerlo todo en una sola vista, pal carajo
-
     @Override
     public void onSettingsCallback(String email, String password) {
-        showLogin(email, password,wk !=null? wk.getCredentials().getCredentials().getUsername():"",wk !=null? wk.getCredentials().getCredentials().getToken():"");
+        showLogin(email, password, wk != null ? wk.getCredentials().getCredentials().getUsername() : "", wk != null ? wk.getCredentials().getCredentials().getToken() : "");
     }
 }

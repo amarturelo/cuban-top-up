@@ -55,4 +55,8 @@
     <string name="txt_not_promotions">Lo sentimos, pero en estos momentos no hay promociones</string>
     <string name="action_try">Reintentar</string>
     <string name="title_not_reload">No hay recargas aun</string>
+    <string name="hint_user_nauta">Correo nauta</string>
+    <string name="hint_password_nauta">Contraseña nauta</string>
+    <string name="hint_user_wk">Usuario en WK</string>
+    <string name="hint_password_wk">Contraseña en WK</string>
 </resources>
