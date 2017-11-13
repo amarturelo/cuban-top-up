@@ -4,9 +4,11 @@ import android.support.annotation.NonNull;
 
 import com.wirelesskings.wkreload.BackgroundLooper;
 import com.wirelesskings.wkreload.domain.interactors.OwnerInteractor;
+import com.wirelesskings.wkreload.domain.model.Reload;
 import com.wirelesskings.wkreload.presenter.BasePresenter;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by Alberto on 28/10/2017.
@@ -32,9 +34,12 @@ public class ViewReloadPresenter extends BasePresenter<ViewReloadContract.View>
         addSubscription(reloadsInteractor.reloadById(id)
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(reload -> {
-                    view.hideLoading();
-                    view.renderReload(reload);
+                .subscribe(new Consumer<Reload>() {
+                    @Override
+                    public void accept(Reload reload) throws Exception {
+                        view.hideLoading();
+                        view.renderReload(reload);
+                    }
                 }));
     }
 }

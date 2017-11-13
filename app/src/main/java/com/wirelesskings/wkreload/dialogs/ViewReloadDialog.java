@@ -78,7 +78,12 @@ public class ViewReloadDialog implements ViewReloadContract.View {
     public void showLoading() {
         bottomDialog.dismiss();
         multiStateView.setViewState(MultiStateView.VIEW_STATE_LOADING);
-        multiStateView.getView(MultiStateView.VIEW_STATE_LOADING).findViewById(R.id.btn_cancel).setOnClickListener(v1 -> cancel());
+        multiStateView.getView(MultiStateView.VIEW_STATE_LOADING).findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancel();
+            }
+        });
         bottomDialog = bottomDialog.getBuilder()
                 .setTitle(R.string.waiting)
                 .setContent(R.string.loading_content)

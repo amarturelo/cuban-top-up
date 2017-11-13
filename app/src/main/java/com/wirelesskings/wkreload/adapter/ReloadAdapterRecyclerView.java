@@ -45,7 +45,7 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ReloadItem reloadItem = reloadItems.get(position);
+        final ReloadItem reloadItem = reloadItems.get(position);
         holder.client_name.setText(reloadItem.getClientName());
         holder.client_number.setText(reloadItem.getClientNumber());
         holder.amount.setText(String.valueOf(reloadItem.getAmount()));

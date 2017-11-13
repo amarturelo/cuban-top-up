@@ -19,6 +19,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
@@ -50,11 +51,11 @@ public class OwnerRepositoryImpl implements OwnerRepository {
     public Observable<CollectionChange<Reload>> reloads() {
         return Observable.create(new ObservableOnSubscribe<CollectionChange<Reload>>() {
             @Override
-            public void subscribe(@NonNull ObservableEmitter<CollectionChange<Reload>> emitter) throws Exception {
-                CollectionChange<Reload> collectionChange = new CollectionChange<Reload>();
+            public void subscribe(@NonNull final ObservableEmitter<CollectionChange<Reload>> emitter) throws Exception {
+                final CollectionChange<Reload> collectionChange = new CollectionChange<Reload>();
 
 
-                Realm realm = Realm.getDefaultInstance();
+                final Realm realm = Realm.getDefaultInstance();
                 RealmResults<RealmReload> result = realm.where(RealmReload.class).findAllAsync();
 
                 realm.where(RealmReload.class).findAllAsync().addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<RealmReload>>() {
@@ -104,8 +105,8 @@ public class OwnerRepositoryImpl implements OwnerRepository {
     public Observable<Owner> owner() {
         return Observable.create(new ObservableOnSubscribe<RealmOwner>() {
             @Override
-            public void subscribe(@NonNull ObservableEmitter<RealmOwner> emitter) throws Exception {
-                Realm realm = Realm.getDefaultInstance();
+            public void subscribe(@NonNull final ObservableEmitter<RealmOwner> emitter) throws Exception {
+                final Realm realm = Realm.getDefaultInstance();
                 owner = realm.where(RealmOwner.class).findAllAsync();
                 owner.addChangeListener(new RealmChangeListener<RealmResults<RealmOwner>>() {
                     @Override
@@ -117,14 +118,19 @@ public class OwnerRepositoryImpl implements OwnerRepository {
                     }
                 });
             }
-        }).map(realmOwner -> ownerDataMapper.transform(realmOwner));
+        }).map(new Function<RealmOwner, Owner>() {
+            @Override
+            public Owner apply(@NonNull RealmOwner realmOwner) throws Exception {
+                return ownerDataMapper.transform(realmOwner);
+            }
+        });
     }
 
     @Override
     public Observable<Long> debit() {
         return Observable.create(new ObservableOnSubscribe<Long>() {
             @Override
-            public void subscribe(@NonNull ObservableEmitter<Long> emitter) throws Exception {
+            public void subscribe(@NonNull final ObservableEmitter<Long> emitter) throws Exception {
                 Realm realm = Realm.getDefaultInstance();
                 RealmResults<RealmReload> result = realm.where(RealmReload.class).findAllAsync();
 
@@ -146,10 +152,18 @@ public class OwnerRepositoryImpl implements OwnerRepository {
 
     @Override
     public Single<Reload> reloadById(String id) {
-        return Single.create((SingleOnSubscribe<RealmReload>) emitter -> {
-            Realm realm = Realm.getDefaultInstance();
-            RealmResults<RealmReload> result = realm.where(RealmReload.class).findAll();
-            emitter.onSuccess(realm.copyFromRealm(result.first()));
-        }).map(realmReload -> reloadDataMapper.transform(realmReload));
+        return Single.create(new SingleOnSubscribe<RealmReload>() {
+            @Override
+            public void subscribe(@NonNull SingleEmitter<RealmReload> emitter) throws Exception {
+                Realm realm = Realm.getDefaultInstance();
+                RealmResults<RealmReload> result = realm.where(RealmReload.class).findAll();
+                emitter.onSuccess(realm.copyFromRealm(result.first()));
+            }
+        }).map(new Function<RealmReload, Reload>() {
+            @Override
+            public Reload apply(@NonNull RealmReload realmReload) throws Exception {
+                return reloadDataMapper.transform(realmReload);
+            }
+        });
     }
 }

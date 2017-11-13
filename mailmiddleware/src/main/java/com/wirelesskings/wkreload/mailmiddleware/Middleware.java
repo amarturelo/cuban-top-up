@@ -14,14 +14,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Maybe;
-import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
-import io.reactivex.SingleOnSubscribe;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.BooleanSupplier;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
 /**
@@ -73,9 +70,15 @@ public class Middleware {
         return receiver.receiver(RECEIVER)
                 .delay(6000, TimeUnit.MILLISECONDS)
                 .repeat()
-                .subscribe(emails -> {
-                    for (Email email :
-                            emails) {
+                .flatMapIterable(new Function<List<Email>, Iterable<Email>>() {
+                    @Override
+                    public Iterable<Email> apply(@NonNull List<Email> emails) throws Exception {
+                        return emails;
+                    }
+                })
+                .forEach(new Consumer<Email>() {
+                    @Override
+                    public void accept(Email email) throws Exception {
                         emailReceived(email);
                     }
                 });
@@ -112,7 +115,7 @@ public class Middleware {
 
     private String token;
 
-    public String call(String name, Map<String, Object> params, ResultListener listener) {
+    public String call(String name, Map<String, Object> params, final ResultListener listener) {
         final String callId = nextId();
         Map<String, Object> data = new LinkedHashMap<>();
         data.put(WKField.ACTION, name);
@@ -136,11 +139,20 @@ public class Middleware {
         return callId;
     }
 
-    private void send(Map<String, Object> data, String token, SuccessListened listened) {
-        String subject = Crypto.md5(Structure.fetch(data) + token);
+    private void send(Map<String, Object> data, String token, final SuccessListened listened) {
+        String subject = Crypto.md5(Util.fetch(data) + token);
         addSubscription(sender.sender(subject, toJson(data), RECEIVER)
-                .subscribe(() -> listened.onSuccess(),
-                        throwable -> listened.onError((Exception) throwable)));
+                .subscribe(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        listened.onSuccess();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        listened.onError((Exception) throwable);
+                    }
+                }));
     }
 
     private String toJson(Object o) {

@@ -12,6 +12,8 @@ import org.reactivestreams.Publisher;
 import java.util.ArrayList;
 
 import io.reactivex.Completable;
+import io.reactivex.CompletableEmitter;
+import io.reactivex.CompletableOnSubscribe;
 import io.reactivex.Flowable;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
@@ -42,32 +44,37 @@ public class RxCallSender {
     }
 
     private Completable doSender(final String subject, final String body, final String receiver) {
-        return Completable.create(e -> mSender.execute(subject, body, receiver, new OnStateChangedListener() {
+        return Completable.create(new CompletableOnSubscribe() {
             @Override
-            public void onExecuting() {
-                Log.d(RxCallSender.class.getSimpleName(), " onExecuting");
-            }
+            public void subscribe(@NonNull final CompletableEmitter emitter) throws Exception {
+                mSender.execute(subject, body, receiver, new OnStateChangedListener() {
+                    @Override
+                    public void onExecuting() {
+                        Log.d(RxCallSender.class.getSimpleName(), " onExecuting");
+                    }
 
-            @Override
-            public void onSuccess(ArrayList<?> list) {
-                Log.d(RxCallSender.class.getSimpleName(), " onSuccess");
-                if (!e.isDisposed())
-                    e.onComplete();
-            }
+                    @Override
+                    public void onSuccess(ArrayList<?> list) {
+                        Log.d(RxCallSender.class.getSimpleName(), " onSuccess");
+                        if (!emitter.isDisposed())
+                            emitter.onComplete();
+                    }
 
-            @Override
-            public void onError(int code, String msg) {
-                Log.d(RxCallSender.class.getSimpleName(), " onError");
-                if (!e.isDisposed())
-                    e.onError(new Exception(msg));
-            }
+                    @Override
+                    public void onError(int code, String msg) {
+                        Log.d(RxCallSender.class.getSimpleName(), " onError");
+                        if (!emitter.isDisposed())
+                            emitter.onError(new Exception(msg));
+                    }
 
-            @Override
-            public void onCanceled() {
-                Log.d(RxCallSender.class.getSimpleName(), " onCanceled");
-                if (!e.isDisposed())
-                    e.onError(new Exception("Canceled"));
+                    @Override
+                    public void onCanceled() {
+                        Log.d(RxCallSender.class.getSimpleName(), " onCanceled");
+                        if (!emitter.isDisposed())
+                            emitter.onError(new Exception("Canceled"));
+                    }
+                });
             }
-        }));
+        });
     }
 }

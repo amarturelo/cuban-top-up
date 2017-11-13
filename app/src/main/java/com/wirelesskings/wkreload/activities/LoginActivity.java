@@ -69,11 +69,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     private void showLogin(String email, String password) {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, LoginFragment.newInstance(email, password)).commit();
-        initPresenter(email, password);
-    }
-
-    private void initPresenter(String email, String password) {
-
     }
 
     @Override
@@ -89,7 +84,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void showLoading() {
-        loadingDialog.show(() -> loginPresenter.cancel());
+        loadingDialog.show(new LoadingDialog.LoadingListener() {
+            @Override
+            public void onCancel() {
+                loginPresenter.cancel();
+            }
+        });
     }
 
     @Override

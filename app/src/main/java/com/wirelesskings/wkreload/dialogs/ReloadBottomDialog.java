@@ -38,7 +38,12 @@ public class ReloadBottomDialog implements ReloadContract.View {
     @Override
     public void loading() {
         multiStateView.setViewState(MultiStateView.VIEW_STATE_LOADING);
-        multiStateView.getView(MultiStateView.VIEW_STATE_LOADING).findViewById(R.id.btn_cancel).setOnClickListener(v1 -> cancel());
+        multiStateView.getView(MultiStateView.VIEW_STATE_LOADING).findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancel();
+            }
+        });
         bottomDialog.dismiss();
         bottomDialog = bottomDialog.getBuilder()
                 .setTitle(R.string.waiting)
@@ -97,35 +102,37 @@ public class ReloadBottomDialog implements ReloadContract.View {
 
         presenter.bindView(this);
 
-        bottomDialog = new BottomDialog.Builder(context)
-                .setTitle("Nueva recarga")
-                .setCustomView(v)
-                .build();
-
         buttonCancel = v.findViewById(R.id.btn_cancel);
         buttonOk = v.findViewById(R.id.btn_ok);
 
-        buttonCancel.setOnClickListener(v1 -> cancel()
-        );
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancel();
+            }
+        });
         clientName = v.findViewById(R.id.client_name);
         clientNumber = v.findViewById(R.id.client_number);
         spAmount = v.findViewById(R.id.sp_amount);
         spCount = v.findViewById(R.id.sp_count);
         multiStateView = v.findViewById(R.id.multiStateView);
 
-        ServerConfig serverConfig = WK.getInstance().getCredentials();
+        final ServerConfig serverConfig = WK.getInstance().getCredentials();
 
-        buttonOk.findViewById(R.id.btn_ok).setOnClickListener(v1 -> {
-            if (check()) {
-                presenter.onReload(
-                        serverConfig.getCredentials().getUsername(),
-                        serverConfig.getCredentials().getPassword(),
-                        serverConfig.getEmail(),
-                        clientName.getText().toString().trim(),
-                        clientNumber.getText().toString().trim(),
-                        spCount.getSelectedItem().toString(),
-                        spAmount.getSelectedItem().toString());
-                loading();
+        buttonOk.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (check()) {
+                    presenter.onReload(
+                            serverConfig.getCredentials().getUsername(),
+                            serverConfig.getCredentials().getPassword(),
+                            serverConfig.getEmail(),
+                            clientName.getText().toString().trim(),
+                            clientNumber.getText().toString().trim(),
+                            spCount.getSelectedItem().toString(),
+                            spAmount.getSelectedItem().toString());
+                    loading();
+                }
             }
         });
 
@@ -137,6 +144,10 @@ public class ReloadBottomDialog implements ReloadContract.View {
     }
 
     public void show() {
+        bottomDialog = new BottomDialog.Builder(v.getContext())
+                .setTitle("Nueva recarga")
+                .setCustomView(v)
+                .build();
         bottomDialog.show();
     }
 

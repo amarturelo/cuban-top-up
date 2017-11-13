@@ -15,7 +15,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 /**
  * Created by Alberto on 24/10/2017.
@@ -41,7 +46,7 @@ public class ServerRepositoryImpl implements ServerRepository {
 
     @Override
     public Single<Owner> reload(String wk_user, String wk_pass, String nauta_user, String client_name, String client_number, String reload_count, String reload_amount) {
-        Map<String, Object> params = new LinkedHashMap<>();
+        final Map<String, Object> params = new LinkedHashMap<>();
         params.put("user", wk_user);
         params.put("pass", wk_pass);
         params.put("user_nauta", nauta_user);
@@ -59,45 +64,75 @@ public class ServerRepositoryImpl implements ServerRepository {
         params.put("reload", reload);
 
         final String[] id = new String[1];
-        return Single.create((SingleOnSubscribe<String>) emitter -> id[0] = middleware.call("reload", params, new ResultListener() {
-            @Override
-            public void onSuccess(String result) {
-                emitter.onSuccess(result);
-            }
+        return Single
+                .create(new SingleOnSubscribe<String>() {
+                    @Override
+                    public void subscribe(@NonNull final SingleEmitter<String> emitter) throws Exception {
+                        id[0] = middleware.call("reload", params, new ResultListener() {
+                            @Override
+                            public void onSuccess(String result) {
+                                emitter.onSuccess(result);
+                            }
 
-            @Override
-            public void onError(Exception e) {
-                emitter.onError(e);
-            }
-        })).map(s -> {
-            JsonParser parser = new JsonParser();
-            JsonElement mJson = parser.parse(s.trim());
-            return gson.fromJson(mJson, RealmOwner.class);
-        })
-                .doOnSuccess(realmOwner -> ownerCache.put(realmOwner))
-                .map(realmOwner -> owerDataMapper.transform(realmOwner))
-                .doOnDispose(() -> middleware.cancel(id[0]));
+                            @Override
+                            public void onError(Exception e) {
+                                emitter.onError(e);
+                            }
+                        });
+                    }
+                })
+                .map(new Function<String, RealmOwner>() {
+                    @Override
+                    public RealmOwner apply(@NonNull String s) throws Exception {
+                        JsonParser parser = new JsonParser();
+                        JsonElement mJson = parser.parse(s.trim());
+                        return gson.fromJson(mJson, RealmOwner.class);
+                    }
+                })
+                .doOnSuccess(new Consumer<RealmOwner>() {
+                    @Override
+                    public void accept(RealmOwner realmOwner) throws Exception {
+                        ownerCache.put(realmOwner);
+                    }
+                })
+                .map(new Function<RealmOwner, Owner>() {
+                    @Override
+                    public Owner apply(@NonNull RealmOwner realmOwner) throws Exception {
+                        return owerDataMapper.transform(realmOwner);
+                    }
+                })
+                .doOnDispose(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        middleware.cancel(id[0]);
+                    }
+                });
     }
 
     @Override
     public Single<Owner> update(String nauta_mail, String wk_username, String wk_password) {
-        Map<String, Object> params = new LinkedHashMap<>();
+        final Map<String, Object> params = new LinkedHashMap<>();
         params.put("user", wk_username);
         params.put("pass", wk_password);
         params.put("user_nauta", nauta_mail);
 
         final String[] id = new String[1];
-        return Single.create((SingleOnSubscribe<String>) emitter -> id[0] = middleware.call("update", params, new ResultListener() {
+        return Single.create(new SingleOnSubscribe<String>() {
             @Override
-            public void onSuccess(String result) {
-                emitter.onSuccess(result);
-            }
+            public void subscribe(@NonNull final SingleEmitter<String> emitter) throws Exception {
+                id[0] = middleware.call("update", params, new ResultListener() {
+                    @Override
+                    public void onSuccess(String result) {
+                        emitter.onSuccess(result);
+                    }
 
-            @Override
-            public void onError(Exception e) {
-                emitter.onError(e);
+                    @Override
+                    public void onError(Exception e) {
+                        emitter.onError(e);
+                    }
+                });
             }
-        }))/*Single.just("" +
+        })/*Single.just("" +
                 "{\n" +
                 "    \"father\": {\n" +
                 "        \"name\": \"dlespinosa\",\n" +
@@ -560,14 +595,32 @@ public class ServerRepositoryImpl implements ServerRepository {
                 "    },\n" +
                 "    \"user_nauta\": \"amarturelo@nauta.cu\",\n" +
                 "    \"nauta_active\": true\n" +
-                "}")*/.map(s -> {
-            JsonParser parser = new JsonParser();
-            JsonElement mJson = parser.parse(s.trim());
-            return gson.fromJson(mJson, RealmOwner.class);
-        })
-                .doOnSuccess(realmOwner -> ownerCache.put(realmOwner))
-                .map(realmOwner -> owerDataMapper.transform(realmOwner))
-                .doOnDispose(() -> middleware.cancel(id[0]))
-                ;
+                "}")*/
+                .map(new Function<String, RealmOwner>() {
+                    @Override
+                    public RealmOwner apply(@NonNull String s) throws Exception {
+                        JsonParser parser = new JsonParser();
+                        JsonElement mJson = parser.parse(s.trim());
+                        return gson.fromJson(mJson, RealmOwner.class);
+                    }
+                })
+                .doOnSuccess(new Consumer<RealmOwner>() {
+                    @Override
+                    public void accept(RealmOwner realmOwner) throws Exception {
+                        ownerCache.put(realmOwner);
+                    }
+                })
+                .map(new Function<RealmOwner, Owner>() {
+                    @Override
+                    public Owner apply(@NonNull RealmOwner realmOwner) throws Exception {
+                        return owerDataMapper.transform(realmOwner);
+                    }
+                })
+                .doOnDispose(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        middleware.cancel(id[0]);
+                    }
+                });
     }
 }

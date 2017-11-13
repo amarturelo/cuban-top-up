@@ -4,9 +4,11 @@ import android.support.annotation.NonNull;
 
 import com.wirelesskings.wkreload.BackgroundLooper;
 import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
+import com.wirelesskings.wkreload.domain.model.Owner;
 import com.wirelesskings.wkreload.presenter.BasePresenter;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by Alberto on 28/10/2017.
@@ -37,7 +39,17 @@ public class ReloadPresenter extends BasePresenter<ReloadContract.View>
         addSubscription(serverInteractor.reload(wk_user, wk_pass, nauta_user, client_name, client_number, reload_count, reload_amount)
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(owner -> view.complete(), throwable -> view.error(throwable)));
+                .subscribe(new Consumer<Owner>() {
+                    @Override
+                    public void accept(Owner owner) throws Exception {
+                        view.complete();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        view.error(throwable);
+                    }
+                }));
     }
 
     public void cancel() {

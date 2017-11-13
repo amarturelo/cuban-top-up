@@ -36,7 +36,7 @@ public class LoadingDialog {
         btnCancel = v.findViewById(R.id.btn_cancel);
     }
 
-    public void show(LoadingListener listener) {
+    public void show(final LoadingListener listener) {
         bottomDialog.show();
 
         btnCancel.setOnClickListener(new View.OnClickListener() {

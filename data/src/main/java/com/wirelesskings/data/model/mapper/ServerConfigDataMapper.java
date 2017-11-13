@@ -1,5 +1,7 @@
 package com.wirelesskings.data.model.mapper;
 
+import com.annimon.stream.Stream;
+import com.annimon.stream.function.Consumer;
 import com.wirelesskings.data.model.internal.RealmServerConfig;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 
@@ -14,9 +16,14 @@ public class ServerConfigDataMapper implements DataMapper<RealmServerConfig, Ser
 
     @Override
     public List<ServerConfig> transform(List<RealmServerConfig> realmServerConfigs) {
-        List<ServerConfig> serverConfigs = new ArrayList<>();
+        final List<ServerConfig> serverConfigs = new ArrayList<>();
         if (realmServerConfigs != null)
-            realmServerConfigs.stream().forEach(realmServerConfig -> serverConfigs.add(transform(realmServerConfig)));
+            Stream.of(realmServerConfigs).withoutNulls().forEach(new Consumer<RealmServerConfig>() {
+                @Override
+                public void accept(RealmServerConfig realmServerConfig) {
+                    serverConfigs.add(transform(realmServerConfig));
+                }
+            });
         return serverConfigs;
     }
 

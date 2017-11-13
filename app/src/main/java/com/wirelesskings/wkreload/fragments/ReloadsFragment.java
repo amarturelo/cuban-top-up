@@ -1,11 +1,9 @@
 package com.wirelesskings.wkreload.fragments;
 
 import android.content.Context;
-import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.wirelesskings.data.cache.OwnerCacheImp;
 import com.wirelesskings.data.model.mapper.FatherDataMapper;
 import com.wirelesskings.data.model.mapper.OwnerDataMapper;
@@ -37,7 +36,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import me.drakeet.materialdialog.MaterialDialog;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -156,26 +154,6 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     }
 
     @Override
-    public void hasPromotions(boolean b) {
-        if (!b) {
-
-            AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
-                    .setTitle(R.string.app_name)
-                    .setMessage(R.string.txt_not_promotions)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    })
-                    .show();
-
-        }
-        listened.visibilityBottom(b);
-
-    }
-
-    @Override
     public void showLoading() {
         loadingDialog.show(this);
     }
@@ -183,7 +161,12 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     @Override
     public void showError(Exception e) {
         hideLoading();
-        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+
+        new BottomDialog.Builder(getActivity())
+                .setTitle(R.string.app_name)
+                .setContent(e.getMessage())
+                .setPositiveText(android.R.string.ok)
+                .build();
     }
 
     @Override
@@ -221,7 +204,6 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     public interface OnReloadsFragmentListened {
         void onFather(Father father);
 
-        void visibilityBottom(boolean b);
     }
 
     @Override

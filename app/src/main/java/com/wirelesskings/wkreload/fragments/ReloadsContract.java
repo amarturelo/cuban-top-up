@@ -28,7 +28,6 @@ public interface ReloadsContract {
 
         void showLoading();
 
-        void hasPromotions(boolean b);
     }
 
     interface Presenter extends BaseContract.Presenter<ReloadsContract.View> {

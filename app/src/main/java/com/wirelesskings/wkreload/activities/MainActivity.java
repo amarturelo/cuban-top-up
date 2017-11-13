@@ -47,7 +47,12 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
         tvFatherName = (TextView) findViewById(R.id.tv_father);
         tvFatherCost = (TextView) findViewById(R.id.tv_cost);
 
-        fab.setOnClickListener(view -> showReload());
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showReload();
+            }
+        });
 
     }
 
@@ -83,19 +88,6 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
     public static Intent getCallingIntent(Context context) {
         Intent callingIntent = new Intent(context, MainActivity.class);
         return callingIntent;
-    }
-
-    @Override
-    public void visibilityBottom(boolean b) {
-        if (b)
-            fab.show();
-        else
-            fab.hide();
-    }
-
-    @Override
-    public void onDebit(String debit) {
-        tvDebit.setText("$" + String.valueOf(debit));
     }
 
     @Override

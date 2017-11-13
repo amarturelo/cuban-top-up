@@ -6,11 +6,13 @@ import com.wirelesskings.wkreload.BackgroundLooper;
 import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.domain.interactors.OwnerInteractor;
 import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
+import com.wirelesskings.wkreload.domain.model.Owner;
 import com.wirelesskings.wkreload.model.mapper.ReloadItemDataMapper;
 import com.wirelesskings.wkreload.presenter.BasePresenter;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by Alberto on 28/10/2017.
@@ -24,6 +26,26 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
     private ReloadItemDataMapper reloadItemDataMapper;
 
     private ServerInteractor serverInteractor;
+
+    private Consumer<Owner> success = new Consumer<Owner>() {
+        @Override
+        public void accept(Owner owner) throws Exception {
+            view.hideLoading();
+            if (owner.getPromotion() != null) {
+                view.renderInsertions(reloadItemDataMapper.transform(owner.getPromotion().getReloads()));
+            } else
+                view.showError(new Exception("No hay promociones en estos momentos"));
+            view.renderFather(owner.getFather());
+        }
+    };
+
+    private Consumer<Throwable> error = new Consumer<Throwable>() {
+        @Override
+        public void accept(Throwable throwable) throws Exception {
+            view.hideLoading();
+            view.showError((Exception) throwable);
+        }
+    };
 
 
     public ReloadsPresenter(OwnerInteractor reloadsInteractor, ReloadItemDataMapper reloadItemDataMapper, ServerInteractor serverInteractor) {
@@ -47,14 +69,7 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
                 WK.getInstance().getCredentials().getEmail())
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(owner -> {
-                            view.hideLoading();
-                            if (owner.getNauta_active().equals("true"))
-                                view.updateComplete();
-                            else
-                                view.showError(new Exception("User not active"));
-                        },
-                        throwable -> view.showError((Exception) throwable));
+                .subscribe(success, error);
         addSubscription(subscription);
     }
 
@@ -63,15 +78,7 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
         addSubscription(reloadsInteractor.owner()
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(owner -> {
-                    if (owner.getPromotion() != null) {
-                        view.hasPromotions(true);
-                        view.renderInsertions(reloadItemDataMapper.transform(owner.getPromotion().getReloads()));
-                    }
-                    else
-                        view.hasPromotions(false);
-                    view.renderFather(owner.getFather());
-                }));
+                .subscribe(success, error));
     }
 
     @Override
