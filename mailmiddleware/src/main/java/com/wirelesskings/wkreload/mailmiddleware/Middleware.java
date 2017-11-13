@@ -86,7 +86,7 @@ public class Middleware {
 
     private void emailReceived(Email email) {
         Map<String, Object> node = gson.fromJson(email.getBody(), LinkedHashMap.class);
-        if (checkMD5()) {
+        if (checkMD5(node, email.getSubject())) {
             String id = (String) node.get(WKField.ID);
 
             final Listener listener = mListeners.get(id);
@@ -102,7 +102,9 @@ public class Middleware {
         }
     }
 
-    private boolean checkMD5() {
+    private boolean checkMD5(Map<String, Object> node, String subject) {
+        String test1 = Util.fetch(node) + Crypto.md5(token);
+        String test2 = Crypto.md5(Util.fetch(node) + Crypto.md5(token));
         return true;
     }
 

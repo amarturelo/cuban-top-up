@@ -113,7 +113,7 @@ public class ViewReloadDialog implements ViewReloadContract.View {
         clientName.setText(reload.getClient().getName());
         clientNumber.setText(reload.getClient().getNumber());
         seller.setText(reload.getSeller().getName());
-        sellerAmount.setText(String.valueOf(Double.valueOf(reload.getSeller().getAmount())));
+        sellerAmount.setText(String.valueOf(Double.valueOf(reload.getSeller().getAmount())/10));
         tvBuy.setText(reload.getAmount() + "x" + reload.getCount());
         tvStatusReload.setText(reload.getStatus());
         tvDateReload.setText(DateUtils.formatDateTime(v.getContext(), reload.getDate().getTime(), 0));
