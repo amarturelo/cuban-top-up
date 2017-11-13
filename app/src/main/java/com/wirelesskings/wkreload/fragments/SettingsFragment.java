@@ -14,8 +14,8 @@ import com.wirelesskings.wkreload.R;
 public class SettingsFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    public static final String ARGS_NAUTA_USER = "args_username";
+    public static final String ARGS_NAUTA_PASS = "args_pass";
 
     // TODO: Rename and change types of parameters
     private EditText mUserNauta;
@@ -40,7 +40,10 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_nauta_settings, container, false);
 
         mUserNauta = view.findViewById(R.id.et_user_nauta);
+        mUserNauta.setText(getUserNauta());
         mNautaPass = view.findViewById(R.id.et_pass_nauta);
+        mNautaPass.setText(getPassNauta());
+
         mNextBottom = view.findViewById(R.id.next_bottom);
         msTub = view.findViewById(R.id.stub);
         mNextBottom.setOnClickListener(this);
@@ -60,9 +63,12 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         settingsListened = null;
     }
 
-    public static SettingsFragment newInstance() {
+    public static SettingsFragment newInstance(String email, String pass) {
 
         Bundle args = new Bundle();
+
+        args.putString(ARGS_NAUTA_USER, email);
+        args.putString(ARGS_NAUTA_PASS, pass);
 
         SettingsFragment fragment = new SettingsFragment();
         fragment.setArguments(args);
@@ -104,6 +110,17 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
 
         return check;
+    }
+
+    public String getUserNauta() {
+        String email = getArguments().getString(ARGS_NAUTA_USER, "");
+        if (email.contains("@"))
+            return email.split("@")[0];
+        return email;
+    }
+
+    public String getPassNauta() {
+        return getArguments().getString(ARGS_NAUTA_PASS, "");
     }
 
     public interface OnFragmentSettingsListened {

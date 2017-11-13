@@ -22,6 +22,7 @@ import com.wirelesskings.wkreload.executor.JobExecutor;
 import com.wirelesskings.wkreload.fragments.LoginFragment;
 import com.wirelesskings.wkreload.fragments.SettingsFragment;
 import com.wirelesskings.wkreload.mailmiddleware.Middleware;
+import com.wirelesskings.wkreload.mailmiddleware.crypto.Crypto;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Constants;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Setting;
 
@@ -48,9 +49,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         initComponents();
 
         if (wk.hasCredentials()) {
-            showLogin(wk.getCredentials().getEmail(), wk.getCredentials().getPassword());
+            showLogin(wk.getCredentials().getEmail(), wk.getCredentials().getPassword(), wk.getCredentials().getCredentials().getUsername(), wk.getCredentials().getCredentials().getToken());
         } else
-            showConfig();
+            showConfig("", "");
     }
 
     private void initComponents() {
@@ -63,12 +64,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
 
-    private void showConfig() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, SettingsFragment.newInstance()).commit();
+    private void showConfig(String email, String pass) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, SettingsFragment.newInstance(email, pass)).commit();
     }
 
-    private void showLogin(String email, String password) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, LoginFragment.newInstance(email, password)).commit();
+    private void showLogin(String email, String password, String username, String token) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, LoginFragment.newInstance(email, password, username, token)).commit();
     }
 
     @Override
@@ -114,8 +115,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     @Override
-    public void onBackSettings() {
-        showConfig();
+    public void onBackSettings(String email, String password) {
+        showConfig(email, password);
     }
 
     ServerConfig serverConfig;
@@ -133,7 +134,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         in.setPort(Constants.IMAP_PLAIN_PORT);
 
         wk.setMiddleware(new Middleware(
-                in, out, serverConfig.getCredentials().getToken()
+                in, out, Crypto.md5(serverConfig.getCredentials().getToken())
         ));
 
         loginPresenter = new LoginPresenter(
@@ -173,8 +174,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         return callingIntent;
     }
 
+    //TODO ponerlo todo en una sola vista, pal carajo
+
     @Override
     public void onSettingsCallback(String email, String password) {
-        showLogin(email, password);
+        showLogin(email, password,wk !=null? wk.getCredentials().getCredentials().getUsername():"",wk !=null? wk.getCredentials().getCredentials().getToken():"");
     }
 }

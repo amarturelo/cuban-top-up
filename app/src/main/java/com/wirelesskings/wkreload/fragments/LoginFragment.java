@@ -25,6 +25,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARGS_NAUTA_USER = "args_username";
     public static final String ARGS_NAUTA_PASS = "args_pass";
+    public static final String ARGS_WK_USER = "args_user";
+    public static final String ARGS_WK_TOKEN = "args_token";
 
     private EditText mUser;
     private EditText mPass;
@@ -56,8 +58,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         mUser = view.findViewById(R.id.et_user);
+        mUser.setText(getWKUser());
         mPass = view.findViewById(R.id.et_pass);
         mToken = view.findViewById(R.id.et_token);
+        mToken.setText(getWKToken());
         buttom = view.findViewById(R.id.login_bottom);
         mBackToSettings = view.findViewById(R.id.back_to_settings);
         mBackToSettings.setOnClickListener(this);
@@ -78,10 +82,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         onLoginFragmentListener = null;
     }
 
-    public static LoginFragment newInstance(String email, String pass) {
+    public static LoginFragment newInstance(String email, String pass, String wk_user, String wk_token) {
         Bundle args = new Bundle();
         args.putString(ARGS_NAUTA_USER, email);
         args.putString(ARGS_NAUTA_PASS, pass);
+        args.putString(ARGS_WK_USER, wk_user);
+        args.putString(ARGS_WK_TOKEN, wk_token);
         LoginFragment fragment = new LoginFragment();
         fragment.setArguments(args);
         return fragment;
@@ -93,6 +99,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     public String getPassNauta() {
         return getArguments().getString(ARGS_NAUTA_PASS);
+    }
+
+    public String getWKUser() {
+        return getArguments().getString(ARGS_WK_USER, "");
+    }
+
+    public String getWKToken() {
+        return getArguments().getString(ARGS_WK_TOKEN, "");
     }
 
     @Override
@@ -108,8 +122,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private void backToSettings() {
-        if(onLoginFragmentListener!=null)
-            onLoginFragmentListener.onBackSettings();
+        if (onLoginFragmentListener != null)
+            onLoginFragmentListener.onBackSettings(serverConfig.getEmail(),serverConfig.getPassword());
     }
 
     private void clickLogin() {
@@ -125,7 +139,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
             serverConfig.setCredentials(
                     new Credentials()
-                            .setToken(Crypto.md5(mToken.getText().toString()))
+                            .setToken(mToken.getText().toString())
                             .setUsername(mUser.getText().toString())
                             .setPassword(crypto)
             );
@@ -156,10 +170,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private OnLoginFragmentListener onLoginFragmentListener;
 
 
-
     public interface OnLoginFragmentListener {
         void onLoginCallback(ServerConfig serverConfig);
 
-        void onBackSettings();
+        void onBackSettings(String email, String password);
     }
 }
