@@ -165,8 +165,9 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
         new BottomDialog.Builder(getActivity())
                 .setTitle(R.string.app_name)
                 .setContent(e.getMessage())
+                .setPositiveBackgroundColorResource(R.color.yellow)
                 .setPositiveText(android.R.string.ok)
-                .build();
+                .build().show();
     }
 
     @Override

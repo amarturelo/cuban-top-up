@@ -38,8 +38,9 @@
                         android:id="@+id/client_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="textCapSentences"
                         android:hint="@string/hint_client_name"
-                        android:text="Alberto" />
+                        android:text="" />
 
                 </LinearLayout>
 
@@ -84,7 +85,7 @@
                                 android:layout_height="wrap_content"
                                 android:hint="########"
                                 android:inputType="phone"
-                                android:text="52950107" />
+                                android:text="" />
 
                         </LinearLayout>
 
