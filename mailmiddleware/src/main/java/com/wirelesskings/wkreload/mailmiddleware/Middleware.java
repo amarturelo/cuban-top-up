@@ -1,8 +1,7 @@
 package com.wirelesskings.wkreload.mailmiddleware;
 
-import com.annimon.stream.Stream;
-import com.annimon.stream.function.Supplier;
-import com.google.common.base.Joiner;
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.wirelesskings.wkreload.mailmiddleware.crypto.Crypto;
@@ -24,8 +23,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-
-import static java.util.stream.Collectors.joining;
 
 /**
  * Created by Alberto on 24/10/2017.
@@ -91,34 +88,31 @@ public class Middleware {
     }
 
     private void emailReceived(Email email) {
-        Map<String, Object> node = gson.fromJson(email.getBody(), LinkedHashMap.class);
-
-        String test = Crypto.md5(Util.scraper(gson.fromJson(email.getBody(), JsonElement.class))+Crypto.md5(token));
-
+        JsonElement node = gson.fromJson(email.getBody(), JsonElement.class);
+        Log.v(this.getClass().getSimpleName(), email.getBody());
 
         if (checkMD5(node, email.getSubject())) {
-            String id = (String) node.get(WKField.ID);
+            String id = node.getAsJsonObject().get(WKField.ID).getAsString();
 
             final Listener listener = mListeners.get(id);
 
             //TODO falta comprobar el md5 del asunto
             if (listener != null && listener instanceof ResultListener) {
                 removedListener(id);
-                if (node.get(WKField.SUCCESS).toString().equals("false")) {
-                    ((ResultListener) listener).onError(new Exception(node.get(WKField.ERRORS).toString()));
+                if (node.getAsJsonObject().get(WKField.SUCCESS).toString().equals("false")) {
+                    ((ResultListener) listener).onError(new Exception(node.getAsJsonObject().get(WKField.ERRORS).toString()));
                 } else
-                    ((ResultListener) listener).onSuccess(gson.toJson(node.get(WKField.RESULT)));
+                    ((ResultListener) listener).onSuccess(
+                            gson.toJson(node.getAsJsonObject().get(WKField.RESULT)));
             }
         }
     }
 
-    private boolean checkMD5(Map<String, Object> node, String subject) {
+    private boolean checkMD5(JsonElement node, String subject) {
 
-        String test1 = Crypto.md5(Util.fetch(node) + token);
-        String test2 = Crypto.md5(Util.fetch(node) + Crypto.md5(token));
-        String test3 = Crypto.md5(Crypto.md5(Util.fetch(node)) + Crypto.md5(token));
-        String test4 = Crypto.md5(Crypto.md5(Util.fetch(node)) + token);
-        return true;
+        String test1 = Crypto.md5(Util.scraper(node) + token);
+
+        return test1.equals(subject);
     }
 
     private void removedListener(String id) {
@@ -156,8 +150,9 @@ public class Middleware {
 
     private void send(Map<String, Object> data, String token, final SuccessListened listened) {
 
+        String subject = Crypto.md5(Util.scraper(gson.toJsonTree(data)) + token);
 
-        String subject = Crypto.md5(Util.fetch(data) + token);
+        //String subject = Crypto.md5(Util.fetch(data) + token);
         addSubscription(sender.sender(subject, toJson(data), RECEIVER)
                 .subscribe(new Action() {
                     @Override

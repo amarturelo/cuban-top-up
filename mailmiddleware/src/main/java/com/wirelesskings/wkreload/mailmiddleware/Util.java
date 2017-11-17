@@ -17,7 +17,7 @@ public class Util {
     public Util() {
     }
 
-    public static String fetch(Map<String, Object> node) {
+/*    public static String fetch(Map<String, Object> node) {
         final String[] result = {""};
         Stream.of(node).forEach(new Consumer<Map.Entry<String, Object>>() {
             @Override
@@ -29,7 +29,7 @@ public class Util {
             }
         });
         return result[0];
-    }
+    }*/
 
     public static String scraper(JsonElement node) {
         String result = "";
