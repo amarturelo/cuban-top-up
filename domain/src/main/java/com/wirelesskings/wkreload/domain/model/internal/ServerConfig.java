@@ -9,6 +9,9 @@ public class ServerConfig {
     private String email;
     private String password;
 
+    private boolean active = false;
+
+
     private Credentials credentials;
 
     public ServerConfig() {
@@ -51,6 +54,15 @@ public class ServerConfig {
         return email == null && password == null;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public ServerConfig setActive(boolean active) {
+        this.active = active;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,6 +70,7 @@ public class ServerConfig {
 
         ServerConfig that = (ServerConfig) o;
 
+        if (active != that.active) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null)
             return false;
@@ -69,6 +82,7 @@ public class ServerConfig {
     public int hashCode() {
         int result = email != null ? email.hashCode() : 0;
         result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (active ? 1 : 0);
         result = 31 * result + (credentials != null ? credentials.hashCode() : 0);
         return result;
     }

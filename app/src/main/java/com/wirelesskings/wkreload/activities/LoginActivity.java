@@ -18,6 +18,7 @@ import com.wirelesskings.wkreload.CredentialsStore;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.dialogs.LoadingDialog;
+import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 import com.wirelesskings.wkreload.executor.JobExecutor;
@@ -78,7 +79,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         if (e instanceof NetworkErrorToSendException) {
             snackbar = Snackbar
                     .make(findViewById(R.id.coordinator), R.string.error_network_to_send, Snackbar.LENGTH_INDEFINITE);
-        } else {
+        } else if (e instanceof UserInactiveWKException)
+            snackbar = Snackbar
+                    .make(findViewById(R.id.coordinator), R.string.error_user_inactive, Snackbar.LENGTH_INDEFINITE);
+
+        else {
             snackbar = Snackbar
                     .make(findViewById(R.id.coordinator), R.string.error_unknown, Snackbar.LENGTH_INDEFINITE);
         }
@@ -107,6 +112,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     private void saveCredentials() {
+        serverConfig.setActive(true);
         wk.saveCredentials(serverConfig);
     }
 
@@ -163,7 +169,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         ServerConfig local = null;
         if (wk.hasCredentials())
             local = wk.getCredentials();
-        if (local != null && local.equals(serverConfig))
+        if (local != null && local.equals(serverConfig) && local.isActive())
             goToMain();
         else {
             loginPresenter.update(serverConfig.getEmail(),

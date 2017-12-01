@@ -44,6 +44,7 @@ public class WK {
         RealmServerConfig realmServerConfig = credentialsStore.getCredentials();
 
         ServerConfig serverConfig = new ServerConfig()
+                .setActive(realmServerConfig.isActive())
                 .setEmail(realmServerConfig.getEmail())
                 .setPassword(realmServerConfig.getPassword())
                 .setCredentials(new Credentials()

@@ -2,6 +2,7 @@ package com.wirelesskings.wkreload.activities;
 
 import android.support.annotation.NonNull;
 
+import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.domain.executor.ThreadExecutor;
 import com.wirelesskings.wkreload.domain.interactors.ServerConfigInteractor;
 import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
@@ -49,7 +50,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
                                 if (owner.getNauta_active().equals("true"))
                                     view.loginComplete();
                                 else
-                                    view.showError(new Exception("User not active"));
+                                    view.showError(new UserInactiveWKException());
                             }
                         },
                         new Consumer<Throwable>() {

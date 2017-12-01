@@ -1,7 +1,6 @@
 package com.wirelesskings.data.repositories;
 
 import com.wirelesskings.data.model.internal.RealmServerConfig;
-import com.wirelesskings.data.model.mapper.ServerConfigDataMapper;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 import com.wirelesskings.wkreload.domain.repositories.ServerConfigRepositoy;
 

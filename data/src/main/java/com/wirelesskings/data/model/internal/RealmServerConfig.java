@@ -13,6 +13,8 @@ public class RealmServerConfig extends RealmObject {
     private String email;
     private String password;
 
+    private boolean active;
+
     private RealmCredentials realmCredentials;
 
     public RealmServerConfig() {
@@ -47,6 +49,15 @@ public class RealmServerConfig extends RealmObject {
 
     public RealmServerConfig setRealmCredentials(RealmCredentials realmCredentials) {
         this.realmCredentials = realmCredentials;
+        return this;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public RealmServerConfig setActive(boolean active) {
+        this.active = active;
         return this;
     }
 }
