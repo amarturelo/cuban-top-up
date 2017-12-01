@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     public void showError(Exception e) {
         hideLoading();
+
         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
     }
 

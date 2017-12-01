@@ -96,7 +96,6 @@ public class Middleware {
 
             final Listener listener = mListeners.get(id);
 
-            //TODO falta comprobar el md5 del asunto
             if (listener != null && listener instanceof ResultListener) {
                 removedListener(id);
                 if (node.getAsJsonObject().get(WKField.SUCCESS).toString().equals("false")) {
