@@ -29,6 +29,7 @@ import com.wirelesskings.wkreload.mailmiddleware.crypto.Crypto;
 import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Constants;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Setting;
+import com.wirelesskings.wkreload.navigation.Navigator;
 
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View,
@@ -79,15 +80,25 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         if (e instanceof NetworkErrorToSendException) {
             snackbar = Snackbar
                     .make(findViewById(R.id.coordinator), R.string.error_network_to_send, Snackbar.LENGTH_INDEFINITE);
-        } else if (e instanceof UserInactiveWKException)
+        } else if (e instanceof UserInactiveWKException) {
+            inactiveUser();
             snackbar = Snackbar
                     .make(findViewById(R.id.coordinator), R.string.error_user_inactive, Snackbar.LENGTH_INDEFINITE);
-
-        else {
+        } else {
             snackbar = Snackbar
                     .make(findViewById(R.id.coordinator), R.string.error_unknown, Snackbar.LENGTH_INDEFINITE);
         }
         snackbar.show();
+    }
+
+    private void inactiveUser() {
+        wk.saveCredentials(wk.getCredentials().setActive(false));
+        goToLogin();
+    }
+
+    private void goToLogin() {
+        Navigator.goToLogin(getApplicationContext());
+        finish();
     }
 
     @Override
