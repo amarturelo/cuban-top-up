@@ -3,7 +3,9 @@ package com.wirelesskings.wkreload.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Toast;
 
 import com.wirelesskings.data.cache.OwnerCacheImp;
@@ -23,6 +25,7 @@ import com.wirelesskings.wkreload.fragments.LoginFragment;
 import com.wirelesskings.wkreload.fragments.SettingsFragment;
 import com.wirelesskings.wkreload.mailmiddleware.Middleware;
 import com.wirelesskings.wkreload.mailmiddleware.crypto.Crypto;
+import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Constants;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Setting;
 
@@ -71,8 +74,15 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     public void showError(Exception e) {
         hideLoading();
-
-        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        Snackbar snackbar = null;
+        if (e instanceof NetworkErrorToSendException) {
+            snackbar = Snackbar
+                    .make(findViewById(R.id.coordinator), R.string.error_network_to_send, Snackbar.LENGTH_LONG);
+        } else {
+            snackbar = Snackbar
+                    .make(findViewById(R.id.coordinator), R.string.error_unknown, Snackbar.LENGTH_LONG);
+        }
+        snackbar.show();
     }
 
     @Override

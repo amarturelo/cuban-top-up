@@ -5,6 +5,9 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.wirelesskings.wkreload.mailmiddleware.crypto.Crypto;
+import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorException;
+import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToReceivedException;
+import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
 import com.wirelesskings.wkreload.mailmiddleware.mail.model.Email;
 import com.wirelesskings.wkreload.mailmiddleware.mail.rx.RxCallReceiver;
 import com.wirelesskings.wkreload.mailmiddleware.mail.rx.RxCallSender;
@@ -140,7 +143,7 @@ public class Middleware {
 
             @Override
             public void onError(Exception e) {
-                listener.onError(e);
+                listener.onError(new NetworkErrorToSendException(e));
             }
         });
 
@@ -161,7 +164,7 @@ public class Middleware {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        listened.onError((Exception) throwable);
+                        listened.onError(new NetworkErrorToReceivedException(throwable));
                     }
                 }));
     }

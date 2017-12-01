@@ -59,4 +59,6 @@
     <string name="hint_password_nauta">Contraseña nauta</string>
     <string name="hint_user_wk">Usuario en WK</string>
     <string name="hint_password_wk">Contraseña en WK</string>
+    <string name="error_network_to_send">Lo sentimos, ocurrió un error al intentar enviar la petición</string>
+    <string name="error_unknown">Lo sentimos, ocurrio un error desconocido</string>
 </resources>
