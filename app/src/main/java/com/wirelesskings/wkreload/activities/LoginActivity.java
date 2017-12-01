@@ -77,10 +77,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         Snackbar snackbar = null;
         if (e instanceof NetworkErrorToSendException) {
             snackbar = Snackbar
-                    .make(findViewById(R.id.coordinator), R.string.error_network_to_send, Snackbar.LENGTH_LONG);
+                    .make(findViewById(R.id.coordinator), R.string.error_network_to_send, Snackbar.LENGTH_INDEFINITE);
         } else {
             snackbar = Snackbar
-                    .make(findViewById(R.id.coordinator), R.string.error_unknown, Snackbar.LENGTH_LONG);
+                    .make(findViewById(R.id.coordinator), R.string.error_unknown, Snackbar.LENGTH_INDEFINITE);
         }
         snackbar.show();
     }

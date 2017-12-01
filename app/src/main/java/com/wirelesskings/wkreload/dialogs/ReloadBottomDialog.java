@@ -1,6 +1,8 @@
 package com.wirelesskings.wkreload.dialogs;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +22,7 @@ import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.custom.MultiStateView;
 import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
+import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
 
 /**
  * Created by Alberto on 28/10/2017.
@@ -49,6 +52,7 @@ public class ReloadBottomDialog implements ReloadContract.View {
                 .setTitle(R.string.waiting)
                 .setContent(R.string.loading_content)
                 .setCancelable(false)
+                .setPositiveText(android.R.string.ok)
                 .build();
         bottomDialog.show();
     }
@@ -56,12 +60,25 @@ public class ReloadBottomDialog implements ReloadContract.View {
     @Override
     public void complete() {
         hideLoading();
+
+        new AlertDialog.Builder(v.getContext())
+                .setTitle(R.string.title_request_success)
+                .setMessage(R.string.message_request_success)
+                .show();
     }
 
     @Override
     public void error(Throwable throwable) {
         hideLoading();
-        Toast.makeText(v.getContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+        Snackbar snackbar = null;
+        if (throwable instanceof NetworkErrorToSendException) {
+            snackbar = Snackbar
+                    .make(v, R.string.error_network_to_send, Snackbar.LENGTH_INDEFINITE);
+        } else {
+            snackbar = Snackbar
+                    .make(v, R.string.error_unknown, Snackbar.LENGTH_INDEFINITE);
+        }
+        snackbar.show();
     }
 
     private MultiStateView multiStateView;

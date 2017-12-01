@@ -61,4 +61,6 @@
     <string name="hint_password_wk">Contraseña en WK</string>
     <string name="error_network_to_send">Lo sentimos, ocurrió un error al intentar enviar la petición</string>
     <string name="error_unknown">Lo sentimos, ocurrio un error desconocido</string>
+    <string name="title_request_success">Petición completada!!!</string>
+    <string name="message_request_success">La petición se realizo correctamente, verifique que su recarga este en la lista y verifique en que estado se encuentra</string>
 </resources>
