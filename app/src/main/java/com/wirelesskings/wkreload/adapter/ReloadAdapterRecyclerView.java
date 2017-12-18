@@ -56,13 +56,13 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
         if (reloadItem.getStatus() != null)
             switch (reloadItem.getStatus()) {
                 case DENIED:
-                    holder.status.setImageResource(R.drawable.ic_error_black_24dp);
+                    holder.status.setImageResource(R.drawable.ic_status_error);
                     break;
                 case INPROGRESS:
-                    holder.status.setImageResource(R.drawable.ic_in_progress_black_24dp);
+                    holder.status.setImageResource(R.drawable.ic_status_in_progress);
                     break;
                 case SUCCESS:
-                    holder.status.setImageResource(R.drawable.ic_done_black_24dp);
+                    holder.status.setImageResource(R.drawable.ic_status_done);
                     break;
             }
 

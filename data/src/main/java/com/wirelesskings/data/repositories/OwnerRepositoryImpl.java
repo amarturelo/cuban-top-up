@@ -4,6 +4,7 @@ import com.wirelesskings.data.model.RealmOwner;
 import com.wirelesskings.data.model.RealmReload;
 import com.wirelesskings.data.model.mapper.OwnerDataMapper;
 import com.wirelesskings.data.model.mapper.ReloadDataMapper;
+import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.domain.model.CollectionChange;
 import com.wirelesskings.wkreload.domain.model.Owner;
 import com.wirelesskings.wkreload.domain.model.Reload;
@@ -112,7 +113,10 @@ public class OwnerRepositoryImpl implements OwnerRepository {
                     @Override
                     public void onChange(RealmResults<RealmOwner> realmOwners) {
                         if (realmOwners.size() > 0)
-                            emitter.onNext(realm.copyFromRealm(realmOwners.first()));
+                            if (Boolean.valueOf(realmOwners.first().getNauta_active()))
+                                emitter.onNext(realm.copyFromRealm(realmOwners.first()));
+                            else
+                                emitter.onError(new UserInactiveWKException());
                         else
                             emitter.onNext(new RealmOwner());
                     }

@@ -33,30 +33,31 @@ import com.wirelesskings.wkreload.navigation.Navigator;
 
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View,
-        LoginFragment.OnLoginFragmentListener,
-        SettingsFragment.OnFragmentSettingsListened {
+        LoginFragment.OnLoginFragmentListener {
 
     private LoginPresenter loginPresenter;
 
     private LoadingDialog loadingDialog;
 
-    private CredentialsStore credentialsStore;
-
     private WK wk;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         wk = WK.getInstance();
-        credentialsStore = new CredentialsStore();
         initComponents();
 
-        if (wk.hasCredentials()) {
-            showLogin(wk.getCredentials().getEmail(), wk.getCredentials().getPassword(), wk.getCredentials().getCredentials().getUsername(), wk.getCredentials().getCredentials().getToken());
-        } else {
-            showLogin("", "", "", "");
+        loginPresenter = new LoginPresenter(
+                JobExecutor.getInstance()
+        );
+
+        initActivity(savedInstanceState);
+    }
+
+    private void initActivity(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, LoginFragment.newInstance()).commit();
         }
     }
 
@@ -67,21 +68,23 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     protected void onResume() {
         super.onResume();
+        loginPresenter.bindView(this);
     }
 
-    private void showLogin(String email, String password, String username, String token) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, LoginFragment.newInstance(email, password, username, token)).commit();
+    @Override
+    public void onGoToMain() {
+        goToMain();
     }
 
     @Override
     public void showError(Exception e) {
+
         hideLoading();
         Snackbar snackbar = null;
         if (e instanceof NetworkErrorToSendException) {
             snackbar = Snackbar
                     .make(findViewById(R.id.coordinator), R.string.error_network_to_send, Snackbar.LENGTH_INDEFINITE);
         } else if (e instanceof UserInactiveWKException) {
-            inactiveUser();
             snackbar = Snackbar
                     .make(findViewById(R.id.coordinator), R.string.error_user_inactive, Snackbar.LENGTH_INDEFINITE);
         } else {
@@ -91,10 +94,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         snackbar.show();
     }
 
-    private void inactiveUser() {
-        wk.saveCredentials(wk.getCredentials().setActive(false));
-        goToLogin();
-    }
 
     private void goToLogin() {
         Navigator.goToLogin(getApplicationContext());
@@ -118,13 +117,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void loginComplete() {
-        saveCredentials();
         goToMain();
-    }
-
-    private void saveCredentials() {
-        serverConfig.setActive(true);
-        wk.saveCredentials(serverConfig);
     }
 
     private void goToMain() {
@@ -134,59 +127,13 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     @Override
-    public void onLoginCallback(ServerConfig serverConfig) {
+    public void onLogin(ServerConfig serverConfig) {
         doLogin(serverConfig);
     }
 
 
-    private ServerConfig serverConfig;
-
     private void doLogin(ServerConfig serverConfig) {
-        Setting out = new Setting(serverConfig.getEmail(), serverConfig.getPassword());
-        out.setServerType(Constants.SMTP_PLAIN); //0 for plain , 1 for ssl
-        out.setHost("smtp.nauta.cu");
-        out.setPort(Constants.SMTP_PLAIN_PORT); //25 for smtp plain,465 for smtp ssl.
-
-
-        Setting in = new Setting(serverConfig.getEmail(), serverConfig.getPassword());
-        in.setServerType(Constants.IMAP_PLAIN);
-        in.setHost("imap.nauta.cu");
-        in.setPort(Constants.IMAP_PLAIN_PORT);
-
-        wk.setMiddleware(new Middleware(
-                in, out, Crypto.md5(serverConfig.getCredentials().getToken())
-        ));
-
-        loginPresenter = new LoginPresenter(
-                JobExecutor.getInstance(),
-                new ServerInteractor(
-                        new ServerRepositoryImpl(
-                                wk.getMiddleware(),
-                                new OwnerDataMapper(
-                                        new FatherDataMapper(),
-                                        new PromotionDataMapper(
-                                                new ReloadDataMapper()
-                                        )
-                                ),
-                                new OwnerCacheImp()
-                        )
-                )
-        );
-
-        loginPresenter.bindView(this);
-
-
-        this.serverConfig = serverConfig;
-        ServerConfig local = null;
-        if (wk.hasCredentials())
-            local = wk.getCredentials();
-        if (local != null && local.equals(serverConfig) && local.isActive())
-            goToMain();
-        else {
-            loginPresenter.update(serverConfig.getEmail(),
-                    serverConfig.getCredentials().getUsername(),
-                    serverConfig.getCredentials().getPassword());
-        }
+        loginPresenter.login(serverConfig);
     }
 
     public static Intent getCallingIntent(Context context) {
@@ -195,7 +142,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     @Override
-    public void onSettingsCallback(String email, String password) {
-        showLogin(email, password, wk != null ? wk.getCredentials().getCredentials().getUsername() : "", wk != null ? wk.getCredentials().getCredentials().getToken() : "");
+    protected void onPause() {
+        super.onPause();
+        loginPresenter.release();
     }
 }

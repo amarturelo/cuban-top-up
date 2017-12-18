@@ -10,7 +10,6 @@ import io.realm.annotations.PrimaryKey;
 public class RealmFather extends RealmObject {
     @PrimaryKey
     private String name;
-    private String amount;
     private String cost;
 
     public RealmFather() {
@@ -34,12 +33,4 @@ public class RealmFather extends RealmObject {
         return this;
     }
 
-    public String getAmount() {
-        return amount;
-    }
-
-    public RealmFather setAmount(String amount) {
-        this.amount = amount;
-        return this;
-    }
 }

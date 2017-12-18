@@ -3,6 +3,7 @@ package com.wirelesskings.wkreload.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,9 +27,11 @@ import com.wirelesskings.wkreload.adapter.DividerItemDecoration;
 import com.wirelesskings.wkreload.adapter.ReloadAdapterRecyclerView;
 import com.wirelesskings.wkreload.dialogs.LoadingDialog;
 import com.wirelesskings.wkreload.dialogs.ViewReloadDialog;
+import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.domain.interactors.OwnerInteractor;
 import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
 import com.wirelesskings.wkreload.domain.model.Father;
+import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
 import com.wirelesskings.wkreload.model.ReloadItem;
 import com.wirelesskings.wkreload.model.mapper.ReloadItemDataMapper;
 
@@ -47,7 +50,6 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     public ReloadsFragment() {
     }
 
-    @BindView(R.id.reload_list)
     RecyclerView reloadList;
 
     ReloadAdapterRecyclerView reloadAdapterRecyclerView;
@@ -60,7 +62,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        ButterKnife.bind(this, view);
+        reloadList =  view.findViewById(R.id.reload_list);
         loadingDialog = new LoadingDialog(getActivity());
         return view;
     }
@@ -85,7 +87,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
                 new ReloadItemDataMapper(),
                 new ServerInteractor(
                         new ServerRepositoryImpl(
-                                WK.getInstance().getMiddleware(),
+                                null,
                                 new OwnerDataMapper(
                                         new FatherDataMapper(),
                                         new PromotionDataMapper(
@@ -162,12 +164,23 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     public void showError(Exception e) {
         hideLoading();
 
-        new BottomDialog.Builder(getActivity())
-                .setTitle(R.string.app_name)
-                .setContent(e.getMessage())
-                .setPositiveBackgroundColorResource(R.color.yellow)
-                .setPositiveText(android.R.string.ok)
-                .build().show();
+        /*Snackbar snackbar = null;
+        if (e instanceof NetworkErrorToSendException) {
+            snackbar = Snackbar
+                    .make(getView().findViewById(R.id.root), R.string.error_network_to_send, Snackbar.LENGTH_INDEFINITE);
+        } else if (e instanceof UserInactiveWKException) {
+            inactiveUser();
+            snackbar = Snackbar
+                    .make(getView().findViewById(R.id.root), R.string.error_user_inactive, Snackbar.LENGTH_INDEFINITE);
+        } else {
+            snackbar = Snackbar
+                    .make(getView().findViewById(R.id.root), R.string.error_unknown, Snackbar.LENGTH_INDEFINITE);
+        }
+        snackbar.show();*/
+    }
+
+    private void inactiveUser() {
+        listened.onInactiveUser();
     }
 
     @Override
@@ -205,6 +218,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     public interface OnReloadsFragmentListened {
         void onFather(Father father);
 
+        void onInactiveUser();
     }
 
     @Override

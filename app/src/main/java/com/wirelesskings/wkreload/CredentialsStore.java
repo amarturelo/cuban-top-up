@@ -24,7 +24,6 @@ public class CredentialsStore {
     }
 
     public void put(RealmServerConfig realmServerConfig) {
-        clear();
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         realm.insertOrUpdate(realmServerConfig);

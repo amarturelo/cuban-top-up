@@ -1,7 +1,6 @@
 package com.wirelesskings.wkreload.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -12,8 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.wirelesskings.wkreload.R;
-import com.wirelesskings.wkreload.activities.LoginActivity;
-import com.wirelesskings.wkreload.activities.MainActivity;
+import com.wirelesskings.wkreload.WK;
+import com.wirelesskings.wkreload.WKSDK;
 import com.wirelesskings.wkreload.domain.model.internal.Credentials;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 import com.wirelesskings.wkreload.mailmiddleware.crypto.Crypto;
@@ -39,6 +38,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private View buttom;
 
+    private WK wk;
+
 
     public LoginFragment() {
     }
@@ -46,6 +47,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        wk = WK.getInstance();
         setHasOptionsMenu(true);
     }
 
@@ -55,18 +57,27 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         mUser = view.findViewById(R.id.et_user);
-        mUser.setText(getWKUser());
         mPass = view.findViewById(R.id.et_pass);
         mToken = view.findViewById(R.id.et_token);
-        mToken.setText(getWKToken());
         mUserNauta = view.findViewById(R.id.et_user_nauta);
-        mUserNauta.setText(getUserNauta());
         mNautaPass = view.findViewById(R.id.et_pass_nauta);
-        mNautaPass.setText(getPassNauta());
 
         buttom = view.findViewById(R.id.login_bottom);
         buttom.setOnClickListener(this);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        WKSDK wksdk = wk.getWKSessionDefault();
+
+        if (wksdk != null) {
+            mUser.setText(wk.getCredentials().getCredentials().getUsername());
+            mToken.setText(wk.getCredentials().getCredentials().getToken());
+            mUserNauta.setText(getUserNauta(wk.getCredentials().getEmail()));
+            mNautaPass.setText((wk.getCredentials().getPassword()));
+        }
     }
 
     @Override
@@ -82,34 +93,21 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         onLoginFragmentListener = null;
     }
 
-    public static LoginFragment newInstance(String email, String pass, String wk_user, String wk_token) {
+    public static LoginFragment newInstance() {
         Bundle args = new Bundle();
-        args.putString(ARGS_NAUTA_USER, email);
+        /*args.putString(ARGS_NAUTA_USER, email);
         args.putString(ARGS_NAUTA_PASS, pass);
         args.putString(ARGS_WK_USER, wk_user);
-        args.putString(ARGS_WK_TOKEN, wk_token);
+        args.putString(ARGS_WK_TOKEN, wk_token);*/
         LoginFragment fragment = new LoginFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public String getUserNauta() {
-        String email = getArguments().getString(ARGS_NAUTA_USER, "");
+    public String getUserNauta(String email) {
         if (email.contains("@"))
             return email.split("@")[0];
         return email;
-    }
-
-    public String getPassNauta() {
-        return getArguments().getString(ARGS_NAUTA_PASS, "");
-    }
-
-    public String getWKUser() {
-        return getArguments().getString(ARGS_WK_USER, "");
-    }
-
-    public String getWKToken() {
-        return getArguments().getString(ARGS_WK_TOKEN, "");
     }
 
     @Override
@@ -144,11 +142,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                     .setUsername(mUser.getText().toString())
                                     .setPassword(crypto)
                     );
-            onLoginFragmentListener.onLoginCallback(serverConfig);
+
+            WKSDK wksdk = wk.getWKSessionDefault();
+
+            if (wksdk != null && wksdk.getServerConfig().equals(serverConfig) && wksdk.getServerConfig().isActive())
+                onLoginFragmentListener.onGoToMain();
+            else
+                onLoginFragmentListener.onLogin(serverConfig);
         }
     }
 
-    //TODO hace validacion
     private boolean check() {
         boolean check = true;
 
@@ -183,7 +186,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 
     public interface OnLoginFragmentListener {
-        void onLoginCallback(ServerConfig serverConfig);
+        void onLogin(ServerConfig serverConfig);
 
+        void onGoToMain();
     }
 }

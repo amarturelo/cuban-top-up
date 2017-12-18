@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.wirelesskings.wkreload.R;
+import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.dialogs.ReloadBottomDialog;
 import com.wirelesskings.wkreload.domain.model.Father;
 import com.wirelesskings.wkreload.fragments.ReloadsFragment;
@@ -22,6 +23,7 @@ import com.wirelesskings.wkreload.mailmiddleware.mail.rx.RxCallReceiver;
 import com.wirelesskings.wkreload.mailmiddleware.mail.rx.RxCallSender;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Constants;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Setting;
+import com.wirelesskings.wkreload.navigation.Navigator;
 
 public class MainActivity extends AppCompatActivity implements ReloadsFragment.OnReloadsFragmentListened {
 
@@ -33,10 +35,14 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
 
     FloatingActionButton fab;
 
+    WK wk;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        wk = WK.getInstance();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -88,6 +94,17 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
     public static Intent getCallingIntent(Context context) {
         Intent callingIntent = new Intent(context, MainActivity.class);
         return callingIntent;
+    }
+
+    @Override
+    public void onInactiveUser() {
+        WK.getInstance().saveCredentials(wk.getCredentials().setActive(false));
+        goToLogin();
+    }
+
+    private void goToLogin() {
+        Navigator.goToLogin(getApplicationContext());
+        finish();
     }
 
     @Override

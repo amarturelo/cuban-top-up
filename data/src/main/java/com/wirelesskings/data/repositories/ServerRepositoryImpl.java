@@ -110,6 +110,58 @@ public class ServerRepositoryImpl implements ServerRepository {
     }
 
     @Override
+    public Single<Owner> update(final Middleware middleware, String user_nauta, String wk_username, String wk_password) {
+        final Map<String, Object> params = new LinkedHashMap<>();
+        params.put("user", wk_username);
+        params.put("pass", wk_password);
+        params.put("user_nauta", user_nauta);
+
+        final String[] id = new String[1];
+        return Single.create(new SingleOnSubscribe<String>() {
+            @Override
+            public void subscribe(@NonNull final SingleEmitter<String> emitter) throws Exception {
+                id[0] = middleware.call("update", params, new ResultListener() {
+                    @Override
+                    public void onSuccess(String result) {
+                        emitter.onSuccess(result);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        emitter.onError(e);
+                    }
+                });
+            }
+        })
+                .map(new Function<String, RealmOwner>() {
+                    @Override
+                    public RealmOwner apply(@NonNull String s) throws Exception {
+                        JsonParser parser = new JsonParser();
+                        JsonElement mJson = parser.parse(s.trim());
+                        return gson.fromJson(mJson, RealmOwner.class);
+                    }
+                })
+                .doOnSuccess(new Consumer<RealmOwner>() {
+                    @Override
+                    public void accept(RealmOwner realmOwner) throws Exception {
+                        ownerCache.put(realmOwner);
+                    }
+                })
+                .map(new Function<RealmOwner, Owner>() {
+                    @Override
+                    public Owner apply(@NonNull RealmOwner realmOwner) throws Exception {
+                        return owerDataMapper.transform(realmOwner);
+                    }
+                })
+                .doOnDispose(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        middleware.cancel(id[0]);
+                    }
+                });
+    }
+
+    @Override
     public Single<Owner> update(String nauta_mail, String wk_username, String wk_password) {
         final Map<String, Object> params = new LinkedHashMap<>();
         params.put("user", wk_username);
@@ -132,470 +184,7 @@ public class ServerRepositoryImpl implements ServerRepository {
                     }
                 });
             }
-        })/*Single.just("" +
-                "{\n" +
-                "    \"father\": {\n" +
-                "        \"name\": \"dlespinosa\",\n" +
-                "        \"amount\": 2860\n" +
-                "    },\n" +
-                "    \"promotion\": {\n" +
-                "        \"title\": \"promocion de pruebas 20 para  50\",\n" +
-                "        \"sdate\": \"2017-10-25 16:10:00\",\n" +
-                "        \"edate\": \"2017-11-01 23:00:00\",\n" +
-                "        \"reloads\": [\n" +
-                "            {\n" +
-                "                \"id\": 1,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:19:30\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 2,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:25:01\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 3,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:26:02\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 4,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:27:02\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 5,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:28:01\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 6,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:28:12\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 7,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:29:01\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 8,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:29:12\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 9,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:30:01\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 10,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:30:17\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 11,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:31:01\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 12,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:31:12\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 13,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:32:01\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 14,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:32:11\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 15,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:33:01\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 16,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:33:12\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 17,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:34:01\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 18,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:34:16\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 19,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:35:02\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 20,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:35:12\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 21,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:36:02\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 22,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:36:12\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 23,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:37:02\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 24,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:37:12\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 25,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:38:02\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 26,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:38:12\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 27,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:39:02\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": 28,\n" +
-                "                \"client\": {\n" +
-                "                    \"number\": \"53192289\",\n" +
-                "                    \"name\": \"albertini\"\n" +
-                "                },\n" +
-                "                \"seller\": {\n" +
-                "                    \"name\": \"amarturelo\",\n" +
-                "                    \"amount\": 2860\n" +
-                "                },\n" +
-                "                \"count\": 1,\n" +
-                "                \"amount\": 20,\n" +
-                "                \"date\": \"2017-10-30 18:39:17\",\n" +
-                "                \"status\": \"inprogress\",\n" +
-                "                \"app\": \"mobile\"\n" +
-                "            }\n" +
-                "        ]\n" +
-                "    },\n" +
-                "    \"user_nauta\": \"amarturelo@nauta.cu\",\n" +
-                "    \"nauta_active\": true\n" +
-                "}")*/
+        })
                 .map(new Function<String, RealmOwner>() {
                     @Override
                     public RealmOwner apply(@NonNull String s) throws Exception {

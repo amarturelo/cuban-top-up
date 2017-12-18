@@ -105,7 +105,7 @@ public class ReloadBottomDialog implements ReloadContract.View {
         presenter = new ReloadPresenter(
                 new ServerInteractor(
                         new ServerRepositoryImpl(
-                                WK.getInstance().getMiddleware(),
+                                null,
                                 new OwnerDataMapper(
                                         new FatherDataMapper(),
                                         new PromotionDataMapper(

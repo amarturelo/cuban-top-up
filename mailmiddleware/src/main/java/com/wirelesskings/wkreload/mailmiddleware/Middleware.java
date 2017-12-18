@@ -11,6 +11,7 @@ import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendEx
 import com.wirelesskings.wkreload.mailmiddleware.mail.model.Email;
 import com.wirelesskings.wkreload.mailmiddleware.mail.rx.RxCallReceiver;
 import com.wirelesskings.wkreload.mailmiddleware.mail.rx.RxCallSender;
+import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Constants;
 import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Setting;
 
 import java.util.HashMap;
@@ -56,8 +57,19 @@ public class Middleware {
         compositeSubscription.clear();
     }
 
+    public Middleware(String user_nauta, String pass_nauta, String token) {
+        Setting out = new Setting(user_nauta, pass_nauta);
+        out.setServerType(Constants.SMTP_PLAIN); //0 for plain , 1 for ssl
+        out.setHost("smtp.nauta.cu");
+        out.setPort(Constants.SMTP_PLAIN_PORT); //25 for smtp plain,465 for smtp ssl.
 
-    public Middleware(Setting in, Setting out, String token) {
+
+        Setting in = new Setting(user_nauta, pass_nauta);
+        in.setServerType(Constants.IMAP_PLAIN);
+        in.setHost("imap.nauta.cu");
+        in.setPort(Constants.IMAP_PLAIN_PORT);
+
+
         receiver = new RxCallReceiver(in, 0, 5000);
         sender = new RxCallSender(out, 5, 5000);
         gson = new Gson();

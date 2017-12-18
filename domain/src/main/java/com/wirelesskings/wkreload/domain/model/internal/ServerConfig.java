@@ -70,7 +70,6 @@ public class ServerConfig {
 
         ServerConfig that = (ServerConfig) o;
 
-        if (active != that.active) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null)
             return false;
@@ -82,7 +81,6 @@ public class ServerConfig {
     public int hashCode() {
         int result = email != null ? email.hashCode() : 0;
         result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (active ? 1 : 0);
         result = 31 * result + (credentials != null ? credentials.hashCode() : 0);
         return result;
     }
