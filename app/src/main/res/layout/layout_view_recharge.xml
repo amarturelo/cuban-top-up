@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<com.wirelesskings.wkreload.custom.MultiStateView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/multiStateView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:msv_loadingView="@layout/layout_view_loading"
-    app:msv_viewState="content">
+    android:layout_height="wrap_content">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,8 +35,8 @@
                         android:id="@+id/client_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textCapSentences"
                         android:hint="@string/hint_client_name"
+                        android:inputType="textCapSentences"
                         android:text="" />
 
                 </LinearLayout>
@@ -143,11 +140,51 @@
 
         </ScrollView>
 
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
         <RelativeLayout
             android:id="@+id/l_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true">
+
+                <FrameLayout
+                    android:id="@+id/change_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true">
+
+                    <ImageView
+                        android:id="@+id/image_change_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:src="@drawable/ic_shopping_cart_black_24dp"
+                        android:tint="@color/red" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tv_count_reload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@+id/change_view"
+                    android:background="@drawable/bg_count_reload"
+                    android:padding="2dp"
+                    android:text="2"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -156,15 +193,23 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/btn_ok"
+                    android:id="@+id/btn_add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/txt_reload" />
+
+                <Button
+                    android:id="@+id/btn_ok"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="@string/txt_reload"
+                    android:visibility="gone" />
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 
-</com.wirelesskings.wkreload.custom.MultiStateView>
+</RelativeLayout>
 
 
 

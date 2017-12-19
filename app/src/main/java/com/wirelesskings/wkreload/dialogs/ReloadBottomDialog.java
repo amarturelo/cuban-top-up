@@ -21,65 +21,19 @@ import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.custom.MultiStateView;
 import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
+import com.wirelesskings.wkreload.domain.model.Reload;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
+
+import java.util.List;
 
 /**
  * Created by Alberto on 28/10/2017.
  */
 
-public class ReloadBottomDialog implements ReloadContract.View {
+public class ReloadBottomDialog {
 
     private final Button buttonOk;
-
-    @Override
-    public void hideLoading() {
-        multiStateView.setViewState(MultiStateView.VIEW_STATE_CONTENT);
-        bottomDialog.dismiss();
-    }
-
-    @Override
-    public void loading() {
-        multiStateView.setViewState(MultiStateView.VIEW_STATE_LOADING);
-        multiStateView.getView(MultiStateView.VIEW_STATE_LOADING).findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancel();
-            }
-        });
-        bottomDialog.dismiss();
-        bottomDialog = bottomDialog.getBuilder()
-                .setTitle(R.string.waiting)
-                .setContent(R.string.loading_content)
-                .setCancelable(false)
-                .setPositiveText(android.R.string.ok)
-                .build();
-        bottomDialog.show();
-    }
-
-    @Override
-    public void complete() {
-        hideLoading();
-
-        new AlertDialog.Builder(v.getContext())
-                .setTitle(R.string.title_request_success)
-                .setMessage(R.string.message_request_success)
-                .show();
-    }
-
-    @Override
-    public void error(Throwable throwable) {
-        hideLoading();
-        Snackbar snackbar = null;
-        if (throwable instanceof NetworkErrorToSendException) {
-            snackbar = Snackbar
-                    .make(v, R.string.error_network_to_send, Snackbar.LENGTH_INDEFINITE);
-        } else {
-            snackbar = Snackbar
-                    .make(v, R.string.error_unknown, Snackbar.LENGTH_INDEFINITE);
-        }
-        snackbar.show();
-    }
 
     private MultiStateView multiStateView;
 
@@ -95,60 +49,31 @@ public class ReloadBottomDialog implements ReloadContract.View {
 
     private View v;
 
-    private ReloadPresenter presenter;
+    public interface OnDialogReloadListened {
+        void onReloads(List<Reload> reloadList);
+    }
 
-    private Button buttonCancel;
+    private OnDialogReloadListened dialogReloadListened;
+
+    public void setDialogReloadListened(OnDialogReloadListened dialogReloadListened) {
+        this.dialogReloadListened = dialogReloadListened;
+    }
 
     public ReloadBottomDialog(Context context) {
         v = LayoutInflater.from(context).inflate(R.layout.layout_view_recharge, null);
 
-        presenter = new ReloadPresenter(
-                new ServerInteractor(
-                        new ServerRepositoryImpl(
-                                null,
-                                new OwnerDataMapper(
-                                        new FatherDataMapper(),
-                                        new PromotionDataMapper(
-                                                new ReloadDataMapper()
-                                        )
-                                ),
-                                new OwnerCacheImp()
-                        )
-                )
-        );
-
-        presenter.bindView(this);
-
-        buttonCancel = v.findViewById(R.id.btn_cancel);
         buttonOk = v.findViewById(R.id.btn_ok);
-
-        buttonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancel();
-            }
-        });
         clientName = v.findViewById(R.id.client_name);
         clientNumber = v.findViewById(R.id.client_number);
         spAmount = v.findViewById(R.id.sp_amount);
         spCount = v.findViewById(R.id.sp_count);
-        multiStateView = v.findViewById(R.id.multiStateView);
-
-        final ServerConfig serverConfig = WK.getInstance().getCredentials();
 
         buttonOk.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (check()) {
-                    presenter.onReload(
-                            serverConfig.getCredentials().getUsername(),
-                            serverConfig.getCredentials().getPassword(),
-                            serverConfig.getEmail(),
-                            clientName.getText().toString().trim(),
-                            clientNumber.getText().toString().trim(),
-                            spCount.getSelectedItem().toString(),
-                            spAmount.getSelectedItem().toString());
-                    loading();
+                    if (dialogReloadListened != null) {
+                    }
                 }
             }
         });
@@ -156,8 +81,6 @@ public class ReloadBottomDialog implements ReloadContract.View {
     }
 
     private void cancel() {
-        hideLoading();
-        presenter.cancel();
     }
 
     public void show() {

@@ -6,23 +6,16 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.dialogs.ReloadBottomDialog;
 import com.wirelesskings.wkreload.domain.model.Father;
 import com.wirelesskings.wkreload.fragments.ReloadsFragment;
-import com.wirelesskings.wkreload.fragments.ReloadsPresenter;
-import com.wirelesskings.wkreload.mailmiddleware.mail.rx.RxCallReceiver;
-import com.wirelesskings.wkreload.mailmiddleware.mail.rx.RxCallSender;
-import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Constants;
-import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Setting;
 import com.wirelesskings.wkreload.navigation.Navigator;
 
 public class MainActivity extends AppCompatActivity implements ReloadsFragment.OnReloadsFragmentListened {

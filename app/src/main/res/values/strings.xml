@@ -64,4 +64,5 @@
     <string name="title_request_success">Petición completada!!!</string>
     <string name="message_request_success">La petición se realizo correctamente, verifique que su recarga este en la lista y verifique en que estado se encuentra</string>
     <string name="error_user_inactive">Lo sentimos, pero su usuario esta desactivado para su uso en la aplicación</string>
+    <string name="txt_add">Agregar</string>
 </resources>
