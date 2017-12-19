@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,15 +21,19 @@ import com.wirelesskings.data.model.mapper.ReloadDataMapper;
 import com.wirelesskings.data.repositories.OwnerRepositoryImpl;
 import com.wirelesskings.data.repositories.ServerRepositoryImpl;
 import com.wirelesskings.wkreload.R;
+import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.adapter.DividerItemDecoration;
 import com.wirelesskings.wkreload.adapter.ReloadAdapterRecyclerView;
 import com.wirelesskings.wkreload.dialogs.LoadingDialog;
 import com.wirelesskings.wkreload.dialogs.ViewReloadDialog;
+import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.domain.interactors.OwnerInteractor;
 import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
 import com.wirelesskings.wkreload.domain.model.Father;
+import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
 import com.wirelesskings.wkreload.model.ReloadItem;
 import com.wirelesskings.wkreload.model.mapper.ReloadItemDataMapper;
+import com.wirelesskings.wkreload.navigation.Navigator;
 
 import java.util.List;
 
@@ -54,7 +59,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        reloadList =  view.findViewById(R.id.reload_list);
+        reloadList = view.findViewById(R.id.reload_list);
         loadingDialog = new LoadingDialog(getActivity());
         return view;
     }
@@ -77,18 +82,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
                         )
                 ),
                 new ReloadItemDataMapper(),
-                new ServerInteractor(
-                        new ServerRepositoryImpl(
-                                null,
-                                new OwnerDataMapper(
-                                        new FatherDataMapper(),
-                                        new PromotionDataMapper(
-                                                new ReloadDataMapper()
-                                        )
-                                ),
-                                new OwnerCacheImp()
-                        )
-                ));
+                WK.getInstance().getWKSessionDefault());
 
     }
 
@@ -156,23 +150,23 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     public void showError(Exception e) {
         hideLoading();
 
-        /*Snackbar snackbar = null;
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle("Ocurrio un error");
+
         if (e instanceof NetworkErrorToSendException) {
-            snackbar = Snackbar
-                    .make(getView().findViewById(R.id.root), R.string.error_network_to_send, Snackbar.LENGTH_INDEFINITE);
+            builder.setMessage(R.string.error_network_to_send);
         } else if (e instanceof UserInactiveWKException) {
-            inactiveUser();
-            snackbar = Snackbar
-                    .make(getView().findViewById(R.id.root), R.string.error_user_inactive, Snackbar.LENGTH_INDEFINITE);
+            goToLogin();
+            builder.setMessage(R.string.error_user_inactive);
         } else {
-            snackbar = Snackbar
-                    .make(getView().findViewById(R.id.root), R.string.error_unknown, Snackbar.LENGTH_INDEFINITE);
+            builder.setMessage(R.string.error_unknown);
         }
-        snackbar.show();*/
+        builder.show();
     }
 
-    private void inactiveUser() {
-        listened.onInactiveUser();
+    private void goToLogin() {
+        Navigator.goToLogin(getContext());
     }
 
     @Override

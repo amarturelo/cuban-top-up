@@ -2,8 +2,11 @@ package com.wirelesskings.wkreload.fragments;
 
 import android.support.annotation.NonNull;
 
+import com.wirelesskings.data.model.RealmOwner;
 import com.wirelesskings.wkreload.BackgroundLooper;
 import com.wirelesskings.wkreload.WK;
+import com.wirelesskings.wkreload.WKSDK;
+import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.domain.interactors.OwnerInteractor;
 import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
 import com.wirelesskings.wkreload.domain.model.Owner;
@@ -12,6 +15,7 @@ import com.wirelesskings.wkreload.presenter.BasePresenter;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -24,8 +28,6 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
     private OwnerInteractor reloadsInteractor;
 
     private ReloadItemDataMapper reloadItemDataMapper;
-
-    private ServerInteractor serverInteractor;
 
     private Consumer<Owner> success = new Consumer<Owner>() {
         @Override
@@ -47,11 +49,13 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
         }
     };
 
+    private WKSDK wksdk;
 
-    public ReloadsPresenter(OwnerInteractor reloadsInteractor, ReloadItemDataMapper reloadItemDataMapper, ServerInteractor serverInteractor) {
+
+    public ReloadsPresenter(OwnerInteractor reloadsInteractor, ReloadItemDataMapper reloadItemDataMapper, WKSDK wksdk) {
         this.reloadsInteractor = reloadsInteractor;
         this.reloadItemDataMapper = reloadItemDataMapper;
-        this.serverInteractor = serverInteractor;
+        this.wksdk = wksdk;
     }
 
     @Override
@@ -63,13 +67,37 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
     @Override
     public void update() {
         view.showLoading();
-        Disposable subscription = serverInteractor.update(
-                WK.getInstance().getCredentials().getCredentials().getUsername(),
-                WK.getInstance().getCredentials().getCredentials().getPassword(),
-                WK.getInstance().getCredentials().getEmail())
+        Disposable subscription = wksdk.update()
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(success, error);
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        view.showLoading();
+                    }
+                })
+                .doFinally(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        view.hideLoading();
+
+                    }
+                })
+                .subscribe(new Consumer<RealmOwner>() {
+                    @Override
+                    public void accept(RealmOwner realmOwner) throws Exception {
+                        if (wksdk.getServerConfig().isActive() != Boolean.parseBoolean(realmOwner.getNauta_active())) {
+                            wksdk.getServerConfig().setActive(Boolean.parseBoolean(realmOwner.getNauta_active()));
+                            WK.getInstance().replaceWKSession(wksdk);
+                        }
+
+                        if (wksdk.getServerConfig().isActive())
+                            view.updateComplete();
+                        else
+                            view.showError(new UserInactiveWKException());
+
+                    }
+                }, error);
         addSubscription(subscription);
     }
 

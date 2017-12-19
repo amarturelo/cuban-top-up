@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: "com.jfrog.artifactory"
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
@@ -44,5 +43,5 @@ dependencies {
     compile 'com.github.javiersantos:BottomDialogs:1.2.1'
     compile project(path: ':mailmiddleware')
 
-    compile 'com.github.applikeysolutions:cosmocalendar:1.0.4'
+    //compile 'com.github.applikeysolutions:cosmocalendar:1.0.4'
 }
