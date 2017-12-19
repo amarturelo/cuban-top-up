@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
@@ -80,18 +81,19 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     public void showError(Exception e) {
 
         hideLoading();
-        Snackbar snackbar = null;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+
+        builder.setTitle("Ocurrio un error");
+
         if (e instanceof NetworkErrorToSendException) {
-            snackbar = Snackbar
-                    .make(findViewById(R.id.coordinator), R.string.error_network_to_send, Snackbar.LENGTH_INDEFINITE);
+            builder.setMessage(R.string.error_network_to_send);
         } else if (e instanceof UserInactiveWKException) {
-            snackbar = Snackbar
-                    .make(findViewById(R.id.coordinator), R.string.error_user_inactive, Snackbar.LENGTH_INDEFINITE);
+            builder.setMessage(R.string.error_user_inactive);
         } else {
-            snackbar = Snackbar
-                    .make(findViewById(R.id.coordinator), R.string.error_unknown, Snackbar.LENGTH_INDEFINITE);
+            builder.setMessage(R.string.error_unknown);
         }
-        snackbar.show();
+        builder.show();
     }
 
 
@@ -130,7 +132,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     public void onLogin(ServerConfig serverConfig) {
         doLogin(serverConfig);
     }
-
 
     private void doLogin(ServerConfig serverConfig) {
         loginPresenter.login(serverConfig);

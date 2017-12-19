@@ -31,7 +31,8 @@ public class FatherDataMapper implements DataMapper<RealmFather, Father> {
         if (realmFather != null) {
             Father father = new Father()
                     .setName(realmFather.getName())
-                    .setCost(realmFather.getCost());
+                    .setCost(realmFather.getCost())
+                    .setAmount(realmFather.getAmount());
             return father;
         }
         return null;

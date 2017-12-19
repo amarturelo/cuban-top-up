@@ -14,9 +14,6 @@ import com.wirelesskings.wkreload.model.ReloadItem;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * Created by Alberto on 18/10/2017.
  */
@@ -51,8 +48,8 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
         holder.amount.setText(String.valueOf(reloadItem.getAmount()));
         holder.count.setText("x" + String.valueOf(reloadItem.getCount()));
 
-        holder.date.setText(DateUtils.formatDateTime(holder.itemView.getContext(),reloadItem.getDate().getTime(),
-                DateUtils.FORMAT_SHOW_DATE|DateUtils.FORMAT_SHOW_TIME));
+        holder.date.setText(DateUtils.formatDateTime(holder.itemView.getContext(), reloadItem.getDate().getTime(),
+                DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME));
         if (reloadItem.getStatus() != null)
             switch (reloadItem.getStatus()) {
                 case DENIED:
@@ -83,33 +80,32 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tv_name)
-        TextView client_name;
+        public TextView client_name;
 
-        @BindView(R.id.root)
-        View root;
+        public View root;
 
-        @BindView(R.id.tv_number)
-        TextView client_number;
+        public TextView client_number;
 
-        @BindView(R.id.tv_seller)
-        TextView seller;
+        public TextView seller;
 
-        @BindView(R.id.tv_amount)
-        TextView amount;
+        public TextView amount;
 
-        @BindView(R.id.tv_count)
-        TextView count;
+        public TextView count;
 
-        @BindView(R.id.tv_date)
-        TextView date;
+        public TextView date;
 
-        @BindView(R.id.iv_status)
-        ImageView status;
+        public ImageView status;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            client_name = itemView.findViewById(R.id.tv_name);
+            root = itemView.findViewById(R.id.root);
+            client_number = itemView.findViewById(R.id.tv_number);
+            seller = itemView.findViewById(R.id.tv_seller);
+            amount = itemView.findViewById(R.id.tv_amount);
+            count = itemView.findViewById(R.id.tv_count);
+            date = itemView.findViewById(R.id.tv_date);
+            status = itemView.findViewById(R.id.iv_status);
         }
     }
 

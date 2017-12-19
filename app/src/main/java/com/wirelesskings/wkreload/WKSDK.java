@@ -1,5 +1,7 @@
 package com.wirelesskings.wkreload;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -11,6 +13,7 @@ import com.wirelesskings.wkreload.mailmiddleware.ResultListener;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Timer;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -68,6 +71,7 @@ public class WKSDK {
                                 emitter.onError(e);
                             }
                         });
+                        Log.d("send id", id[0]);
                     }
                 })
                 .map(new Function<String, RealmOwner>() {

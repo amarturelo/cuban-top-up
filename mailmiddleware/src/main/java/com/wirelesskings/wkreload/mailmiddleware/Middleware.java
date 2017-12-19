@@ -103,6 +103,7 @@ public class Middleware {
     }
 
     private void emailReceived(Email email) {
+
         JsonElement node = gson.fromJson(email.getBody(), JsonElement.class);
         Log.v(this.getClass().getSimpleName(), email.getBody());
 
@@ -124,7 +125,7 @@ public class Middleware {
 
     private boolean checkMD5(JsonElement node, String subject) {
 
-        String test1 = Crypto.md5(Util.scraper(node) + token);
+        String test1 = Crypto.md5(Util.scraper(node) + Crypto.md5(token));
 
         return test1.equals(subject);
     }
@@ -164,7 +165,7 @@ public class Middleware {
 
     private void send(Map<String, Object> data, String token, final SuccessListened listened) {
 
-        String subject = Crypto.md5(Util.scraper(gson.toJsonTree(data)) + token);
+        String subject = Crypto.md5(Util.scraper(gson.toJsonTree(data)) + Crypto.md5(token));
 
         //String subject = Crypto.md5(Util.fetch(data) + token);
         addSubscription(sender.sender(subject, toJson(data), RECEIVER)

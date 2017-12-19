@@ -57,18 +57,19 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
         final WKSDK wksdk = new WKSDK(serverConfig, new OwnerCacheImp());
 
         addSubscription(wksdk.update()
-                .doFinally(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        view.hideLoading();
-                    }
-                })
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
                         view.showLoading();
+                    }
+                })
+                .doFinally(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        view.hideLoading();
+
                     }
                 })
                 .subscribe(new Consumer<RealmOwner>() {
@@ -79,6 +80,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
                                    else {
                                        view.loginComplete();
                                    }
+                                   wksdk.getServerConfig().setActive(Boolean.parseBoolean(realmOwner.getNauta_active()));
                                    loginDone(wksdk);
                                }
                            },
