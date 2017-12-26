@@ -13,10 +13,17 @@ import android.widget.TextView;
 
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.WK;
+import com.wirelesskings.wkreload.WKSDK;
 import com.wirelesskings.wkreload.dialogs.ReloadBottomDialog;
 import com.wirelesskings.wkreload.domain.model.Father;
 import com.wirelesskings.wkreload.fragments.ReloadsFragment;
 import com.wirelesskings.wkreload.navigation.Navigator;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements ReloadsFragment.OnReloadsFragmentListened {
 
@@ -56,7 +63,22 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
     }
 
     private void showReload() {
-        reloadBottomDialog.show();
+        List<WKSDK.WKReload> wkReloads = new ArrayList<>();
+        wkReloads.add(new WKSDK.WKReload()
+                .setName("Alberto")
+                .setNumber("52950107")
+                .setAmount(50)
+                .setCount(1));
+        wkReloads.add(new WKSDK.WKReload()
+                .setName("Nelsy")
+                .setNumber("53548789")
+                .setAmount(20)
+                .setCount(1));
+        WK.getInstance().getWKSessionDefault()
+                .reload(wkReloads)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+        //reloadBottomDialog.show();
     }
 
     @Override

@@ -2,16 +2,19 @@ package com.wirelesskings.wkreload;
 
 import android.util.Log;
 
+import com.annimon.stream.Stream;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.wirelesskings.data.cache.OwnerCache;
 import com.wirelesskings.data.model.RealmOwner;
+import com.wirelesskings.wkreload.domain.model.Reload;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 import com.wirelesskings.wkreload.mailmiddleware.Middleware;
 import com.wirelesskings.wkreload.mailmiddleware.ResultListener;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 
@@ -97,23 +100,25 @@ public class WKSDK {
                 ;
     }
 
-    public Single<RealmOwner> reload(String client_name, String client_number, String reload_count, String reload_amount) {
+    public Single<RealmOwner> reload(List<WKReload> reloads) {
         final Map<String, Object> params = new LinkedHashMap<>();
         params.put("user", serverConfig.getCredentials().getUsername());
         params.put("pass", serverConfig.getCredentials().getPassword());
         params.put("user_nauta", serverConfig.getEmail());
 
-        Map<String, Object> client = new LinkedHashMap<>();
-        client.put("number", client_number);
-        client.put("name", client_name);
-
-        params.put("client", client);
-
-        Map<String, Object> reload = new LinkedHashMap<>();
-        reload.put("count", reload_count);
-        reload.put("amount", reload_amount);
-
-        params.put("reload", reload);
+        params.put("multiple", Stream.of(reloads)
+                .map(new com.annimon.stream.function.Function<WKReload, Map<String, Object>>() {
+                    @Override
+                    public Map<String, Object> apply(WKReload reload) {
+                        Map<String, Object> client = new LinkedHashMap<>();
+                        client.put("number", reload.getNumber());
+                        client.put("name", reload.getName());
+                        client.put("count", reload.getCount());
+                        client.put("amount", reload.getAmount());
+                        return client;
+                    }
+                })
+                .toList());
 
 
         final String[] id = new String[1];
@@ -149,5 +154,51 @@ public class WKSDK {
                         middleware.cancel(id[0]);
                     }
                 });
+    }
+
+    public static class WKReload{
+        private String number;
+        private String name;
+        private int count;
+        private int amount;
+
+        public WKReload() {
+        }
+
+        public String getNumber() {
+            return number;
+        }
+
+        public WKReload setNumber(String number) {
+            this.number = number;
+            return this;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public WKReload setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public int getCount() {
+            return count;
+        }
+
+        public WKReload setCount(int count) {
+            this.count = count;
+            return this;
+        }
+
+        public int getAmount() {
+            return amount;
+        }
+
+        public WKReload setAmount(int amount) {
+            this.amount = amount;
+            return this;
+        }
     }
 }

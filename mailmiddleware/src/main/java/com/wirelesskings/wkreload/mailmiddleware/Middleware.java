@@ -156,7 +156,8 @@ public class Middleware {
 
             @Override
             public void onError(Exception e) {
-                listener.onError(new NetworkErrorToSendException(e));
+                if (listener != null)
+                    listener.onError(new NetworkErrorToSendException(e));
             }
         });
 

@@ -1,6 +1,7 @@
 package com.wirelesskings.wkreload.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -82,7 +83,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         hideLoading();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Ocurrio un error");
 
@@ -93,6 +94,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         } else {
             builder.setMessage(R.string.error_unknown);
         }
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
         builder.show();
     }
 
