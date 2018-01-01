@@ -19,8 +19,6 @@ public interface LoginContract {
 
     interface Presenter extends BaseContract.Presenter<View> {
 
-
-
         void login(ServerConfig serverConfig);
     }
 }

@@ -65,4 +65,11 @@
     <string name="message_request_success">La petición se realizo correctamente, verifique que su recarga este en la lista y verifique en que estado se encuentra</string>
     <string name="error_user_inactive">Lo sentimos, pero su usuario esta desactivado para su uso en la aplicación</string>
     <string name="txt_add">Agregar</string>
+    <string name="title_state_reload_denied">denied</string>
+    <string name="title_state_reload_in_progress">in progress</string>
+    <string name="title_state_reload_done">done</string>
+    <string name="title_state_reload_all">todos</string>
+    <string name="title_reload_state">Reload STATE</string>
+    <string name="txt_filter">Filtrar</string>
+    <string name="title_activity_reload">ReloadActivity</string>
 </resources>

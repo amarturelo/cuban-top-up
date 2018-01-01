@@ -9,7 +9,18 @@ public class Father {
     private String amount;
     private String cost;
 
+    private String wkUser;
+
     public Father() {
+    }
+
+    public String getWkUser() {
+        return wkUser;
+    }
+
+    public Father setWkUser(String wkUser) {
+        this.wkUser = wkUser;
+        return this;
     }
 
     public String getName() {

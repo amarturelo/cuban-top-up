@@ -8,10 +8,14 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class RealmFather extends RealmObject {
+    public static final String WK_USER = "wkUser";
     @PrimaryKey
     private String name;
     private String cost;
     private String amount;
+
+    private String wkUser;
+
 
     public RealmFather() {
     }
@@ -40,6 +44,15 @@ public class RealmFather extends RealmObject {
 
     public RealmFather setAmount(String amount) {
         this.amount = amount;
+        return this;
+    }
+
+    public String getWkUser() {
+        return wkUser;
+    }
+
+    public RealmFather setWkUser(String wkUser) {
+        this.wkUser = wkUser;
         return this;
     }
 }

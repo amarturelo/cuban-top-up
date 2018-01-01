@@ -2,34 +2,30 @@ package com.wirelesskings.wkreload.activities;
 
 import android.support.annotation.NonNull;
 
-import com.google.common.util.concurrent.AbstractScheduledService;
-import com.wirelesskings.data.cache.OwnerCache;
-import com.wirelesskings.data.cache.OwnerCacheImp;
-import com.wirelesskings.data.model.RealmOwner;
-import com.wirelesskings.data.model.mapper.FatherDataMapper;
-import com.wirelesskings.data.model.mapper.OwnerDataMapper;
-import com.wirelesskings.data.model.mapper.PromotionDataMapper;
-import com.wirelesskings.data.model.mapper.ReloadDataMapper;
-import com.wirelesskings.data.repositories.ServerRepositoryImpl;
+import com.annimon.stream.Stream;
+import com.annimon.stream.function.Function;
+import com.wirelesskings.wkreload.CacheHelper;
 import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.WKSDK;
 import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.domain.executor.ThreadExecutor;
-import com.wirelesskings.wkreload.domain.interactors.ServerConfigInteractor;
-import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
-import com.wirelesskings.wkreload.domain.model.Owner;
+import com.wirelesskings.wkreload.domain.interactors.FatherInteractor;
+import com.wirelesskings.wkreload.domain.interactors.PromotionInteractor;
+import com.wirelesskings.wkreload.domain.model.Client;
+import com.wirelesskings.wkreload.domain.model.Father;
+import com.wirelesskings.wkreload.domain.model.Promotion;
+import com.wirelesskings.wkreload.domain.model.Reload;
+import com.wirelesskings.wkreload.domain.model.Seller;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
-import com.wirelesskings.wkreload.mailmiddleware.Middleware;
-import com.wirelesskings.wkreload.mailmiddleware.crypto.Crypto;
 import com.wirelesskings.wkreload.presenter.BasePresenter;
 
-import io.reactivex.Scheduler;
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
-import io.reactivex.functions.BiConsumer;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -41,8 +37,11 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
 
     private ThreadExecutor threadExecutor;
 
-    public LoginPresenter(ThreadExecutor threadExecutor) {
+    private CacheHelper cacheHelper;
+
+    public LoginPresenter(ThreadExecutor threadExecutor, CacheHelper cacheHelper) {
         this.threadExecutor = threadExecutor;
+        this.cacheHelper = cacheHelper;
     }
 
     @Override
@@ -54,9 +53,15 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
     public void login(final ServerConfig serverConfig) {
         clearSubscriptions();
 
-        final WKSDK wksdk = new WKSDK(serverConfig, new OwnerCacheImp());
+        final WKSDK wksdk = new WKSDK(serverConfig);
 
         addSubscription(wksdk.update()
+                .doOnSuccess(new Consumer<WKSDK.WKOwner>() {
+                    @Override
+                    public void accept(WKSDK.WKOwner wkOwner) throws Exception {
+                        cacheHelper.save(wkOwner, serverConfig.getCredentials().getUsername());
+                    }
+                })
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
@@ -72,14 +77,13 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
 
                     }
                 })
-                .subscribe(new Consumer<RealmOwner>() {
+                .subscribe(new Consumer<WKSDK.WKOwner>() {
                                @Override
-                               public void accept(RealmOwner realmOwner) throws Exception {
+                               public void accept(WKSDK.WKOwner realmOwner) throws Exception {
                                    if (!Boolean.valueOf(realmOwner.getNauta_active()))
                                        view.showError(new UserInactiveWKException());
-                                   else {
+                                   else
                                        view.loginComplete();
-                                   }
                                    wksdk.getServerConfig().setActive(Boolean.parseBoolean(realmOwner.getNauta_active()));
                                    loginDone(wksdk);
                                }
@@ -100,6 +104,5 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
     public void cancel() {
         clearSubscriptions();
     }
-
 
 }

@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by Alberto on 18/10/2017.
  */
 
-public class ReloadItem {
+public class ReloadItemModel {
     private String id;
     private String seller;
     private int amount;
@@ -17,14 +17,14 @@ public class ReloadItem {
 
     private Date date;
 
-    public ReloadItem() {
+    public ReloadItemModel() {
     }
 
     public String getId() {
         return id;
     }
 
-    public ReloadItem setId(String id) {
+    public ReloadItemModel setId(String id) {
         this.id = id;
         return this;
     }
@@ -33,7 +33,7 @@ public class ReloadItem {
         return seller;
     }
 
-    public ReloadItem setSeller(String seller) {
+    public ReloadItemModel setSeller(String seller) {
         this.seller = seller;
         return this;
     }
@@ -42,7 +42,7 @@ public class ReloadItem {
         return amount;
     }
 
-    public ReloadItem setAmount(int amount) {
+    public ReloadItemModel setAmount(int amount) {
         this.amount = amount;
         return this;
     }
@@ -51,7 +51,7 @@ public class ReloadItem {
         return count;
     }
 
-    public ReloadItem setCount(int count) {
+    public ReloadItemModel setCount(int count) {
         this.count = count;
         return this;
     }
@@ -60,7 +60,7 @@ public class ReloadItem {
         return clientNumber;
     }
 
-    public ReloadItem setClientNumber(String clientNumber) {
+    public ReloadItemModel setClientNumber(String clientNumber) {
         this.clientNumber = clientNumber;
         return this;
     }
@@ -69,7 +69,7 @@ public class ReloadItem {
         return clientName;
     }
 
-    public ReloadItem setClientName(String clientName) {
+    public ReloadItemModel setClientName(String clientName) {
         this.clientName = clientName;
         return this;
     }
@@ -78,7 +78,7 @@ public class ReloadItem {
         return date;
     }
 
-    public ReloadItem setDate(Date date) {
+    public ReloadItemModel setDate(Date date) {
         this.date = date;
         return this;
     }
@@ -87,7 +87,7 @@ public class ReloadItem {
         return status;
     }
 
-    public ReloadItem setStatus(STATUS status) {
+    public ReloadItemModel setStatus(STATUS status) {
         this.status = status;
         return this;
     }
@@ -101,7 +101,7 @@ public class ReloadItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ReloadItem that = (ReloadItem) o;
+        ReloadItemModel that = (ReloadItemModel) o;
 
         return id != null ? id.equals(that.id) : that.id == null;
 

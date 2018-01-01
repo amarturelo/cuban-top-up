@@ -1,7 +1,7 @@
 package com.wirelesskings.wkreload.fragments;
 
 import com.wirelesskings.wkreload.domain.model.Father;
-import com.wirelesskings.wkreload.model.ReloadItem;
+import com.wirelesskings.wkreload.model.ReloadItemModel;
 import com.wirelesskings.wkreload.presenter.BaseContract;
 
 import java.util.List;
@@ -12,11 +12,11 @@ import java.util.List;
 
 public interface ReloadsContract {
     interface View extends BaseContract.View {
-        void renderInsertions(List<ReloadItem> reloads);
-        void renderDeletions(List<ReloadItem> reloads);
-        void renderChanges(List<ReloadItem> reloads);
+        void renderInsertions(List<ReloadItemModel> reloads);
+        void renderDeletions(List<ReloadItemModel> reloads);
+        void renderChanges(List<ReloadItemModel> reloads);
 
-        void renderReloads(List<ReloadItem> reloads);
+        void renderReloads(List<ReloadItemModel> reloads);
 
         void renderFather(Father father);
 

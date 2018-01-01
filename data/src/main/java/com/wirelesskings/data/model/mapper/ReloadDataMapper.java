@@ -14,10 +14,9 @@ import java.util.List;
  * Created by Alberto on 28/10/2017.
  */
 
-public class ReloadDataMapper implements DataMapper<RealmReload, Reload> {
+public class ReloadDataMapper  {
 
-    @Override
-    public List<Reload> transform(List<RealmReload> realmReloads) {
+    public static List<Reload> transform(List<RealmReload> realmReloads) {
         List<Reload> reloads = new ArrayList<>();
         if (realmReloads != null) {
             for (RealmReload realmReload :
@@ -28,8 +27,7 @@ public class ReloadDataMapper implements DataMapper<RealmReload, Reload> {
         return reloads;
     }
 
-    @Override
-    public Reload transform(RealmReload realmReload) {
+    public static Reload transform(RealmReload realmReload) {
         Reload reload = null;
         if (realmReload != null) {
             reload = new Reload()

@@ -9,33 +9,47 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.wirelesskings.data.cache.impl.FatherCacheImpl;
+import com.wirelesskings.data.cache.impl.PromotionCacheImpl;
+import com.wirelesskings.data.repositories.FatherRepositoryImpl;
+import com.wirelesskings.data.repositories.PromotionRepositoryImpl;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.WK;
-import com.wirelesskings.wkreload.WKSDK;
-import com.wirelesskings.wkreload.dialogs.ReloadBottomDialog;
+import com.wirelesskings.wkreload.adapter.PromotionsListSpinnerAdapter;
+import com.wirelesskings.wkreload.dialogs.FilterBottomDialog;
+import com.wirelesskings.wkreload.domain.interactors.FatherInteractor;
+import com.wirelesskings.wkreload.domain.interactors.PromotionInteractor;
 import com.wirelesskings.wkreload.domain.model.Father;
 import com.wirelesskings.wkreload.fragments.ReloadsFragment;
+import com.wirelesskings.wkreload.model.FatherModel;
+import com.wirelesskings.wkreload.model.PromotionItemModel;
 import com.wirelesskings.wkreload.navigation.Navigator;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-
-public class MainActivity extends AppCompatActivity implements ReloadsFragment.OnReloadsFragmentListened {
+public class MainActivity extends AppCompatActivity implements ReloadsFragment.OnReloadsFragmentListened, MainContract.View {
 
     private ReloadBottomDialog reloadBottomDialog;
+    private FilterBottomDialog filterBottomDialog;
 
     private TextView tvDebit;
     private TextView tvFatherName;
     private TextView tvFatherCost;
 
-    FloatingActionButton fab;
+    private Spinner spinner;
+
+    FloatingActionButton fabReload;
+    FloatingActionButton fabFilter;
 
     WK wk;
+
+    private MainPresenter presenter;
+
+    private PromotionsListSpinnerAdapter promotionsListSpinnerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,39 +60,81 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        reloadBottomDialog = new ReloadBottomDialog(this);
+        presenter = new MainPresenter(
+                new PromotionInteractor(
+                        new PromotionRepositoryImpl(
+                                new PromotionCacheImpl()
+                        )
+                )
+                , new FatherInteractor(
+                new FatherRepositoryImpl(
+                        new FatherCacheImpl()
+                )
+        )
+        );
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        initComponents();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.bindView(this);
+    }
+
+    private void initComponents() {
+        spinner = (Spinner) findViewById(R.id.spinner);
+
+
+        reloadBottomDialog = new ReloadBottomDialog(this);
+        filterBottomDialog = new FilterBottomDialog(this);
+
+        fabReload = (FloatingActionButton) findViewById(R.id.fab_reload);
+        fabFilter = (FloatingActionButton) findViewById(R.id.fab_filter);
         tvDebit = (TextView) findViewById(R.id.tv_debit);
         tvFatherName = (TextView) findViewById(R.id.tv_father);
         tvFatherCost = (TextView) findViewById(R.id.tv_cost);
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabReload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showReload();
             }
         });
+        fabFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFilter();
+            }
+        });
+    }
 
+    private void showFilter() {
+        filterBottomDialog.show();
     }
 
     private void showReload() {
-        List<WKSDK.WKReload> wkReloads = new ArrayList<>();
-        wkReloads.add(new WKSDK.WKReload()
-                .setName("Alberto")
+        /*List<WKSDK.ReloadParams> wkReloads = new ArrayList<>();
+        wkReloads.add(new WKSDK.ReloadParams()
+                .setName("Yepeto")
                 .setNumber("52950107")
                 .setAmount(50)
                 .setCount(1));
-        wkReloads.add(new WKSDK.WKReload()
-                .setName("Nelsy")
+        wkReloads.add(new WKSDK.ReloadParams()
+                .setName("Rosendo")
                 .setNumber("53548789")
                 .setAmount(20)
                 .setCount(1));
         WK.getInstance().getWKSessionDefault()
                 .reload(wkReloads)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+                .subscribe();*/
+        goToReload();
         //reloadBottomDialog.show();
+    }
+
+    private void goToReload() {
+        Navigator.goToReload(getApplicationContext());
     }
 
     @Override
@@ -124,8 +180,54 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
 
     @Override
     public void onFather(Father father) {
-        tvDebit.setText("$" + String.valueOf(father.getAmount()));
         tvFatherCost.setText("$" + String.valueOf(father.getCost()));
         tvFatherName.setText(String.valueOf(father.getName()));
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showError(Exception e) {
+
+    }
+
+    @Override
+    public void renderPromotionList(List<PromotionItemModel> promotionItemModels) {
+        promotionsListSpinnerAdapter = new PromotionsListSpinnerAdapter(getApplicationContext(), (PromotionItemModel[]) promotionItemModels.toArray());
+        spinner.setAdapter(promotionsListSpinnerAdapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // When the given dropdown item is selected, show its contents in the
+                // container view.
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, ReloadsFragment.newInstance(promotionsListSpinnerAdapter.getItem(position).getId()))
+                        .commit();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
+
+    @Override
+    public void renderPromotion(PromotionItemModel promotionItemModel) {
+        tvDebit.setText("$" + String.valueOf(promotionItemModel.getAmount()));
+    }
+
+    @Override
+    public void renderFather(FatherModel fatherModel) {
+        tvFatherCost.setText("$" + String.valueOf(fatherModel.getCount()));
+        tvFatherName.setText(String.valueOf(fatherModel.getName()));
     }
 }

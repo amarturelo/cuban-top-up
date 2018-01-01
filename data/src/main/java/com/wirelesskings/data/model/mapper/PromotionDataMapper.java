@@ -10,16 +10,9 @@ import java.util.List;
  * Created by Alberto on 02/11/2017.
  */
 
-public class PromotionDataMapper implements DataMapper<RealmPromotion, Promotion> {
+public class PromotionDataMapper {
 
-    private ReloadDataMapper reloadDataMapper;
-
-    public PromotionDataMapper(ReloadDataMapper reloadDataMapper) {
-        this.reloadDataMapper = reloadDataMapper;
-    }
-
-    @Override
-    public List<Promotion> transform(List<RealmPromotion> realmPromotions) {
+    public static List<Promotion> transform(List<RealmPromotion> realmPromotions) {
         List<Promotion> promotions = new ArrayList<>();
         for (RealmPromotion realmPromotion :
                 realmPromotions) {
@@ -32,14 +25,15 @@ public class PromotionDataMapper implements DataMapper<RealmPromotion, Promotion
         return promotions;
     }
 
-    @Override
-    public Promotion transform(RealmPromotion realmPromotion) {
+    public static Promotion transform(RealmPromotion realmPromotion) {
         if (realmPromotion != null) {
             Promotion promotion = new Promotion()
                     .setEdate(realmPromotion.getEdate())
                     .setSdate(realmPromotion.getSdate())
+                    .setId(realmPromotion.getId())
                     .setPromotion(realmPromotion.getPromotion())
-                    .setReloads(reloadDataMapper.transform(realmPromotion.getRealmReloads()));
+                    .setAmount(realmPromotion.getAmount())
+                    .setReloads(ReloadDataMapper.transform(realmPromotion.getRealmReloads()));
             return promotion;
         }
         return null;

@@ -1,6 +1,7 @@
 package com.wirelesskings.data.model;
 
 import io.realm.RealmObject;
+import io.realm.annotations.LinkingObjects;
 import io.realm.annotations.PrimaryKey;
 
 /**
@@ -28,7 +29,32 @@ public class RealmReload extends RealmObject {
     private String status;
     private String app;
 
+    @LinkingObjects("reloads")
+    private RealmPromotion realmPromotion;
+
     public RealmReload() {
+    }
+
+    public RealmPromotion getRealmPromotion() {
+        return realmPromotion;
+    }
+
+    public RealmClient getClient() {
+        return client;
+    }
+
+    public RealmReload setClient(RealmClient client) {
+        this.client = client;
+        return this;
+    }
+
+    public RealmSeller getSeller() {
+        return seller;
+    }
+
+    public RealmReload setSeller(RealmSeller seller) {
+        this.seller = seller;
+        return this;
     }
 
     public String getId() {

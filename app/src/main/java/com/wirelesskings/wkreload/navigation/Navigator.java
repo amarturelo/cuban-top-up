@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.wirelesskings.wkreload.activities.LoginActivity;
 import com.wirelesskings.wkreload.activities.MainActivity;
+import com.wirelesskings.wkreload.activities.ReloadActivity;
 
 /**
  * Created by Alberto on 18/10/2017.
@@ -22,6 +23,13 @@ public class Navigator {
     public static void goToLogin(Context context) {
         if (context != null) {
             Intent intentToLaunch = LoginActivity.getCallingIntent(context);
+            context.startActivity(intentToLaunch);
+        }
+    }
+
+    public static void goToReload(Context context) {
+        if (context != null) {
+            Intent intentToLaunch = ReloadActivity.getCallingIntent(context);
             context.startActivity(intentToLaunch);
         }
     }

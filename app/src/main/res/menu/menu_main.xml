@@ -11,13 +11,6 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/action_filter"
-        android:icon="@drawable/ic_filter_list_black_24dp"
-        android:orderInCategory="100"
-        android:title="@string/action_filter"
-        android:visible="false"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"

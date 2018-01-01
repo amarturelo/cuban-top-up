@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wirelesskings.wkreload.R;
-import com.wirelesskings.wkreload.model.ReloadItem;
+import com.wirelesskings.wkreload.model.ReloadItemModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapterRecyclerView.ViewHolder> {
 
-    private List<ReloadItem> reloadItems;
+    private List<ReloadItemModel> reloadItems;
 
     public interface Listened {
         void onClickItem(String id);
@@ -42,7 +42,7 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final ReloadItem reloadItem = reloadItems.get(position);
+        final ReloadItemModel reloadItem = reloadItems.get(position);
         holder.client_name.setText(reloadItem.getClientName());
         holder.client_number.setText(reloadItem.getClientNumber());
         holder.amount.setText(String.valueOf(reloadItem.getAmount()));
@@ -109,20 +109,20 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
         }
     }
 
-    public void inserted(List<ReloadItem> items) {
+    public void inserted(List<ReloadItemModel> items) {
         reloadItems.clear();
-        for (ReloadItem reloadItem :
+        for (ReloadItemModel reloadItem :
                 items) {
             add(reloadItem);
         }
         notifyDataSetChanged();
     }
 
-    private void add(ReloadItem reloadItem) {
+    private void add(ReloadItemModel reloadItem) {
         reloadItems.add(reloadItem);
     }
 
-    private void change(ReloadItem reloadItem) {
+    private void change(ReloadItemModel reloadItem) {
         int i = reloadItems.indexOf(reloadItem);
         if (i != -1) {
             reloadItems.remove(reloadItem);
@@ -131,7 +131,7 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
         }
     }
 
-    private void deleted(ReloadItem reloadItem) {
+    private void deleted(ReloadItemModel reloadItem) {
         int i = reloadItems.indexOf(reloadItem);
         if (i != -1) {
             reloadItems.remove(reloadItem);
@@ -139,15 +139,15 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
         }
     }
 
-    public void changed(List<ReloadItem> items) {
-        for (ReloadItem reloadItem :
+    public void changed(List<ReloadItemModel> items) {
+        for (ReloadItemModel reloadItem :
                 items) {
             change(reloadItem);
         }
     }
 
-    public void deleted(List<ReloadItem> items) {
-        for (ReloadItem reloadItem :
+    public void deleted(List<ReloadItemModel> items) {
+        for (ReloadItemModel reloadItem :
                 items) {
             deleted(reloadItem);
         }

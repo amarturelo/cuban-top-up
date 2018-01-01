@@ -4,33 +4,20 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Toast;
 
-import com.wirelesskings.data.cache.OwnerCacheImp;
-import com.wirelesskings.data.model.mapper.FatherDataMapper;
-import com.wirelesskings.data.model.mapper.OwnerDataMapper;
-import com.wirelesskings.data.model.mapper.PromotionDataMapper;
-import com.wirelesskings.data.model.mapper.ReloadDataMapper;
-import com.wirelesskings.data.repositories.ServerRepositoryImpl;
-import com.wirelesskings.wkreload.CredentialsStore;
+import com.wirelesskings.data.cache.impl.FatherCacheImpl;
+import com.wirelesskings.data.cache.impl.PromotionCacheImpl;
+import com.wirelesskings.wkreload.CacheHelper;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.dialogs.LoadingDialog;
 import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
-import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 import com.wirelesskings.wkreload.executor.JobExecutor;
 import com.wirelesskings.wkreload.fragments.LoginFragment;
-import com.wirelesskings.wkreload.fragments.SettingsFragment;
-import com.wirelesskings.wkreload.mailmiddleware.Middleware;
-import com.wirelesskings.wkreload.mailmiddleware.crypto.Crypto;
 import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
-import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Constants;
-import com.wirelesskings.wkreload.mailmiddleware.mail.settings.Setting;
 import com.wirelesskings.wkreload.navigation.Navigator;
 
 
@@ -52,6 +39,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         loginPresenter = new LoginPresenter(
                 JobExecutor.getInstance()
+                , new CacheHelper(
+                new FatherCacheImpl()
+                , new PromotionCacheImpl()
+        )
         );
 
         initActivity(savedInstanceState);

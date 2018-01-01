@@ -1,5 +1,7 @@
 package com.wirelesskings.data.model;
 
+import java.util.Date;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
@@ -9,19 +11,32 @@ import io.realm.RealmObject;
 
 public class RealmPromotion extends RealmObject {
 
+    public static final String WK_USER = "wkUser";
+
+    private String wkUser;
+
     private String title;
 
     private String id;
 
     private String amount;
 
-    private String sdate;
+    private Date sdate;
 
-    private String edate;
+    private Date edate;
 
     private RealmList<RealmReload> reloads;
 
     public RealmPromotion() {
+    }
+
+    public String getWkUser() {
+        return wkUser;
+    }
+
+    public RealmPromotion setWkUser(String wkUser) {
+        this.wkUser = wkUser;
+        return this;
     }
 
     public String getPromotion() {
@@ -33,20 +48,20 @@ public class RealmPromotion extends RealmObject {
         return this;
     }
 
-    public String getSdate() {
+    public Date getSdate() {
         return sdate;
     }
 
-    public RealmPromotion setSdate(String sdate) {
+    public RealmPromotion setSdate(Date sdate) {
         this.sdate = sdate;
         return this;
     }
 
-    public String getEdate() {
+    public Date getEdate() {
         return edate;
     }
 
-    public RealmPromotion setEdate(String edate) {
+    public RealmPromotion setEdate(Date edate) {
         this.edate = edate;
         return this;
     }

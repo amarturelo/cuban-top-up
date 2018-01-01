@@ -1,10 +1,7 @@
 package com.wirelesskings.wkreload.model.mapper;
 
-import android.text.format.DateUtils;
-
-import com.wirelesskings.data.model.mapper.DataMapper;
 import com.wirelesskings.wkreload.domain.model.Reload;
-import com.wirelesskings.wkreload.model.ReloadItem;
+import com.wirelesskings.wkreload.model.ReloadItemModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +10,9 @@ import java.util.List;
  * Created by Alberto on 28/10/2017.
  */
 
-public class ReloadItemDataMapper implements DataMapper<Reload, ReloadItem> {
-    @Override
-    public List<ReloadItem> transform(List<Reload> reloads) {
-        List<ReloadItem> reloadItems = new ArrayList<>();
+public class ReloadItemDataMapper  {
+    public static List<ReloadItemModel> transform(List<Reload> reloads) {
+        List<ReloadItemModel> reloadItems = new ArrayList<>();
         if (reloads != null) {
             for (Reload reload :
                     reloads) {
@@ -27,11 +23,10 @@ public class ReloadItemDataMapper implements DataMapper<Reload, ReloadItem> {
         return reloadItems;
     }
 
-    @Override
-    public ReloadItem transform(Reload reload) {
-        ReloadItem reloadItem = null;
+    public static ReloadItemModel transform(Reload reload) {
+        ReloadItemModel reloadItem = null;
         if (reload != null) {
-            reloadItem = new ReloadItem()
+            reloadItem = new ReloadItemModel()
                     .setAmount(reload.getAmount())
                     .setClientName(reload.getClient().getName())
                     .setClientNumber(reload.getClient().getNumber())
@@ -41,13 +36,13 @@ public class ReloadItemDataMapper implements DataMapper<Reload, ReloadItem> {
                     .setId(reload.getId());
             switch (reload.getStatus()) {
                 case "inprogress":
-                    reloadItem.setStatus(ReloadItem.STATUS.INPROGRESS);
+                    reloadItem.setStatus(ReloadItemModel.STATUS.INPROGRESS);
                     break;
                 case "denied":
-                    reloadItem.setStatus(ReloadItem.STATUS.DENIED);
+                    reloadItem.setStatus(ReloadItemModel.STATUS.DENIED);
                     break;
                 case "success":
-                    reloadItem.setStatus(ReloadItem.STATUS.SUCCESS);
+                    reloadItem.setStatus(ReloadItemModel.STATUS.SUCCESS);
                     break;
             }
 

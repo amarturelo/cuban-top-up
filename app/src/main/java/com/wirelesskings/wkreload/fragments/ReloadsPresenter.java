@@ -2,13 +2,13 @@ package com.wirelesskings.wkreload.fragments;
 
 import android.support.annotation.NonNull;
 
-import com.wirelesskings.data.model.RealmOwner;
 import com.wirelesskings.wkreload.BackgroundLooper;
 import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.WKSDK;
 import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.domain.interactors.OwnerInteractor;
-import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
+import com.wirelesskings.wkreload.domain.interactors.PromotionInteractor;
+import com.wirelesskings.wkreload.domain.interactors.ReloadInteractor;
 import com.wirelesskings.wkreload.domain.model.Owner;
 import com.wirelesskings.wkreload.model.mapper.ReloadItemDataMapper;
 import com.wirelesskings.wkreload.presenter.BasePresenter;
@@ -25,16 +25,14 @@ import io.reactivex.functions.Consumer;
 public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
         implements ReloadsContract.Presenter {
 
-    private OwnerInteractor reloadsInteractor;
-
-    private ReloadItemDataMapper reloadItemDataMapper;
+    private ReloadInteractor reloadInteractor;
 
     private Consumer<Owner> success = new Consumer<Owner>() {
         @Override
         public void accept(Owner owner) throws Exception {
             view.hideLoading();
             if (owner.getPromotion() != null) {
-                view.renderInsertions(reloadItemDataMapper.transform(owner.getPromotion().getReloads()));
+                view.renderInsertions(ReloadItemDataMapper.transform(owner.getPromotion().getReloads()));
             } else
                 view.showError(new Exception("No hay promociones en estos momentos"));
             view.renderFather(owner.getFather());
@@ -51,10 +49,8 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
 
     private WKSDK wksdk;
 
-
-    public ReloadsPresenter(OwnerInteractor reloadsInteractor, ReloadItemDataMapper reloadItemDataMapper, WKSDK wksdk) {
-        this.reloadsInteractor = reloadsInteractor;
-        this.reloadItemDataMapper = reloadItemDataMapper;
+    public ReloadsPresenter(ReloadInteractor reloadInteractor, WKSDK wksdk) {
+        this.reloadInteractor = reloadInteractor;
         this.wksdk = wksdk;
     }
 
@@ -83,11 +79,11 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
 
                     }
                 })
-                .subscribe(new Consumer<RealmOwner>() {
+                .subscribe(new Consumer<WKSDK.WKOwner>() {
                     @Override
-                    public void accept(RealmOwner realmOwner) throws Exception {
-                        if (wksdk.getServerConfig().isActive() != Boolean.parseBoolean(realmOwner.getNauta_active())) {
-                            wksdk.getServerConfig().setActive(Boolean.parseBoolean(realmOwner.getNauta_active()));
+                    public void accept(WKSDK.WKOwner wkOwner) throws Exception {
+                        if (wksdk.getServerConfig().isActive() != Boolean.parseBoolean(wkOwner.getNauta_active())) {
+                            wksdk.getServerConfig().setActive(Boolean.parseBoolean(wkOwner.getNauta_active()));
                             WK.getInstance().replaceWKSession(wksdk);
                         }
 
@@ -103,10 +99,10 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
 
     @Override
     public void onReloads() {
-        addSubscription(reloadsInteractor.owner()
+        /*addSubscription(reloadsInteractor.owner()
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(success, error));
+                .subscribe(success, error));*/
     }
 
     @Override

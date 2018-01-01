@@ -35,5 +35,6 @@ dependencies {
     compile project(':domain')
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     compile 'com.google.code.gson:gson:2.8.2'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile project(':mailmiddleware')
 }

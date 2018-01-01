@@ -1,34 +1,9 @@
 package com.wirelesskings.wkreload;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.wirelesskings.data.cache.OwnerCache;
-import com.wirelesskings.data.cache.OwnerCacheImp;
-import com.wirelesskings.data.model.RealmOwner;
 import com.wirelesskings.data.model.internal.RealmCredentials;
 import com.wirelesskings.data.model.internal.RealmServerConfig;
-import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
-import com.wirelesskings.wkreload.domain.model.Owner;
 import com.wirelesskings.wkreload.domain.model.internal.Credentials;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
-import com.wirelesskings.wkreload.mailmiddleware.Middleware;
-import com.wirelesskings.wkreload.mailmiddleware.ResultListener;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import io.reactivex.Completable;
-import io.reactivex.CompletableEmitter;
-import io.reactivex.CompletableOnSubscribe;
-import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
-import io.reactivex.SingleOnSubscribe;
-import io.reactivex.SingleSource;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 
 /**
  * Created by Alberto on 04/11/2017.
@@ -51,7 +26,7 @@ public class WK {
 
     public WKSDK createWKSession(ServerConfig serverConfig) {
         if (serverConfig != null)
-            return new WKSDK(serverConfig, new OwnerCacheImp());
+            return new WKSDK(serverConfig);
         return null;
     }
 

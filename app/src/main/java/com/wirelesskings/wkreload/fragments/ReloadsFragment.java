@@ -13,13 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.wirelesskings.data.cache.OwnerCacheImp;
-import com.wirelesskings.data.model.mapper.FatherDataMapper;
-import com.wirelesskings.data.model.mapper.OwnerDataMapper;
-import com.wirelesskings.data.model.mapper.PromotionDataMapper;
-import com.wirelesskings.data.model.mapper.ReloadDataMapper;
-import com.wirelesskings.data.repositories.OwnerRepositoryImpl;
-import com.wirelesskings.data.repositories.ServerRepositoryImpl;
+import com.wirelesskings.data.cache.impl.ReloadCacheImpl;
+import com.wirelesskings.data.repositories.ReloadRepositoryImpl;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.adapter.DividerItemDecoration;
@@ -27,12 +22,10 @@ import com.wirelesskings.wkreload.adapter.ReloadAdapterRecyclerView;
 import com.wirelesskings.wkreload.dialogs.LoadingDialog;
 import com.wirelesskings.wkreload.dialogs.ViewReloadDialog;
 import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
-import com.wirelesskings.wkreload.domain.interactors.OwnerInteractor;
-import com.wirelesskings.wkreload.domain.interactors.ServerInteractor;
+import com.wirelesskings.wkreload.domain.interactors.ReloadInteractor;
 import com.wirelesskings.wkreload.domain.model.Father;
 import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
-import com.wirelesskings.wkreload.model.ReloadItem;
-import com.wirelesskings.wkreload.model.mapper.ReloadItemDataMapper;
+import com.wirelesskings.wkreload.model.ReloadItemModel;
 import com.wirelesskings.wkreload.navigation.Navigator;
 
 import java.util.List;
@@ -43,6 +36,8 @@ import java.util.List;
 public class ReloadsFragment extends Fragment implements ReloadsContract.View,
         ReloadAdapterRecyclerView.Listened,
         LoadingDialog.LoadingListener {
+
+    public static final String ARG_PROMOTION_ID = "promotion_id";
 
     public ReloadsFragment() {
     }
@@ -70,20 +65,12 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
         setHasOptionsMenu(true);
         viewReloadDialog = new ViewReloadDialog(getActivity());
         presenter = new ReloadsPresenter(
-                new OwnerInteractor(
-                        new OwnerRepositoryImpl(
-                                new ReloadDataMapper(),
-                                new OwnerDataMapper(
-                                        new FatherDataMapper(),
-                                        new PromotionDataMapper(
-                                                new ReloadDataMapper()
-                                        )
-                                )
+                new ReloadInteractor(
+                        new ReloadRepositoryImpl(
+                                new ReloadCacheImpl()
                         )
-                ),
-                new ReloadItemDataMapper(),
-                WK.getInstance().getWKSessionDefault());
-
+                )
+                , WK.getInstance().getWKSessionDefault());
     }
 
     private void initFragment(Bundle savedInstanceState) {
@@ -92,36 +79,41 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
         }
     }
 
+    public static ReloadsFragment newInstance(String promotionId) {
+        Bundle args = new Bundle();
+        args.putString(ARG_PROMOTION_ID, promotionId);
+        ReloadsFragment fragment = new ReloadsFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         reloadList.setLayoutManager(new LinearLayoutManager(getContext()));
         reloadList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
         reloadAdapterRecyclerView = new ReloadAdapterRecyclerView(this);
         reloadList.setAdapter(reloadAdapterRecyclerView);
         initFragment(savedInstanceState);
-
     }
 
     @Override
-    public void renderInsertions(List<ReloadItem> reloads) {
+    public void renderInsertions(List<ReloadItemModel> reloads) {
         reloadAdapterRecyclerView.inserted(reloads);
     }
 
     @Override
-    public void renderDeletions(List<ReloadItem> reloads) {
+    public void renderDeletions(List<ReloadItemModel> reloads) {
         reloadAdapterRecyclerView.deleted(reloads);
     }
 
     @Override
-    public void renderChanges(List<ReloadItem> reloads) {
+    public void renderChanges(List<ReloadItemModel> reloads) {
         reloadAdapterRecyclerView.changed(reloads);
     }
 
     @Override
-    public void renderReloads(List<ReloadItem> reloads) {
+    public void renderReloads(List<ReloadItemModel> reloads) {
         reloadAdapterRecyclerView.inserted(reloads);
     }
 
