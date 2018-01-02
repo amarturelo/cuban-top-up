@@ -7,5 +7,5 @@
     android:clipToPadding="false"
     android:paddingBottom="@dimen/list_item_spacing_half"
     android:paddingTop="@dimen/list_item_spacing_half"
-    tools:context="com.wirelesskings.wkreload.fragments.ReloadOptionItemListDialogFragment"
+    tools:context="com.wirelesskings.wkreload.fragments.ReloadClickItemMenuDialogFragment"
     tools:listitem="@layout/fragment_reload_option_item_list_dialog_item" />

@@ -43,17 +43,17 @@ public class ViewReloadDialog implements ViewReloadContract.View {
                 .setCustomView(v)
                 .build();
 
-        presenter = new ViewReloadPresenter(new OwnerInteractor(
-                new OwnerRepositoryImpl(
-                        new ReloadDataMapper(),
-                        new OwnerDataMapper(
-                                new FatherDataMapper(),
-                                new PromotionDataMapper(
-                                        new ReloadDataMapper()
-                                )
-                        )
-                )
-        ));
+//        presenter = new ViewReloadPresenter(new OwnerInteractor(
+//                new OwnerRepositoryImpl(
+//                        new ReloadDataMapper(),
+//                        new OwnerDataMapper(
+//                                new FatherDataMapper(),
+//                                new PromotionDataMapper(
+//                                        new ReloadDataMapper()
+//                                )
+//                        )
+//                )
+//        ));
 
         clientName = v.findViewById(R.id.tv_client_name);
         clientNumber = v.findViewById(R.id.tv_client_number);

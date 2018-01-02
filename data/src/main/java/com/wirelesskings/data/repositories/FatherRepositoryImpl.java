@@ -26,7 +26,6 @@ public class FatherRepositoryImpl implements FatherRepository {
         fatherCache.put(new RealmFather()
                 .setWkUser(father.getWkUser())
                 .setName(father.getName())
-                .setAmount(father.getAmount())
                 .setCost(father.getCost())
         );
     }

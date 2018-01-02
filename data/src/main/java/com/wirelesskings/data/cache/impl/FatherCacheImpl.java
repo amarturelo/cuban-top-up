@@ -5,6 +5,7 @@ import android.os.Looper;
 import com.wirelesskings.data.cache.FatherCache;
 import com.wirelesskings.data.model.RealmFather;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
@@ -42,13 +43,12 @@ public class FatherCacheImpl implements FatherCache {
                                         return Realm.getDefaultInstance();
                                     }
                                 }
-                                , new Function<Realm, ObservableSource<? extends RealmFather>>() {
+                                , new Function<Realm, ObservableSource<? extends List<RealmFather>>>() {
                                     @Override
-                                    public ObservableSource<? extends RealmFather> apply(Realm realm) throws Exception {
-                                        return (ObservableSource<? extends RealmFather>) realm.where(RealmFather.class)
+                                    public ObservableSource<? extends List<RealmFather>> apply(Realm realm) throws Exception {
+                                        return realm.where(RealmFather.class)
                                                 .equalTo(RealmFather.WK_USER, wkUser)
                                                 .findAllAsync()
-                                                .first()
                                                 .asFlowable()
                                                 .toObservable();
                                     }
@@ -57,6 +57,12 @@ public class FatherCacheImpl implements FatherCache {
                                     @Override
                                     public void accept(Realm realm) throws Exception {
                                         realm.close();
+                                    }
+                                })
+                                .map(new Function<List<RealmFather>, RealmFather>() {
+                                    @Override
+                                    public RealmFather apply(List<RealmFather> realmFathers) throws Exception {
+                                        return realmFathers.get(0);
                                     }
                                 });
                     }

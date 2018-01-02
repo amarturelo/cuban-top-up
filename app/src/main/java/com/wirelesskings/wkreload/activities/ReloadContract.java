@@ -1,6 +1,9 @@
 package com.wirelesskings.wkreload.activities;
 
+import com.wirelesskings.wkreload.model.PreReloadItemModel;
 import com.wirelesskings.wkreload.presenter.BaseContract;
+
+import java.util.List;
 
 /**
  * Created by alberto on 1/01/18.
@@ -15,12 +18,12 @@ public interface ReloadContract {
 
         void showError(Exception e);
 
-
+        void reloadComplete();
     }
 
     interface Presenter extends BaseContract.Presenter<ReloadContract.View> {
 
-        void reload(String wkUser);
+        void reload(List<PreReloadItemModel> wkUser);
 
     }
 }

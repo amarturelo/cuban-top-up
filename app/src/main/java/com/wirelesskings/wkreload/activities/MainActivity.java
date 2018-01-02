@@ -33,7 +33,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ReloadsFragment.OnReloadsFragmentListened, MainContract.View {
 
-    private ReloadBottomDialog reloadBottomDialog;
     private FilterBottomDialog filterBottomDialog;
 
     private TextView tvDebit;
@@ -86,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
         spinner = (Spinner) findViewById(R.id.spinner);
 
 
-        reloadBottomDialog = new ReloadBottomDialog(this);
         filterBottomDialog = new FilterBottomDialog(this);
 
         fabReload = (FloatingActionButton) findViewById(R.id.fab_reload);

@@ -12,7 +12,6 @@ public class RealmFather extends RealmObject {
     @PrimaryKey
     private String name;
     private String cost;
-    private String amount;
 
     private String wkUser;
 
@@ -35,15 +34,6 @@ public class RealmFather extends RealmObject {
 
     public RealmFather setCost(String cost) {
         this.cost = cost;
-        return this;
-    }
-
-    public String getAmount() {
-        return amount;
-    }
-
-    public RealmFather setAmount(String amount) {
-        this.amount = amount;
         return this;
     }
 

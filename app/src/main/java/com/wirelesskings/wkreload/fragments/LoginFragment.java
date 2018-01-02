@@ -16,6 +16,7 @@ import com.wirelesskings.wkreload.WKSDK;
 import com.wirelesskings.wkreload.domain.model.internal.Credentials;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 import com.wirelesskings.wkreload.mailmiddleware.crypto.Crypto;
+import com.wirelesskings.wkreload.navigation.Navigator;
 
 
 /**
@@ -114,6 +115,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login_bottom:
+                //Navigator.goToReload(getContext());
                 clickLogin();
                 break;
         }

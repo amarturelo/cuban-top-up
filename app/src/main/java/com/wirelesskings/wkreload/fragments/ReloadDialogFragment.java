@@ -13,6 +13,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.wirelesskings.wkreload.R;
+import com.wirelesskings.wkreload.WKSDK;
+import com.wirelesskings.wkreload.model.PreReloadItemModel;
 
 /**
  * Created by alberto on 1/01/18.
@@ -51,11 +53,25 @@ public class ReloadDialogFragment extends BottomSheetDialogFragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        buttonOk = view.findViewById(R.id.btn_ok);
+        buttonOk = view.findViewById(R.id.btn_add);
         clientName = view.findViewById(R.id.client_name);
         clientNumber = view.findViewById(R.id.client_number);
         spAmount = view.findViewById(R.id.sp_amount);
         spCount = view.findViewById(R.id.sp_count);
+
+        buttonOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (check() && mListener != null) {
+                    mListener.onReload(new PreReloadItemModel()
+                            .setCount(Integer.parseInt(spCount.getSelectedItem().toString()))
+                            .setClientName(clientName.getText().toString().trim())
+                            .setClientNumber(clientNumber.getText().toString().trim())
+                            .setAmount(Integer.parseInt(spAmount.getSelectedItem().toString())));
+                    dismiss();
+                }
+            }
+        });
     }
 
     @Override
@@ -69,6 +85,20 @@ public class ReloadDialogFragment extends BottomSheetDialogFragment {
         }
     }
 
+    private boolean check() {
+        boolean check = true;
+        if (clientName.getText().toString().isEmpty()) {
+            clientName.setError("Debe espesificar el nombre del cliente");
+            check = false;
+        }
+        if (clientNumber.getText().toString().isEmpty()) {
+            clientNumber.setError("Debe espesificar el númbero a recargar");
+            check = false;
+        }
+
+        return check;
+    }
+
     @Override
     public void onDetach() {
         mListener = null;
@@ -76,6 +106,6 @@ public class ReloadDialogFragment extends BottomSheetDialogFragment {
     }
 
     public interface Listener {
-        void onReload(int position);
+        void onReload(PreReloadItemModel preReloadItemModel);
     }
 }

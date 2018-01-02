@@ -9,8 +9,9 @@
     tools:showIn="@layout/activity_reload">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_to_reload"
+        android:id="@+id/list_pre_reload"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:listitem="@layout/pre_reload_list_item" />
 
 </android.support.constraint.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.wirelesskings.wkreload;
 
 import com.annimon.stream.Stream;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.wirelesskings.data.model.RealmClient;
@@ -33,7 +34,10 @@ public class WKSDK {
 
     public WKSDK(ServerConfig serverConfig) {
         this.serverConfig = serverConfig;
-        this.gson = new Gson();
+        this.gson =new GsonBuilder()
+                .setLenient()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .create();
 
         middleware = new Middleware(serverConfig.getEmail()
                 , serverConfig.getPassword()
@@ -227,8 +231,6 @@ public class WKSDK {
 
         private String id;
 
-        private String amount;
-
         private Date sdate;
 
         private Date edate;
@@ -252,15 +254,6 @@ public class WKSDK {
 
         public WKPromotion setId(String id) {
             this.id = id;
-            return this;
-        }
-
-        public String getAmount() {
-            return amount;
-        }
-
-        public WKPromotion setAmount(String amount) {
-            this.amount = amount;
             return this;
         }
 

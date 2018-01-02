@@ -2,25 +2,13 @@ package com.wirelesskings.wkreload.activities;
 
 import android.support.annotation.NonNull;
 
-import com.annimon.stream.Stream;
-import com.annimon.stream.function.Function;
 import com.wirelesskings.wkreload.CacheHelper;
 import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.WKSDK;
 import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.domain.executor.ThreadExecutor;
-import com.wirelesskings.wkreload.domain.interactors.FatherInteractor;
-import com.wirelesskings.wkreload.domain.interactors.PromotionInteractor;
-import com.wirelesskings.wkreload.domain.model.Client;
-import com.wirelesskings.wkreload.domain.model.Father;
-import com.wirelesskings.wkreload.domain.model.Promotion;
-import com.wirelesskings.wkreload.domain.model.Reload;
-import com.wirelesskings.wkreload.domain.model.Seller;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 import com.wirelesskings.wkreload.presenter.BasePresenter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -85,7 +73,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
                                    else
                                        view.loginComplete();
                                    wksdk.getServerConfig().setActive(Boolean.parseBoolean(realmOwner.getNauta_active()));
-                                   loginDone(wksdk);
+                                   requestDone(wksdk);
                                }
                            },
                         new Consumer<Throwable>() {
@@ -97,7 +85,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
         );
     }
 
-    private void loginDone(WKSDK wksdk) {
+    private void requestDone(WKSDK wksdk) {
         WK.getInstance().replaceWKSession(wksdk);
     }
 
