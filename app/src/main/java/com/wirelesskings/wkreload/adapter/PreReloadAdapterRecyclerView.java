@@ -24,6 +24,11 @@ public class PreReloadAdapterRecyclerView extends RecyclerView.Adapter<PreReload
         return preReloadItemModels;
     }
 
+    public void clear() {
+        preReloadItemModels.clear();
+        notifyDataSetChanged();
+    }
+
     public interface Listened {
         void onClickItem(View view, int id);
     }

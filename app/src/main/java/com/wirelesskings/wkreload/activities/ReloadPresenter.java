@@ -7,6 +7,7 @@ import com.wirelesskings.wkreload.CacheHelper;
 import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.WKSDK;
 import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
+import com.wirelesskings.wkreload.domain.executor.ThreadExecutor;
 import com.wirelesskings.wkreload.model.PreReloadItemModel;
 import com.wirelesskings.wkreload.presenter.BasePresenter;
 
@@ -16,6 +17,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by alberto on 1/01/18.
@@ -25,12 +27,14 @@ public class ReloadPresenter extends BasePresenter<ReloadContract.View>
         implements ReloadContract.Presenter {
 
     private WKSDK wksdk;
+    private ThreadExecutor threadExecutor;
 
     private CacheHelper cacheHelper;
 
 
-    public ReloadPresenter(WKSDK wksdk, CacheHelper cacheHelper) {
+    public ReloadPresenter(WKSDK wksdk, ThreadExecutor threadExecutor, CacheHelper cacheHelper) {
         this.wksdk = wksdk;
+        this.threadExecutor = threadExecutor;
         this.cacheHelper = cacheHelper;
     }
 
@@ -48,6 +52,14 @@ public class ReloadPresenter extends BasePresenter<ReloadContract.View>
                     }
                 })
                 .toList())
+                .doOnSuccess(new Consumer<WKSDK.WKOwner>() {
+                    @Override
+                    public void accept(WKSDK.WKOwner wkOwner) throws Exception {
+                        cacheHelper.save(wkOwner, wksdk.getServerConfig().getCredentials().getUsername());
+                    }
+                })
+                .subscribeOn(Schedulers.from(threadExecutor))
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
@@ -58,28 +70,21 @@ public class ReloadPresenter extends BasePresenter<ReloadContract.View>
                     @Override
                     public void run() throws Exception {
                         view.hideLoading();
+
                     }
                 })
-                .doOnSuccess(new Consumer<WKSDK.WKOwner>() {
-                    @Override
-                    public void accept(WKSDK.WKOwner wkOwner) throws Exception {
-                        cacheHelper.save(wkOwner, wksdk.getServerConfig().getCredentials().getUsername());
-                    }
-                })
-                .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<WKSDK.WKOwner>() {
                                @Override
-                               public void accept(WKSDK.WKOwner wkOwner) throws Exception {
-                                   if (!Boolean.valueOf(wkOwner.getNauta_active()))
+                               public void accept(WKSDK.WKOwner realmOwner) throws Exception {
+                                   if (!Boolean.valueOf(realmOwner.getNauta_active()))
                                        view.showError(new UserInactiveWKException());
                                    else
                                        view.reloadComplete();
-                                   wksdk.getServerConfig().setActive(Boolean.parseBoolean(wkOwner.getNauta_active()));
+                                   wksdk.getServerConfig().setActive(Boolean.parseBoolean(realmOwner.getNauta_active()));
                                    requestDone(wksdk);
                                }
-                           }
-                        , new Consumer<Throwable>() {
+                           },
+                        new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable throwable) throws Exception {
                                 view.showError((Exception) throwable);

@@ -69,6 +69,7 @@ public class MainPresenter extends BasePresenter<MainContract.View>
     public void getPromotionById(String id) {
         addSubscription(promotionInteractor.getPromotionById(id)
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
+                .unsubscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Promotion>() {
                     @Override

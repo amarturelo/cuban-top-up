@@ -1,15 +1,18 @@
 package com.wirelesskings.wkreload.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
 import com.wirelesskings.data.cache.impl.FatherCacheImpl;
 import com.wirelesskings.data.cache.impl.PromotionCacheImpl;
@@ -19,9 +22,14 @@ import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.WKSDK;
 import com.wirelesskings.wkreload.adapter.PreReloadAdapterRecyclerView;
 import com.wirelesskings.wkreload.dialogs.LoadingDialog;
+import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
+import com.wirelesskings.wkreload.executor.JobExecutor;
+import com.wirelesskings.wkreload.fragments.LoadingDialogFragment;
 import com.wirelesskings.wkreload.fragments.ReloadClickItemMenuDialogFragment;
 import com.wirelesskings.wkreload.fragments.ReloadDialogFragment;
+import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
 import com.wirelesskings.wkreload.model.PreReloadItemModel;
+import com.wirelesskings.wkreload.navigation.Navigator;
 
 
 public class ReloadActivity extends AppCompatActivity implements ReloadContract.View, ReloadDialogFragment.Listener, ReloadClickItemMenuDialogFragment.Listener {
@@ -72,6 +80,7 @@ public class ReloadActivity extends AppCompatActivity implements ReloadContract.
         });
 
         presenter = new ReloadPresenter(WK.getInstance().getWKSessionDefault()
+                , JobExecutor.getInstance()
                 , new CacheHelper(
                 new FatherCacheImpl()
                 , new PromotionCacheImpl()
@@ -92,30 +101,54 @@ public class ReloadActivity extends AppCompatActivity implements ReloadContract.
         return new Intent(context, ReloadActivity.class);
     }
 
+    private LoadingDialogFragment loadingDialogFragment;
+
     @Override
     public void showLoading() {
-        LoadingDialog loadingDialog = new LoadingDialog(getApplicationContext());
-        loadingDialog.show(new LoadingDialog.LoadingListener() {
-            @Override
-            public void onCancel() {
-
-            }
-        });
+        loadingDialogFragment = LoadingDialogFragment.newInstance();
+        loadingDialogFragment.show(getSupportFragmentManager(), LoadingDialogFragment.class.getSimpleName());
     }
 
     @Override
     public void hideLoading() {
-
+        loadingDialogFragment.dismiss();
     }
 
     @Override
     public void showError(Exception e) {
+        hideLoading();
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Ocurrio un error");
+
+        if (e instanceof NetworkErrorToSendException) {
+            builder.setMessage(R.string.error_network_to_send);
+        } else if (e instanceof UserInactiveWKException) {
+            builder.setMessage(R.string.error_user_inactive);
+            goToLogin();
+        } else {
+            builder.setMessage(R.string.error_unknown);
+        }
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    private void goToLogin() {
+        Navigator.goToLogin(getApplicationContext());
+        finish();
     }
 
     @Override
     public void reloadComplete() {
-
+        preReloadAdapterRecyclerView.clear();
+        checkCount();
+        Toast.makeText(getApplicationContext(), R.string.toast_reload_complete, Toast.LENGTH_LONG).show();
     }
 
     @Override

@@ -57,6 +57,7 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
     public void onReloads(String promotionId) {
         addSubscription(promotionInteractor.getPromotionById(promotionId)
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
+                .unsubscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Promotion>() {
                     @Override

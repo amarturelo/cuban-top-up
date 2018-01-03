@@ -44,7 +44,6 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
 
     private ReloadsPresenter presenter;
 
-    private LoadingDialog loadingDialog;
 
     private String mPromotionId;
 
@@ -53,7 +52,6 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         reloadList = view.findViewById(R.id.reload_list);
-        loadingDialog = new LoadingDialog(getActivity());
         return view;
     }
 
@@ -121,7 +119,6 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
 
     @Override
     public void hideLoading() {
-        loadingDialog.dismiss();
     }
 
 
@@ -133,7 +130,6 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
 
     @Override
     public void showLoading() {
-        loadingDialog.show(this);
     }
 
     @Override

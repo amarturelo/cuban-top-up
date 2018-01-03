@@ -4,6 +4,7 @@ import java.util.Date;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Alberto on 23/10/2017.
@@ -18,6 +19,7 @@ public class RealmPromotion extends RealmObject {
 
     private String title;
 
+    @PrimaryKey
     private String id;
 
     private String amount;

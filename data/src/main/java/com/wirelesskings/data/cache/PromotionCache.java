@@ -20,5 +20,5 @@ public interface PromotionCache {
 
     Observable<List<RealmPromotion>> getAll(String wkUser);
 
-    Single<RealmPromotion> get(String id);
+    Observable<RealmPromotion> get(String id);
 }

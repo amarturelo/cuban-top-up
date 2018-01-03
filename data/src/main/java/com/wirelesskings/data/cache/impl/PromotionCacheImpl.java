@@ -64,14 +64,35 @@ public class PromotionCacheImpl implements PromotionCache {
     }
 
     @Override
-    public Single<RealmPromotion> get(final String id) {
-        return Single.create(new SingleOnSubscribe<RealmPromotion>() {
+    public Observable<RealmPromotion> get(final String id) {
+        return Observable.create(new ObservableOnSubscribe<RealmPromotion>() {
             @Override
-            public void subscribe(SingleEmitter<RealmPromotion> emitter) throws Exception {
-                Realm realm = Realm.getDefaultInstance();
-                emitter.onSuccess(realm.where(RealmPromotion.class)
+            public void subscribe(final ObservableEmitter<RealmPromotion> emitter) throws Exception {
+                final Realm observableRealm = Realm.getDefaultInstance();
+                final RealmResults<RealmPromotion> results = observableRealm.where(RealmPromotion.class)
                         .equalTo(RealmPromotion.ID, id)
-                        .findAll().first());
+                        .findAllAsync();
+
+                final RealmChangeListener<RealmResults<RealmPromotion>> listener = new RealmChangeListener<RealmResults<RealmPromotion>>() {
+                    @Override
+                    public void onChange(RealmResults<RealmPromotion> realmPromotions) {
+                        if (results.isLoaded() && results.isValid()) {
+                            if (results.first() != null)
+                                emitter.onNext(observableRealm.copyFromRealm(results.first()));
+                        }
+                    }
+                };
+                emitter.setDisposable(Disposables.fromRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (results.isLoaded() && results.isValid()) {
+                            results.removeChangeListener(listener);
+                        }
+                        observableRealm.close();
+                    }
+                }));
+
+                results.addChangeListener(listener);
             }
         });
     }

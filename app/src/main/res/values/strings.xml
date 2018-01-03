@@ -71,6 +71,7 @@
     <string name="title_state_reload_all">todos</string>
     <string name="title_reload_state">Reload STATE</string>
     <string name="txt_filter">Filtrar</string>
-    <string name="title_activity_reload">ReloadActivity</string>
+    <string name="title_activity_reload">Borrador de recagas</string>
     <string name="toast_update_complete">Actualizacion completada</string>
+    <string name="toast_reload_complete">Recarga completada</string>
 </resources>

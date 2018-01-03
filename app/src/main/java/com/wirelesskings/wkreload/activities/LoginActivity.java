@@ -16,6 +16,7 @@ import com.wirelesskings.wkreload.dialogs.LoadingDialog;
 import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 import com.wirelesskings.wkreload.executor.JobExecutor;
+import com.wirelesskings.wkreload.fragments.LoadingDialogFragment;
 import com.wirelesskings.wkreload.fragments.LoginFragment;
 import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
 import com.wirelesskings.wkreload.navigation.Navigator;
@@ -26,7 +27,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     private LoginPresenter loginPresenter;
 
-    private LoadingDialog loadingDialog;
 
     private WK wk;
 
@@ -55,7 +55,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     private void initComponents() {
-        loadingDialog = new LoadingDialog(this);
     }
 
     @Override
@@ -94,25 +93,19 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         builder.show();
     }
 
+    private LoadingDialogFragment loadingDialogFragment;
 
-    private void goToLogin() {
-        Navigator.goToLogin(getApplicationContext());
-        finish();
-    }
 
     @Override
     public void hideLoading() {
-        loadingDialog.dismiss();
+        loadingDialogFragment.dismiss();
+        loadingDialogFragment = null;
     }
 
     @Override
     public void showLoading() {
-        loadingDialog.show(new LoadingDialog.LoadingListener() {
-            @Override
-            public void onCancel() {
-                loginPresenter.cancel();
-            }
-        });
+        loadingDialogFragment = LoadingDialogFragment.newInstance();
+        loadingDialogFragment.show(getSupportFragmentManager(), LoadingDialogFragment.class.getSimpleName());
     }
 
     @Override

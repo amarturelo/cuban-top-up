@@ -15,5 +15,5 @@ import io.reactivex.Single;
 public interface PromotionRepository {
     Observable<List<Promotion>> promotions(String wkUser);
 
-    Single<Promotion> promotionById(String id);
+    Observable<Promotion> promotionById(String id);
 }

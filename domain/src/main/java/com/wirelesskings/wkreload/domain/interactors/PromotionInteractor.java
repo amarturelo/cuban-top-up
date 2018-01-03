@@ -25,7 +25,7 @@ public class PromotionInteractor {
         return promotionRepository.promotions(wkUser);
     }
 
-    public Single<Promotion> getPromotionById(String id) {
+    public Observable<Promotion> getPromotionById(String id) {
         return promotionRepository.promotionById(id);
     }
 

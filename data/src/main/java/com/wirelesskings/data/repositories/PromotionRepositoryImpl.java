@@ -39,7 +39,7 @@ public class PromotionRepositoryImpl implements PromotionRepository {
     }
 
     @Override
-    public Single<Promotion> promotionById(String id) {
+    public Observable<Promotion> promotionById(String id) {
         return promotionCache.get(id)
                 .map(new Function<RealmPromotion, Promotion>() {
                     @Override
