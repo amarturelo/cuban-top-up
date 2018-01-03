@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,9 +18,8 @@ import com.wirelesskings.data.cache.impl.PromotionCacheImpl;
 import com.wirelesskings.wkreload.CacheHelper;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.WK;
-import com.wirelesskings.wkreload.WKSDK;
+import com.wirelesskings.wkreload.adapter.DividerItemDecoration;
 import com.wirelesskings.wkreload.adapter.PreReloadAdapterRecyclerView;
-import com.wirelesskings.wkreload.dialogs.LoadingDialog;
 import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.executor.JobExecutor;
 import com.wirelesskings.wkreload.fragments.LoadingDialogFragment;
@@ -60,7 +58,7 @@ public class ReloadActivity extends AppCompatActivity implements ReloadContract.
             }
         });
         listPreReload.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        listPreReload.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
+        listPreReload.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL_LIST));
 
         preReloadAdapterRecyclerView = new PreReloadAdapterRecyclerView(new PreReloadAdapterRecyclerView.Listened() {
             @Override
@@ -116,7 +114,6 @@ public class ReloadActivity extends AppCompatActivity implements ReloadContract.
 
     @Override
     public void showError(Exception e) {
-        hideLoading();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -140,7 +137,7 @@ public class ReloadActivity extends AppCompatActivity implements ReloadContract.
     }
 
     private void goToLogin() {
-        Navigator.goToLogin(getApplicationContext());
+        Navigator.goToLogin(this);
         finish();
     }
 

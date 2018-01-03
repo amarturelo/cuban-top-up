@@ -12,14 +12,12 @@ import com.wirelesskings.data.cache.impl.PromotionCacheImpl;
 import com.wirelesskings.wkreload.CacheHelper;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.WK;
-import com.wirelesskings.wkreload.dialogs.LoadingDialog;
 import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 import com.wirelesskings.wkreload.executor.JobExecutor;
 import com.wirelesskings.wkreload.fragments.LoadingDialogFragment;
 import com.wirelesskings.wkreload.fragments.LoginFragment;
 import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
-import com.wirelesskings.wkreload.navigation.Navigator;
 
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View,
@@ -70,8 +68,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void showError(Exception e) {
-
-        hideLoading();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 

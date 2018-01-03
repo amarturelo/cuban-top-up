@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     private void goToLogin() {
-        Navigator.goToLogin(getApplicationContext());
+        Navigator.goToLogin(this);
         finish();
     }
 
@@ -213,7 +213,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void showError(Exception e) {
-        hideLoading();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 

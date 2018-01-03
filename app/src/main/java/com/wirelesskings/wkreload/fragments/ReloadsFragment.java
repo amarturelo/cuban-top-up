@@ -17,8 +17,6 @@ import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.adapter.DividerItemDecoration;
 import com.wirelesskings.wkreload.adapter.ReloadAdapterRecyclerView;
-import com.wirelesskings.wkreload.dialogs.LoadingDialog;
-import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.domain.interactors.PromotionInteractor;
 import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
 import com.wirelesskings.wkreload.model.ReloadItemModel;
@@ -142,10 +140,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
 
         if (e instanceof NetworkErrorToSendException) {
             builder.setMessage(R.string.error_network_to_send);
-        } else if (e instanceof UserInactiveWKException) {
-            goToLogin();
-            builder.setMessage(R.string.error_user_inactive);
-        } else {
+        }  else {
             builder.setMessage(R.string.error_unknown);
         }
         builder.show();

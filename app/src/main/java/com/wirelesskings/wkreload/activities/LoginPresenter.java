@@ -68,12 +68,12 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
                 .subscribe(new Consumer<WKSDK.WKOwner>() {
                                @Override
                                public void accept(WKSDK.WKOwner realmOwner) throws Exception {
-                                   if (!Boolean.valueOf(realmOwner.getNauta_active()))
+                                   wksdk.getServerConfig().setActive(realmOwner.getNauta_active().equals("1"));
+                                   requestDone(wksdk);
+                                   if (!realmOwner.getNauta_active().equals("1"))
                                        view.showError(new UserInactiveWKException());
                                    else
                                        view.loginComplete();
-                                   wksdk.getServerConfig().setActive(Boolean.parseBoolean(realmOwner.getNauta_active()));
-                                   requestDone(wksdk);
                                }
                            },
                         new Consumer<Throwable>() {
