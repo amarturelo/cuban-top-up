@@ -33,7 +33,7 @@ import com.wirelesskings.wkreload.navigation.Navigator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ReloadsFragment.OnReloadsFragmentListened, MainContract.View {
+public class MainActivity extends AppCompatActivity implements MainContract.View {
 
     private FilterBottomDialog filterBottomDialog;
 
@@ -176,21 +176,9 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
         presenter.release();
     }
 
-    @Override
-    public void onInactiveUser() {
-        WK.getInstance().saveCredentials(wk.getCredentials().setActive(false));
-        goToLogin();
-    }
-
     private void goToLogin() {
         Navigator.goToLogin(getApplicationContext());
         finish();
-    }
-
-    @Override
-    public void onFather(Father father) {
-        tvFatherCost.setText("$" + String.valueOf(father.getCost()));
-        tvFatherName.setText(String.valueOf(father.getName()));
     }
 
     @Override

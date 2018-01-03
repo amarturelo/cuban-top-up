@@ -1,9 +1,10 @@
-package com.wirelesskings.wkreload.dialogs;
+package com.wirelesskings.wkreload.fragments;
 
 import android.support.annotation.NonNull;
 
 import com.wirelesskings.wkreload.BackgroundLooper;
 import com.wirelesskings.wkreload.domain.interactors.OwnerInteractor;
+import com.wirelesskings.wkreload.domain.interactors.ReloadInteractor;
 import com.wirelesskings.wkreload.domain.model.Reload;
 import com.wirelesskings.wkreload.presenter.BasePresenter;
 
@@ -17,9 +18,9 @@ import io.reactivex.functions.Consumer;
 public class ViewReloadPresenter extends BasePresenter<ViewReloadContract.View>
         implements ViewReloadContract.Presenter {
 
-    private OwnerInteractor reloadsInteractor;
+    private ReloadInteractor reloadsInteractor;
 
-    public ViewReloadPresenter(OwnerInteractor reloadsInteractor) {
+    public ViewReloadPresenter(ReloadInteractor reloadsInteractor) {
         this.reloadsInteractor = reloadsInteractor;
     }
 

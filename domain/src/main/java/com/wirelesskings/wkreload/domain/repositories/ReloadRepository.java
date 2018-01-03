@@ -5,6 +5,7 @@ import com.wirelesskings.wkreload.domain.model.Reload;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * Created by alberto on 30/12/17.
@@ -12,4 +13,6 @@ import io.reactivex.Observable;
 
 public interface ReloadRepository {
     Observable<List<Reload>> reloads();
+
+    Single<Reload> reloadById(String id);
 }

@@ -1,4 +1,4 @@
-package com.wirelesskings.wkreload.dialogs;
+package com.wirelesskings.wkreload.fragments;
 
 import com.wirelesskings.wkreload.domain.model.Reload;
 import com.wirelesskings.wkreload.presenter.BaseContract;

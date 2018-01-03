@@ -11,6 +11,7 @@ import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.Single;
 import io.reactivex.functions.Function;
 import io.realm.Realm;
 
@@ -24,6 +25,17 @@ public class ReloadRepositoryImpl implements ReloadRepository {
 
     public ReloadRepositoryImpl(ReloadCache reloadCache) {
         this.reloadCache = reloadCache;
+    }
+
+    @Override
+    public Single<Reload> reloadById(String id) {
+        return reloadCache.getById(id)
+                .map(new Function<RealmReload, Reload>() {
+                    @Override
+                    public Reload apply(RealmReload realmReload) throws Exception {
+                        return ReloadDataMapper.transform(realmReload);
+                    }
+                });
     }
 
     @Override

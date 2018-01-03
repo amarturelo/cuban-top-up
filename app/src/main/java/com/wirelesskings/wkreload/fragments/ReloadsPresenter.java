@@ -32,18 +32,6 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
 
     private PromotionInteractor promotionInteractor;
 
-    private Consumer<Owner> success = new Consumer<Owner>() {
-        @Override
-        public void accept(Owner owner) throws Exception {
-            view.hideLoading();
-            if (owner.getPromotion() != null) {
-                view.renderInsertions(ReloadItemDataMapper.transform(owner.getPromotion().getReloads()));
-            } else
-                view.showError(new Exception("No hay promociones en estos momentos"));
-            view.renderFather(owner.getFather());
-        }
-    };
-
     private Consumer<Throwable> error = new Consumer<Throwable>() {
         @Override
         public void accept(Throwable throwable) throws Exception {

@@ -14,18 +14,14 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.wirelesskings.data.cache.impl.PromotionCacheImpl;
-import com.wirelesskings.data.cache.impl.ReloadCacheImpl;
 import com.wirelesskings.data.repositories.PromotionRepositoryImpl;
-import com.wirelesskings.data.repositories.ReloadRepositoryImpl;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.adapter.DividerItemDecoration;
 import com.wirelesskings.wkreload.adapter.ReloadAdapterRecyclerView;
 import com.wirelesskings.wkreload.dialogs.LoadingDialog;
-import com.wirelesskings.wkreload.dialogs.ViewReloadDialog;
 import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.domain.interactors.PromotionInteractor;
-import com.wirelesskings.wkreload.domain.interactors.ReloadInteractor;
 import com.wirelesskings.wkreload.domain.model.Father;
 import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
 import com.wirelesskings.wkreload.model.ReloadItemModel;
@@ -172,8 +168,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
 
     @Override
     public void renderFather(Father father) {
-        if (listened != null)
-            listened.onFather(father);
+
     }
 
     @Override
@@ -185,17 +180,13 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnReloadsFragmentListened)
-            listened = (OnReloadsFragmentListened) context;
     }
 
-    private OnReloadsFragmentListened listened;
-
-    //private ViewReloadDialog viewReloadDialog;
 
     @Override
     public void onClickItem(String id) {
-        //viewReloadDialog.show(id);
+        ViewReloadDialogFragment viewReloadDialogFragment = ViewReloadDialogFragment.newInstance(id);
+        viewReloadDialogFragment.show(getChildFragmentManager(), ViewReloadDialogFragment.class.getSimpleName());
     }
 
     @Override
@@ -203,11 +194,6 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
         presenter.cancel();
     }
 
-    public interface OnReloadsFragmentListened {
-        void onFather(Father father);
-
-        void onInactiveUser();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

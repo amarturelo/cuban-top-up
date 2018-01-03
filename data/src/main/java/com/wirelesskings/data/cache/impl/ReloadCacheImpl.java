@@ -13,6 +13,9 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
+import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.MainThreadDisposable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposables;
@@ -78,6 +81,20 @@ public class ReloadCacheImpl implements ReloadCache {
                 }));
 
                 results.addChangeListener(listener);
+            }
+        });
+    }
+
+    @Override
+    public Single<RealmReload> getById(final String id) {
+        return Single.create(new SingleOnSubscribe<RealmReload>() {
+            @Override
+            public void subscribe(SingleEmitter<RealmReload> emitter) throws Exception {
+                final Realm observableRealm = Realm.getDefaultInstance();
+                emitter.onSuccess(observableRealm.copyFromRealm(observableRealm
+                        .where(RealmReload.class)
+                        .equalTo(RealmReload.ID, id)
+                        .findFirst()));
             }
         });
     }

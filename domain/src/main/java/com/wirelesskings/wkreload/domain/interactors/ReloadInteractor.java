@@ -5,7 +5,9 @@ import com.wirelesskings.wkreload.domain.repositories.ReloadRepository;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * Created by alberto on 31/12/17.
@@ -20,5 +22,9 @@ public class ReloadInteractor {
 
     public Observable<List<Reload>> getAll() {
         return reloadRepository.reloads();
+    }
+
+    public Single<Reload> reloadById(String id) {
+        return reloadRepository.reloadById(id);
     }
 }
