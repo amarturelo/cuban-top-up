@@ -63,7 +63,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        viewReloadDialog = new ViewReloadDialog(getActivity());
+        //viewReloadDialog = new ViewReloadDialog(getActivity());
         presenter = new ReloadsPresenter(
                 new ReloadInteractor(
                         new ReloadRepositoryImpl(
@@ -181,11 +181,11 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
 
     private OnReloadsFragmentListened listened;
 
-    private ViewReloadDialog viewReloadDialog;
+    //private ViewReloadDialog viewReloadDialog;
 
     @Override
     public void onClickItem(String id) {
-        viewReloadDialog.show(id);
+        //viewReloadDialog.show(id);
     }
 
     @Override

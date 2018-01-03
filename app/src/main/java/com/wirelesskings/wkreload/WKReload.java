@@ -49,7 +49,7 @@ public class WKReload extends Application {
                 .setAmount(50)
                 .setId("20")
                 .setCount(2)
-                .setDate("")
+                .setDate(new Date())
                 .setRealmClient(new RealmClient()
                         .setName("Alberto")
                         .setNumber("52950107"))

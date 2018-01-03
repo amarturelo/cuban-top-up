@@ -5,6 +5,7 @@ import com.wirelesskings.wkreload.domain.model.Promotion;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 

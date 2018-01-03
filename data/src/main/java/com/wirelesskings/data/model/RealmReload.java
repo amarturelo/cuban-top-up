@@ -1,5 +1,7 @@
 package com.wirelesskings.data.model;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.annotations.LinkingObjects;
@@ -26,7 +28,7 @@ public class RealmReload extends RealmObject {
     private RealmSeller seller;
     private int count;
     private int amount;
-    private String date;
+    private Date date;
     private String status;
     private String app;
 
@@ -104,11 +106,11 @@ public class RealmReload extends RealmObject {
         return this;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public RealmReload setDate(String date) {
+    public RealmReload setDate(Date date) {
         this.date = date;
         return this;
     }

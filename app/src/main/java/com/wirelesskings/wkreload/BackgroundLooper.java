@@ -6,15 +6,16 @@ import android.os.Process;
 
 public class BackgroundLooper {
 
-  private static HandlerThread handlerThread;
+    private static HandlerThread handlerThread;
 
-  public static Looper get() {
-    if (handlerThread == null) {
-      handlerThread = new HandlerThread(
-          "BackgroundHandlerThread", Process.THREAD_PRIORITY_BACKGROUND);
-      handlerThread.start();
+    public static Looper get() {
+        if (handlerThread == null) {
+            handlerThread = new HandlerThread(
+                    "BackgroundHandlerThread", Process.THREAD_PRIORITY_BACKGROUND);
+            if (!handlerThread.isAlive())
+                handlerThread.start();
+        }
+
+        return handlerThread.getLooper();
     }
-
-    return handlerThread.getLooper();
-  }
 }

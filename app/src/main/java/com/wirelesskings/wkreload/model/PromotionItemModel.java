@@ -60,4 +60,9 @@ public class PromotionItemModel {
         this.title = title;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return title+" jpder";
+    }
 }

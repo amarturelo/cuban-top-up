@@ -4,16 +4,22 @@ import android.os.Looper;
 
 import com.wirelesskings.data.cache.FatherCache;
 import com.wirelesskings.data.model.RealmFather;
+import com.wirelesskings.data.model.RealmPromotion;
 
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 /**
  * Created by alberto on 31/12/17.
@@ -32,42 +38,37 @@ public class FatherCacheImpl implements FatherCache {
 
     @Override
     public Observable<RealmFather> fatherByUser(final String wkUser) {
-        return Observable.defer(
-                new Callable<ObservableSource<? extends RealmFather>>() {
+        return Observable.create(new ObservableOnSubscribe<RealmFather>() {
+            @Override
+            public void subscribe(final ObservableEmitter<RealmFather> emitter) throws Exception {
+                final Realm observableRealm = Realm.getDefaultInstance();
+                final RealmResults<RealmFather> results = observableRealm.where(RealmFather.class)
+                        .equalTo(RealmFather.WK_USER, wkUser)
+                        .findAllAsync();
+
+                final RealmChangeListener<RealmResults<RealmFather>> listener = new RealmChangeListener<RealmResults<RealmFather>>() {
                     @Override
-                    public ObservableSource<? extends RealmFather> call() throws Exception {
-                        return Observable.using(
-                                new Callable<Realm>() {
-                                    @Override
-                                    public Realm call() throws Exception {
-                                        return Realm.getDefaultInstance();
-                                    }
-                                }
-                                , new Function<Realm, ObservableSource<? extends List<RealmFather>>>() {
-                                    @Override
-                                    public ObservableSource<? extends List<RealmFather>> apply(Realm realm) throws Exception {
-                                        return realm.where(RealmFather.class)
-                                                .equalTo(RealmFather.WK_USER, wkUser)
-                                                .findAllAsync()
-                                                .asFlowable()
-                                                .toObservable();
-                                    }
-                                }
-                                , new Consumer<Realm>() {
-                                    @Override
-                                    public void accept(Realm realm) throws Exception {
-                                        realm.close();
-                                    }
-                                })
-                                .map(new Function<List<RealmFather>, RealmFather>() {
-                                    @Override
-                                    public RealmFather apply(List<RealmFather> realmFathers) throws Exception {
-                                        return realmFathers.get(0);
-                                    }
-                                });
+                    public void onChange(RealmResults<RealmFather> realmFathers) {
+                        if (results.isValid() && results.isLoaded()) {
+                            RealmFather realmFather = realmFathers.first();
+                            if (realmFather != null)
+                                emitter.onNext(observableRealm.copyFromRealm(realmFather));
+                        }
                     }
-                }
-        )
-                .unsubscribeOn(AndroidSchedulers.from(Looper.myLooper()));
+                };
+
+                emitter.setDisposable(Disposables.fromRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (results.isValid()) {
+                            results.removeChangeListener(listener);
+                        }
+                        observableRealm.close();
+                    }
+                }));
+
+                results.addChangeListener(listener);
+            }
+        });
     }
 }

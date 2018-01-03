@@ -132,6 +132,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_password_wk"
+                        android:text="123456"
                         android:inputType="textPassword" />
                 </android.support.design.widget.TextInputLayout>
 

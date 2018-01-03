@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Alberto on 28/10/2017.
  */
 
-public class ReloadDataMapper  {
+public class ReloadDataMapper {
 
     public static List<Reload> transform(List<RealmReload> realmReloads) {
         List<Reload> reloads = new ArrayList<>();
@@ -38,14 +38,7 @@ public class ReloadDataMapper  {
                             .setNumber(realmReload.getRealmClient().getNumber()))
                     .setCount(realmReload.getCount());
 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-            try {
-                reload.setDate(format.parse(realmReload.getDate()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+            reload.setDate(realmReload.getDate());
             reload.setId(realmReload.getId())
                     .setStatus(realmReload.getStatus())
                     .setSeller(new Seller()

@@ -34,6 +34,7 @@ public class MainPresenter extends BasePresenter<MainContract.View>
     public void getAllPromotions(String wkUser) {
         addSubscription(promotionInteractor.getAllPromotions(wkUser)
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
+                .unsubscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<Promotion>>() {
                                @Override
@@ -71,6 +72,7 @@ public class MainPresenter extends BasePresenter<MainContract.View>
     public void getFatherByUser(String wkUser) {
         addSubscription(fatherInteractor.getFatherByUser(wkUser)
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
+                .unsubscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Father>() {
                                @Override

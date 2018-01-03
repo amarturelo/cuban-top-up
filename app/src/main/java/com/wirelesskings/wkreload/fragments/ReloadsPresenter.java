@@ -10,8 +10,11 @@ import com.wirelesskings.wkreload.domain.interactors.OwnerInteractor;
 import com.wirelesskings.wkreload.domain.interactors.PromotionInteractor;
 import com.wirelesskings.wkreload.domain.interactors.ReloadInteractor;
 import com.wirelesskings.wkreload.domain.model.Owner;
+import com.wirelesskings.wkreload.domain.model.Reload;
 import com.wirelesskings.wkreload.model.mapper.ReloadItemDataMapper;
 import com.wirelesskings.wkreload.presenter.BasePresenter;
+
+import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -99,10 +102,15 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
 
     @Override
     public void onReloads() {
-        /*addSubscription(reloadsInteractor.owner()
+        addSubscription(reloadInteractor.getAll()
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(success, error));*/
+                .subscribe(new Consumer<List<Reload>>() {
+                    @Override
+                    public void accept(List<Reload> reloads) throws Exception {
+                        view.renderInsertions(ReloadItemDataMapper.transform(reloads));
+                    }
+                }, error));
     }
 
     @Override

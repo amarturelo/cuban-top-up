@@ -12,6 +12,7 @@ import io.realm.RealmObject;
 public class RealmPromotion extends RealmObject {
 
     public static final String WK_USER = "wkUser";
+    public static final String ID = "id";
 
     private String wkUser;
 

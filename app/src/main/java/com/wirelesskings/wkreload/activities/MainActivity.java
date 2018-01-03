@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wirelesskings.data.cache.impl.FatherCacheImpl;
 import com.wirelesskings.data.cache.impl.PromotionCacheImpl;
@@ -29,6 +30,7 @@ import com.wirelesskings.wkreload.model.FatherModel;
 import com.wirelesskings.wkreload.model.PromotionItemModel;
 import com.wirelesskings.wkreload.navigation.Navigator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ReloadsFragment.OnReloadsFragmentListened, MainContract.View {
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
         wk = WK.getInstance();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         presenter = new MainPresenter(
                 new PromotionInteractor(
@@ -79,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
     protected void onResume() {
         super.onResume();
         presenter.bindView(this);
+        presenter.getAllPromotions(WK.getInstance().getCredentials().getCredentials().getUsername());
+        presenter.getFatherByUser(WK.getInstance().getCredentials().getCredentials().getUsername());
     }
 
     private void initComponents() {
@@ -132,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
     }
 
     private void goToReload() {
-        Navigator.goToReload(getApplicationContext());
+        Navigator.goToReload(this);
     }
 
     @Override
@@ -166,6 +171,12 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        presenter.release();
+    }
+
+    @Override
     public void onInactiveUser() {
         WK.getInstance().saveCredentials(wk.getCredentials().setActive(false));
         goToLogin();
@@ -194,12 +205,13 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
 
     @Override
     public void showError(Exception e) {
-
+        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void renderPromotionList(List<PromotionItemModel> promotionItemModels) {
-        promotionsListSpinnerAdapter = new PromotionsListSpinnerAdapter(getApplicationContext(), (PromotionItemModel[]) promotionItemModels.toArray());
+        promotionsListSpinnerAdapter = new PromotionsListSpinnerAdapter(getApplicationContext(), (ArrayList<PromotionItemModel>) promotionItemModels)
+        ;
         spinner.setAdapter(promotionsListSpinnerAdapter);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -207,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements ReloadsFragment.O
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // When the given dropdown item is selected, show its contents in the
                 // container view.
+                presenter.getPromotionById(promotionsListSpinnerAdapter.getItem(position).getId());
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, ReloadsFragment.newInstance(promotionsListSpinnerAdapter.getItem(position).getId()))
                         .commit();

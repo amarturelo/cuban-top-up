@@ -34,7 +34,7 @@ public class WKSDK {
 
     public WKSDK(ServerConfig serverConfig) {
         this.serverConfig = serverConfig;
-        this.gson =new GsonBuilder()
+        this.gson = new GsonBuilder()
                 .setLenient()
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
                 .create();
@@ -291,7 +291,7 @@ public class WKSDK {
         private RealmSeller seller;
         private int count;
         private int amount;
-        private String date;
+        private Date date;
         private String status;
         private String app;
 
@@ -343,11 +343,11 @@ public class WKSDK {
             return this;
         }
 
-        public String getDate() {
+        public Date getDate() {
             return date;
         }
 
-        public WKReload setDate(String date) {
+        public WKReload setDate(Date date) {
             this.date = date;
             return this;
         }
