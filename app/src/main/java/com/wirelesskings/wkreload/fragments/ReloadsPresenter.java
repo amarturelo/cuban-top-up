@@ -10,6 +10,7 @@ import com.wirelesskings.wkreload.domain.interactors.OwnerInteractor;
 import com.wirelesskings.wkreload.domain.interactors.PromotionInteractor;
 import com.wirelesskings.wkreload.domain.interactors.ReloadInteractor;
 import com.wirelesskings.wkreload.domain.model.Owner;
+import com.wirelesskings.wkreload.domain.model.Promotion;
 import com.wirelesskings.wkreload.domain.model.Reload;
 import com.wirelesskings.wkreload.model.mapper.ReloadItemDataMapper;
 import com.wirelesskings.wkreload.presenter.BasePresenter;
@@ -28,7 +29,8 @@ import io.reactivex.functions.Consumer;
 public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
         implements ReloadsContract.Presenter {
 
-    private ReloadInteractor reloadInteractor;
+
+    private PromotionInteractor promotionInteractor;
 
     private Consumer<Owner> success = new Consumer<Owner>() {
         @Override
@@ -52,8 +54,8 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
 
     private WKSDK wksdk;
 
-    public ReloadsPresenter(ReloadInteractor reloadInteractor, WKSDK wksdk) {
-        this.reloadInteractor = reloadInteractor;
+    public ReloadsPresenter(PromotionInteractor promotionInteractor, WKSDK wksdk) {
+        this.promotionInteractor = promotionInteractor;
         this.wksdk = wksdk;
     }
 
@@ -101,14 +103,14 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
     }
 
     @Override
-    public void onReloads() {
-        addSubscription(reloadInteractor.getAll()
+    public void onReloads(String promotionId) {
+        addSubscription(promotionInteractor.getPromotionById(promotionId)
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<Reload>>() {
+                .subscribe(new Consumer<Promotion>() {
                     @Override
-                    public void accept(List<Reload> reloads) throws Exception {
-                        view.renderInsertions(ReloadItemDataMapper.transform(reloads));
+                    public void accept(Promotion promotion) throws Exception {
+                        view.renderInsertions(ReloadItemDataMapper.transform(promotion.getReloads()));
                     }
                 }, error));
     }
@@ -116,6 +118,5 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
     @Override
     public void bindView(@NonNull ReloadsContract.View view) {
         super.bindView(view);
-        onReloads();
     }
 }

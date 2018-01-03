@@ -13,7 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.wirelesskings.data.cache.impl.PromotionCacheImpl;
 import com.wirelesskings.data.cache.impl.ReloadCacheImpl;
+import com.wirelesskings.data.repositories.PromotionRepositoryImpl;
 import com.wirelesskings.data.repositories.ReloadRepositoryImpl;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.WK;
@@ -22,6 +24,7 @@ import com.wirelesskings.wkreload.adapter.ReloadAdapterRecyclerView;
 import com.wirelesskings.wkreload.dialogs.LoadingDialog;
 import com.wirelesskings.wkreload.dialogs.ViewReloadDialog;
 import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
+import com.wirelesskings.wkreload.domain.interactors.PromotionInteractor;
 import com.wirelesskings.wkreload.domain.interactors.ReloadInteractor;
 import com.wirelesskings.wkreload.domain.model.Father;
 import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
@@ -50,6 +53,8 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
 
     private LoadingDialog loadingDialog;
 
+    private String mPromotionId;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -64,10 +69,13 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         //viewReloadDialog = new ViewReloadDialog(getActivity());
+
+        mPromotionId = getArguments().getString(ARG_PROMOTION_ID);
+
         presenter = new ReloadsPresenter(
-                new ReloadInteractor(
-                        new ReloadRepositoryImpl(
-                                new ReloadCacheImpl()
+                new PromotionInteractor(
+                        new PromotionRepositoryImpl(
+                                new PromotionCacheImpl()
                         )
                 )
                 , WK.getInstance().getWKSessionDefault());
@@ -96,6 +104,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
         reloadList.setAdapter(reloadAdapterRecyclerView);
         initFragment(savedInstanceState);
     }
+
 
     @Override
     public void renderInsertions(List<ReloadItemModel> reloads) {
@@ -170,6 +179,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     @Override
     public void onResume() {
         super.onResume();
+        presenter.onReloads(mPromotionId);
     }
 
     @Override

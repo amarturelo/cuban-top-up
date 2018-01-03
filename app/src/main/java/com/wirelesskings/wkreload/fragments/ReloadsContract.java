@@ -31,7 +31,7 @@ public interface ReloadsContract {
     }
 
     interface Presenter extends BaseContract.Presenter<ReloadsContract.View> {
-        void onReloads();
+        void onReloads(String promotionId);
 
         void update();
 
