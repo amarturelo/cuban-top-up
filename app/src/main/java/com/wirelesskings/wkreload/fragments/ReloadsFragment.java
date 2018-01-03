@@ -8,10 +8,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.wirelesskings.data.cache.impl.PromotionCacheImpl;
 import com.wirelesskings.data.repositories.PromotionRepositoryImpl;
@@ -22,7 +20,6 @@ import com.wirelesskings.wkreload.adapter.ReloadAdapterRecyclerView;
 import com.wirelesskings.wkreload.dialogs.LoadingDialog;
 import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.domain.interactors.PromotionInteractor;
-import com.wirelesskings.wkreload.domain.model.Father;
 import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
 import com.wirelesskings.wkreload.model.ReloadItemModel;
 import com.wirelesskings.wkreload.navigation.Navigator;
@@ -127,10 +124,6 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
         loadingDialog.dismiss();
     }
 
-    @Override
-    public void updateComplete() {
-        Toast.makeText(getContext(), "Update Complete", Toast.LENGTH_LONG).show();
-    }
 
     @Override
     public void onDetach() {
@@ -167,11 +160,6 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     }
 
     @Override
-    public void renderFather(Father father) {
-
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         presenter.onReloads(mPromotionId);
@@ -195,19 +183,8 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_update:
-                update();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
-    private void update() {
-        presenter.update();
-    }
+
 
 
 }

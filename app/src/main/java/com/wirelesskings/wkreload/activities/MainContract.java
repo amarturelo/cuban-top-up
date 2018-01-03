@@ -25,6 +25,8 @@ public interface MainContract {
         void renderPromotion(PromotionItemModel promotionItemModel);
 
         void renderFather(FatherModel fatherModel);
+
+        void updateComplete();
     }
 
     interface Presenter extends BaseContract.Presenter<MainContract.View> {
@@ -35,5 +37,6 @@ public interface MainContract {
 
         void getFatherByUser(String wkUser);
 
+        void update();
     }
 }

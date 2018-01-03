@@ -37,11 +37,11 @@ public class LoadingDialogFragment extends BottomSheetDialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         final Fragment parent = getParentFragment();
-        if (parent != null) {
+        /*if (parent != null) {
             mListener = (Listener) parent;
         } else {
             mListener = (Listener) context;
-        }
+        }*/
     }
 
     @Override
@@ -57,10 +57,9 @@ public class LoadingDialogFragment extends BottomSheetDialogFragment {
     }
 
     // TODO: Customize parameters
-    public static BottomSheetDialogFragment newInstance(int itemCount) {
-        final BottomSheetDialogFragment fragment = new BottomSheetDialogFragment();
+    public static LoadingDialogFragment newInstance() {
+        final LoadingDialogFragment fragment = new LoadingDialogFragment();
         final Bundle args = new Bundle();
-        args.putInt(ARG_PROCESS_POS, itemCount);
         fragment.setArguments(args);
         return fragment;
     }

@@ -54,43 +54,6 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
     }
 
     @Override
-    public void update() {
-        view.showLoading();
-        Disposable subscription = wksdk.update()
-                .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        view.showLoading();
-                    }
-                })
-                .doFinally(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        view.hideLoading();
-
-                    }
-                })
-                .subscribe(new Consumer<WKSDK.WKOwner>() {
-                    @Override
-                    public void accept(WKSDK.WKOwner wkOwner) throws Exception {
-                        if (wksdk.getServerConfig().isActive() != Boolean.parseBoolean(wkOwner.getNauta_active())) {
-                            wksdk.getServerConfig().setActive(Boolean.parseBoolean(wkOwner.getNauta_active()));
-                            WK.getInstance().replaceWKSession(wksdk);
-                        }
-
-                        if (wksdk.getServerConfig().isActive())
-                            view.updateComplete();
-                        else
-                            view.showError(new UserInactiveWKException());
-
-                    }
-                }, error);
-        addSubscription(subscription);
-    }
-
-    @Override
     public void onReloads(String promotionId) {
         addSubscription(promotionInteractor.getPromotionById(promotionId)
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))

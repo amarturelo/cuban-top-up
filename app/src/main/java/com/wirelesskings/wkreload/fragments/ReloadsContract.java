@@ -18,11 +18,9 @@ public interface ReloadsContract {
 
         void renderReloads(List<ReloadItemModel> reloads);
 
-        void renderFather(Father father);
 
         void hideLoading();
 
-        void updateComplete();
 
         void showError(Exception e);
 
@@ -32,9 +30,6 @@ public interface ReloadsContract {
 
     interface Presenter extends BaseContract.Presenter<ReloadsContract.View> {
         void onReloads(String promotionId);
-
-        void update();
-
         void cancel();
     }
 }
