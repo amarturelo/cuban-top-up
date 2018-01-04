@@ -44,6 +44,12 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
         final WKSDK wksdk = new WKSDK(serverConfig);
 
         addSubscription(wksdk.update()
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+
+                    }
+                })
                 .doOnSuccess(new Consumer<WKSDK.WKOwner>() {
                     @Override
                     public void accept(WKSDK.WKOwner wkOwner) throws Exception {

@@ -91,6 +91,7 @@ public class ReloadPresenter extends BasePresenter<ReloadContract.View>
                                 view.showError((Exception) throwable);
                             }
                         })
+
         );
     }
 

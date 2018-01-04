@@ -124,8 +124,18 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
 
+    <com.wirelesskings.wkreload.custom.MultiStateView
+        android:id="@+id/multi_state_view_promotions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:msv_emptyView="@layout/reload_empty_view"
+        app:msv_viewState="content">
+
+        <include layout="@layout/content_main" />
+
+    </com.wirelesskings.wkreload.custom.MultiStateView>
 
     <LinearLayout
         android:id="@+id/action_fab"

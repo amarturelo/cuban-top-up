@@ -9,11 +9,12 @@
     tools:showIn="@layout/activity_main">
 
     <com.wirelesskings.wkreload.custom.MultiStateView
+        android:id="@+id/multi_state_view_reloads"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:msv_emptyView="@layout/empty_view"
+        app:msv_emptyView="@layout/reload_empty_view"
         app:msv_errorView="@layout/error_view"
-        app:msv_viewState="content">
+        app:msv_viewState="error">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/reload_list"

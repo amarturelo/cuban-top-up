@@ -10,6 +10,6 @@
         android:id="@+id/tv_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/title_not_reload" />
+        android:text="@string/title_not_promotions" />
 
 </LinearLayout>

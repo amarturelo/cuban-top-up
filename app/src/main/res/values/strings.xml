@@ -74,4 +74,5 @@
     <string name="title_activity_reload">Borrador de recagas</string>
     <string name="toast_update_complete">Actualizacion completada</string>
     <string name="toast_reload_complete">Recarga completada</string>
+    <string name="title_not_promotions">No hay promociones</string>
 </resources>

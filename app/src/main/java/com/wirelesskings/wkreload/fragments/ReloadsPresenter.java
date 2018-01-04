@@ -3,23 +3,13 @@ package com.wirelesskings.wkreload.fragments;
 import android.support.annotation.NonNull;
 
 import com.wirelesskings.wkreload.BackgroundLooper;
-import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.WKSDK;
-import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
-import com.wirelesskings.wkreload.domain.interactors.OwnerInteractor;
 import com.wirelesskings.wkreload.domain.interactors.PromotionInteractor;
-import com.wirelesskings.wkreload.domain.interactors.ReloadInteractor;
-import com.wirelesskings.wkreload.domain.model.Owner;
 import com.wirelesskings.wkreload.domain.model.Promotion;
-import com.wirelesskings.wkreload.domain.model.Reload;
 import com.wirelesskings.wkreload.model.mapper.ReloadItemDataMapper;
 import com.wirelesskings.wkreload.presenter.BasePresenter;
 
-import java.util.List;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -62,7 +52,7 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
                 .subscribe(new Consumer<Promotion>() {
                     @Override
                     public void accept(Promotion promotion) throws Exception {
-                        view.renderInsertions(ReloadItemDataMapper.transform(promotion.getReloads()));
+                        view.renderReloads(ReloadItemDataMapper.transform(promotion.getReloads()));
                     }
                 }, error));
     }

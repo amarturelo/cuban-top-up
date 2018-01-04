@@ -12,15 +12,9 @@ import java.util.List;
 
 public interface ReloadsContract {
     interface View extends BaseContract.View {
-        void renderInsertions(List<ReloadItemModel> reloads);
-        void renderDeletions(List<ReloadItemModel> reloads);
-        void renderChanges(List<ReloadItemModel> reloads);
-
         void renderReloads(List<ReloadItemModel> reloads);
 
-
         void hideLoading();
-
 
         void showError(Exception e);
 

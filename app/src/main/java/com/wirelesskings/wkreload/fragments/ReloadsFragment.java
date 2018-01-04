@@ -17,6 +17,7 @@ import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.adapter.DividerItemDecoration;
 import com.wirelesskings.wkreload.adapter.ReloadAdapterRecyclerView;
+import com.wirelesskings.wkreload.custom.MultiStateView;
 import com.wirelesskings.wkreload.domain.interactors.PromotionInteractor;
 import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
 import com.wirelesskings.wkreload.model.ReloadItemModel;
@@ -28,8 +29,7 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class ReloadsFragment extends Fragment implements ReloadsContract.View,
-        ReloadAdapterRecyclerView.Listened,
-        LoadingDialog.LoadingListener {
+        ReloadAdapterRecyclerView.Listened {
 
     public static final String ARG_PROMOTION_ID = "promotion_id";
 
@@ -42,6 +42,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
 
     private ReloadsPresenter presenter;
 
+    private MultiStateView multiStateViewReloads;
 
     private String mPromotionId;
 
@@ -87,6 +88,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        multiStateViewReloads = view.findViewById(R.id.multi_state_view_reloads);
         reloadList.setLayoutManager(new LinearLayoutManager(getContext()));
         reloadList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
         reloadAdapterRecyclerView = new ReloadAdapterRecyclerView(this);
@@ -96,22 +98,11 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
 
 
     @Override
-    public void renderInsertions(List<ReloadItemModel> reloads) {
-        reloadAdapterRecyclerView.inserted(reloads);
-    }
-
-    @Override
-    public void renderDeletions(List<ReloadItemModel> reloads) {
-        reloadAdapterRecyclerView.deleted(reloads);
-    }
-
-    @Override
-    public void renderChanges(List<ReloadItemModel> reloads) {
-        reloadAdapterRecyclerView.changed(reloads);
-    }
-
-    @Override
     public void renderReloads(List<ReloadItemModel> reloads) {
+        if (reloads.isEmpty())
+            multiStateViewReloads.setViewState(MultiStateView.VIEW_STATE_EMPTY);
+        else
+            multiStateViewReloads.setViewState(MultiStateView.VIEW_STATE_CONTENT);
         reloadAdapterRecyclerView.inserted(reloads);
     }
 
@@ -140,7 +131,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
 
         if (e instanceof NetworkErrorToSendException) {
             builder.setMessage(R.string.error_network_to_send);
-        }  else {
+        } else {
             builder.setMessage(R.string.error_unknown);
         }
         builder.show();
@@ -167,15 +158,5 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
         ViewReloadDialogFragment viewReloadDialogFragment = ViewReloadDialogFragment.newInstance(id);
         viewReloadDialogFragment.show(getChildFragmentManager(), ViewReloadDialogFragment.class.getSimpleName());
     }
-
-    @Override
-    public void onCancel() {
-        presenter.cancel();
-    }
-
-
-
-
-
 
 }

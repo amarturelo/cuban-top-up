@@ -25,6 +25,7 @@ import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.WK;
 import com.wirelesskings.wkreload.WKSDK;
 import com.wirelesskings.wkreload.adapter.PromotionsListSpinnerAdapter;
+import com.wirelesskings.wkreload.custom.MultiStateView;
 import com.wirelesskings.wkreload.dialogs.FilterBottomDialog;
 import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.domain.interactors.FatherInteractor;
@@ -51,12 +52,16 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     private Spinner spinner;
 
-    FloatingActionButton fabReload;
-    FloatingActionButton fabFilter;
+    private MultiStateView multiStateViewPromotions;
+
+    private FloatingActionButton fabReload;
+    private FloatingActionButton fabFilter;
 
     WK wk;
 
     private MainPresenter presenter;
+
+    private View actions;
 
     private PromotionsListSpinnerAdapter promotionsListSpinnerAdapter;
 
@@ -105,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     private void initComponents() {
         spinner = (Spinner) findViewById(R.id.spinner);
-
+        multiStateViewPromotions = (MultiStateView) findViewById(R.id.multi_state_view_promotions);
 
         filterBottomDialog = new FilterBottomDialog(this);
 
@@ -114,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         tvDebit = (TextView) findViewById(R.id.tv_debit);
         tvFatherName = (TextView) findViewById(R.id.tv_father);
         tvFatherCost = (TextView) findViewById(R.id.tv_cost);
-
+        actions = findViewById(R.id.action_fab);
         fabReload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,23 +139,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     private void showReload() {
-        /*List<WKSDK.ReloadParams> wkReloads = new ArrayList<>();
-        wkReloads.add(new WKSDK.ReloadParams()
-                .setName("Yepeto")
-                .setNumber("52950107")
-                .setAmount(50)
-                .setCount(1));
-        wkReloads.add(new WKSDK.ReloadParams()
-                .setName("Rosendo")
-                .setNumber("53548789")
-                .setAmount(20)
-                .setCount(1));
-        WK.getInstance().getWKSessionDefault()
-                .reload(wkReloads)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();*/
         goToReload();
-        //reloadBottomDialog.show();
     }
 
     private void goToReload() {
@@ -237,8 +226,14 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void renderPromotionList(List<PromotionItemModel> promotionItemModels) {
-        promotionsListSpinnerAdapter = new PromotionsListSpinnerAdapter(getApplicationContext(), promotionItemModels)
-        ;
+        if (promotionItemModels.isEmpty()) {
+            actions.setVisibility(View.GONE);
+            multiStateViewPromotions.setViewState(MultiStateView.VIEW_STATE_EMPTY);
+        } else {
+            actions.setVisibility(View.VISIBLE);
+            multiStateViewPromotions.setViewState(MultiStateView.VIEW_STATE_CONTENT);
+        }
+        promotionsListSpinnerAdapter = new PromotionsListSpinnerAdapter(getApplicationContext(), promotionItemModels);
         spinner.setAdapter(promotionsListSpinnerAdapter);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -256,6 +251,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
     }
 
     @Override
