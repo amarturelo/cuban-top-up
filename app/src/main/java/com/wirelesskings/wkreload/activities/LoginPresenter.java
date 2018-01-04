@@ -44,12 +44,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
         final WKSDK wksdk = new WKSDK(serverConfig);
 
         addSubscription(wksdk.update()
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-
-                    }
-                })
                 .doOnSuccess(new Consumer<WKSDK.WKOwner>() {
                     @Override
                     public void accept(WKSDK.WKOwner wkOwner) throws Exception {
@@ -61,9 +55,10 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
-                        view.showLoading();
+                        view.showLoading(disposable);
                     }
                 })
+
                 .doFinally(new Action() {
                     @Override
                     public void run() throws Exception {
@@ -71,6 +66,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
 
                     }
                 })
+
                 .subscribe(new Consumer<WKSDK.WKOwner>() {
                                @Override
                                public void accept(WKSDK.WKOwner realmOwner) throws Exception {
@@ -95,8 +91,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
         WK.getInstance().replaceWKSession(wksdk);
     }
 
-    public void cancel() {
-        clearSubscriptions();
-    }
+
 
 }

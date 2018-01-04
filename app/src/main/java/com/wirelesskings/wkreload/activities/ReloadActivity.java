@@ -29,6 +29,8 @@ import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendEx
 import com.wirelesskings.wkreload.model.PreReloadItemModel;
 import com.wirelesskings.wkreload.navigation.Navigator;
 
+import io.reactivex.disposables.Disposable;
+
 
 public class ReloadActivity extends AppCompatActivity implements ReloadContract.View, ReloadDialogFragment.Listener, ReloadClickItemMenuDialogFragment.Listener {
 
@@ -102,7 +104,7 @@ public class ReloadActivity extends AppCompatActivity implements ReloadContract.
     private LoadingDialogFragment loadingDialogFragment;
 
     @Override
-    public void showLoading() {
+    public void showLoading(Disposable disposable) {
         loadingDialogFragment = LoadingDialogFragment.newInstance();
         loadingDialogFragment.show(getSupportFragmentManager(), LoadingDialogFragment.class.getSimpleName());
     }

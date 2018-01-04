@@ -63,7 +63,7 @@ public class ReloadPresenter extends BasePresenter<ReloadContract.View>
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
-                        view.showLoading();
+                        view.showLoading(disposable);
                     }
                 })
                 .doFinally(new Action() {

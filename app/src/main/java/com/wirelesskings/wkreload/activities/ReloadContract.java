@@ -5,6 +5,8 @@ import com.wirelesskings.wkreload.presenter.BaseContract;
 
 import java.util.List;
 
+import io.reactivex.disposables.Disposable;
+
 /**
  * Created by alberto on 1/01/18.
  */
@@ -12,7 +14,7 @@ import java.util.List;
 public interface ReloadContract {
     interface View extends BaseContract.View {
 
-        void showLoading();
+        void showLoading(Disposable disposable);
 
         void hideLoading();
 

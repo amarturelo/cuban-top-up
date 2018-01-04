@@ -124,7 +124,7 @@ public class MainPresenter extends BasePresenter<MainContract.View>
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
-                        view.showLoading();
+                        view.showLoading(disposable);
                     }
                 })
                 .doFinally(new Action() {

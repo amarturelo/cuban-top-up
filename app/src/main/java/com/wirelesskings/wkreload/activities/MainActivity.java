@@ -23,14 +23,12 @@ import com.wirelesskings.data.repositories.PromotionRepositoryImpl;
 import com.wirelesskings.wkreload.CacheHelper;
 import com.wirelesskings.wkreload.R;
 import com.wirelesskings.wkreload.WK;
-import com.wirelesskings.wkreload.WKSDK;
 import com.wirelesskings.wkreload.adapter.PromotionsListSpinnerAdapter;
 import com.wirelesskings.wkreload.custom.MultiStateView;
 import com.wirelesskings.wkreload.dialogs.FilterBottomDialog;
 import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.domain.interactors.FatherInteractor;
 import com.wirelesskings.wkreload.domain.interactors.PromotionInteractor;
-import com.wirelesskings.wkreload.domain.model.Father;
 import com.wirelesskings.wkreload.executor.JobExecutor;
 import com.wirelesskings.wkreload.fragments.LoadingDialogFragment;
 import com.wirelesskings.wkreload.fragments.ReloadsFragment;
@@ -39,8 +37,9 @@ import com.wirelesskings.wkreload.model.FatherModel;
 import com.wirelesskings.wkreload.model.PromotionItemModel;
 import com.wirelesskings.wkreload.navigation.Navigator;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.disposables.Disposable;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View {
 
@@ -190,9 +189,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private LoadingDialogFragment loadingDialogFragment;
 
     @Override
-    public void showLoading() {
+    public void showLoading(Disposable disposable) {
         loadingDialogFragment = LoadingDialogFragment.newInstance();
         loadingDialogFragment.show(getSupportFragmentManager(), LoadingDialogFragment.class.getSimpleName());
+        loadingDialogFragment.putDisposable(disposable);
     }
 
     @Override
@@ -264,4 +264,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         tvFatherCost.setText("$" + String.valueOf(fatherModel.getCount()));
         tvFatherName.setText(String.valueOf(fatherModel.getName()));
     }
+
+
 }

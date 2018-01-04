@@ -19,6 +19,8 @@ import com.wirelesskings.wkreload.fragments.LoadingDialogFragment;
 import com.wirelesskings.wkreload.fragments.LoginFragment;
 import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
 
+import io.reactivex.disposables.Disposable;
+
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View,
         LoginFragment.OnLoginFragmentListener {
@@ -99,9 +101,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     @Override
-    public void showLoading() {
+    public void showLoading(Disposable disposable) {
         loadingDialogFragment = LoadingDialogFragment.newInstance();
         loadingDialogFragment.show(getSupportFragmentManager(), LoadingDialogFragment.class.getSimpleName());
+        loadingDialogFragment.putDisposable(disposable);
     }
 
     @Override
@@ -134,4 +137,5 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         super.onPause();
         loginPresenter.release();
     }
+
 }

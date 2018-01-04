@@ -3,6 +3,8 @@ package com.wirelesskings.wkreload.activities;
 import com.wirelesskings.wkreload.domain.model.internal.ServerConfig;
 import com.wirelesskings.wkreload.presenter.BaseContract;
 
+import io.reactivex.disposables.Disposable;
+
 
 public interface LoginContract {
 
@@ -10,7 +12,7 @@ public interface LoginContract {
 
         void loginComplete();
 
-        void showLoading();
+        void showLoading(Disposable disposable);
 
         void hideLoading();
 

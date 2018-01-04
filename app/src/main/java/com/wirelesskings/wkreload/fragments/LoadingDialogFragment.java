@@ -11,20 +11,23 @@ import android.view.ViewGroup;
 
 import com.wirelesskings.wkreload.R;
 
+import io.reactivex.disposables.Disposable;
+
 /**
  * Created by alberto on 1/01/18.
  */
 
 public class LoadingDialogFragment extends BottomSheetDialogFragment {
     // TODO: Customize parameter argument names
-    private static final String ARG_PROCESS_POS = "process_pos";
-    private Listener mListener;
 
     private View btnCancel;
 
-    public interface Listener {
-        void onCancel(int pos);
+    private Disposable mDisposable;
+
+    public void putDisposable(Disposable disposable) {
+        mDisposable = disposable;
     }
+
 
     @Nullable
     @Override
@@ -37,22 +40,24 @@ public class LoadingDialogFragment extends BottomSheetDialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         final Fragment parent = getParentFragment();
-        /*if (parent != null) {
-            mListener = (Listener) parent;
-        } else {
-            mListener = (Listener) context;
-        }*/
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         btnCancel = view.findViewById(R.id.btn_cancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mDisposable != null && !mDisposable.isDisposed())
+                    mDisposable.dispose();
+                dismiss();
+            }
+        });
     }
 
     @Override
     public void onDetach() {
-        mListener = null;
         super.onDetach();
     }
 
