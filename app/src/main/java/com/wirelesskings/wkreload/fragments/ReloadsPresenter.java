@@ -57,6 +57,8 @@ public class ReloadsPresenter extends BasePresenter<ReloadsContract.View>
                 }, error));
     }
 
+
+
     @Override
     public void bindView(@NonNull ReloadsContract.View view) {
         super.bindView(view);

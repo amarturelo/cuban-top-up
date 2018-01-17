@@ -25,6 +25,7 @@
     <string name="txt_debit">Débito</string>
 
     <string-array name="array_amount">
+        <item>15</item>
         <item>20</item>
         <item>30</item>
         <item>40</item>

@@ -54,13 +54,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private MultiStateView multiStateViewPromotions;
 
     private FloatingActionButton fabReload;
-    private FloatingActionButton fabFilter;
 
     WK wk;
 
     private MainPresenter presenter;
 
-    private View actions;
 
     private PromotionsListSpinnerAdapter promotionsListSpinnerAdapter;
 
@@ -114,21 +112,13 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         filterBottomDialog = new FilterBottomDialog(this);
 
         fabReload = (FloatingActionButton) findViewById(R.id.fab_reload);
-        fabFilter = (FloatingActionButton) findViewById(R.id.fab_filter);
         tvDebit = (TextView) findViewById(R.id.tv_debit);
         tvFatherName = (TextView) findViewById(R.id.tv_father);
         tvFatherCost = (TextView) findViewById(R.id.tv_cost);
-        actions = findViewById(R.id.action_fab);
         fabReload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showReload();
-            }
-        });
-        fabFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFilter();
             }
         });
     }
@@ -160,8 +150,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_filter) {
+            showFilter();
         }
         if (id == R.id.action_update) {
             presenter.update();
@@ -227,10 +217,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     public void renderPromotionList(List<PromotionItemModel> promotionItemModels) {
         if (promotionItemModels.isEmpty()) {
-            actions.setVisibility(View.GONE);
+            fabReload.setVisibility(View.GONE);
             multiStateViewPromotions.setViewState(MultiStateView.VIEW_STATE_EMPTY);
         } else {
-            actions.setVisibility(View.VISIBLE);
+            fabReload.setVisibility(View.VISIBLE);
             multiStateViewPromotions.setViewState(MultiStateView.VIEW_STATE_CONTENT);
         }
         promotionsListSpinnerAdapter = new PromotionsListSpinnerAdapter(getApplicationContext(), promotionItemModels);
@@ -265,5 +255,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         tvFatherName.setText(String.valueOf(fatherModel.getName()));
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.release();
+    }
 }

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.wirelesskings.wkreload.activities.MainActivity">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -132,37 +131,19 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:msv_emptyView="@layout/reload_empty_view"
         app:msv_viewState="content">
-
         <include layout="@layout/content_main" />
 
     </com.wirelesskings.wkreload.custom.MultiStateView>
 
-    <LinearLayout
-        android:id="@+id/action_fab"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_reload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:src="@drawable/ic_filter_list_black_24dp"
-            app:backgroundTint="@android:color/white"
-            app:fabSize="normal" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_reload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/ic_add_black_24dp"
-            app:backgroundTint="@android:color/white"
-            app:fabSize="normal" />
-    </LinearLayout>
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add_black_24dp"
+        app:backgroundTint="@android:color/white"
+        app:fabSize="normal" />
 
 
 </android.support.design.widget.CoordinatorLayout>

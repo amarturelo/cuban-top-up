@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ public class ReloadActivity extends AppCompatActivity implements ReloadContract.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_reload);
 
         listPreReload = (RecyclerView) findViewById(R.id.list_pre_reload);
@@ -168,4 +170,27 @@ public class ReloadActivity extends AppCompatActivity implements ReloadContract.
         preReloadAdapterRecyclerView.deleted(anInt);
         checkCount();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.release();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == android.R.id.home) {
+            onBackPressed();
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

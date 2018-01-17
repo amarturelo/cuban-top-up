@@ -79,6 +79,12 @@ public class ViewReloadDialogFragment extends BottomSheetDialogFragment implemen
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        presenter.release();
+    }
+
+    @Override
     public void showLoading() {
 
     }

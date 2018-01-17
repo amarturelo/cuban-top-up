@@ -29,6 +29,7 @@
         <activity
             android:name=".activities.ReloadActivity"
             android:label="@string/title_activity_reload"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

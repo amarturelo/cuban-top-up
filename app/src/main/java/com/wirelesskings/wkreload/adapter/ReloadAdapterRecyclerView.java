@@ -74,6 +74,8 @@ public class ReloadAdapterRecyclerView extends RecyclerView.Adapter<ReloadAdapte
         holder.seller.setText(reloadItem.getSeller());
     }
 
+
+
     @Override
     public int getItemCount() {
         return reloadItems.size();
