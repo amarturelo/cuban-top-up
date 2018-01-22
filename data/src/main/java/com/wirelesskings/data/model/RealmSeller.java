@@ -13,6 +13,8 @@ public class RealmSeller extends RealmObject {
     private String name;
     private String amount;
 
+    private String wkUser;
+
     public RealmSeller() {
     }
 
@@ -31,6 +33,15 @@ public class RealmSeller extends RealmObject {
 
     public RealmSeller setAmount(String amount) {
         this.amount = amount;
+        return this;
+    }
+
+    public String getWkUser() {
+        return wkUser;
+    }
+
+    public RealmSeller setWkUser(String wkUser) {
+        this.wkUser = wkUser;
         return this;
     }
 }

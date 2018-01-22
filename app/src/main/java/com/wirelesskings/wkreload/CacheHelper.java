@@ -27,7 +27,7 @@ public class CacheHelper {
         this.promotionCache = promotionCache;
     }
 
-    public void save(WKSDK.WKOwner wkOwner, String wkUser) {
+    public void save(WKSDK.WKOwner wkOwner, final String wkUser) {
         fatherCache.put(new RealmFather()
                 .setWkUser(wkUser)
                 .setCost(wkOwner.getFather().getCost())
@@ -46,9 +46,11 @@ public class CacheHelper {
                                     .setApp(wkReload.getApp())
                                     .setDate(wkReload.getDate())
                                     .setClient(new RealmClient()
+                                            .setWkUser(wkUser)
                                             .setName(wkReload.getClient().getName())
                                             .setNumber(wkReload.getClient().getNumber()))
                                     .setSeller(new RealmSeller()
+                                            .setWkUser(wkUser)
                                             .setName(wkReload.getSeller().getName())
                                             .setAmount(wkReload.getSeller().getAmount()))
                                     .setCount(wkReload.getCount())

@@ -43,6 +43,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.github.javiersantos:BottomDialogs:1.2.1'
     compile project(path: ':mailmiddleware')
-
+    compile 'com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1'
     //compile 'com.github.applikeysolutions:cosmocalendar:1.0.4'
 }

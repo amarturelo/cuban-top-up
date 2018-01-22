@@ -24,6 +24,14 @@
     <string name="txt_reload">Recargar</string>
     <string name="txt_debit">Débito</string>
 
+    <string-array name="array_reload_state">
+        <item>ALL</item>
+        <item>DENIED</item>
+        <item>IN PROGRESS</item>
+        <item>DONE</item>
+    </string-array>
+
+
     <string-array name="array_amount">
         <item>15</item>
         <item>20</item>
@@ -76,4 +84,11 @@
     <string name="toast_update_complete">Actualizacion completada</string>
     <string name="toast_reload_complete">Recarga completada</string>
     <string name="title_not_promotions">No hay promociones</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_tab_start_date">inicio</string>
+    <string name="title_tab_end_date">fin</string>
+    <string name="title_client_number">Numero de cliente</string>
+    <string name="title_client_name">Nombre del cliente</string>
+    <string name="title_reload_date_range">Rango de fecha</string>
+    <string name="title_seller_name">Vendedor</string>
 </resources>

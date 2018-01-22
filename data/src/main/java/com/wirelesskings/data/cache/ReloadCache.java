@@ -1,10 +1,12 @@
 package com.wirelesskings.data.cache;
 
 import com.wirelesskings.data.model.RealmReload;
+import com.wirelesskings.wkreload.domain.filter.Filter;
 import com.wirelesskings.wkreload.domain.model.Reload;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
@@ -20,4 +22,6 @@ public interface ReloadCache {
     Observable<List<RealmReload>> get();
 
     Single<RealmReload> getById(String id);
+
+    Flowable<List<RealmReload>> getByFilters(List<Filter> filters);
 }

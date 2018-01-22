@@ -1,15 +1,16 @@
-package com.wirelesskings.wkreload.fragments;
+package com.wirelesskings.wkreload.activities;
 
+import com.wirelesskings.wkreload.domain.filter.Filter;
 import com.wirelesskings.wkreload.model.ReloadItemModel;
 import com.wirelesskings.wkreload.presenter.BaseContract;
 
 import java.util.List;
 
 /**
- * Created by Alberto on 28/10/2017.
+ * Created by alberto on 21/01/18.
  */
 
-public interface ReloadsContract {
+public interface SearchContract {
     interface View extends BaseContract.View {
         void renderReloads(List<ReloadItemModel> reloads);
 
@@ -21,8 +22,7 @@ public interface ReloadsContract {
 
     }
 
-    interface Presenter extends BaseContract.Presenter<ReloadsContract.View> {
-        void onReloads(String promotionId);
-        void cancel();
+    interface Presenter extends BaseContract.Presenter<SearchContract.View> {
+        void onReloads(List<Filter> filters);
     }
 }

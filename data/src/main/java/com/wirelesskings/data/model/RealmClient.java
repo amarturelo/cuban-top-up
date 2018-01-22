@@ -8,9 +8,14 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class RealmClient extends RealmObject {
+    public static final String NAME = "name";
+    public static final String NUMBER = "number";
+
     @PrimaryKey
     private String number;
     private String name;
+
+    private String wkUser;
 
     public RealmClient() {
     }
@@ -30,6 +35,15 @@ public class RealmClient extends RealmObject {
 
     public RealmClient setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public String getWkUser() {
+        return wkUser;
+    }
+
+    public RealmClient setWkUser(String wkUser) {
+        this.wkUser = wkUser;
         return this;
     }
 }

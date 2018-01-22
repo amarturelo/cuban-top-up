@@ -3,12 +3,14 @@ package com.wirelesskings.data.repositories;
 import com.wirelesskings.data.cache.ReloadCache;
 import com.wirelesskings.data.model.RealmReload;
 import com.wirelesskings.data.model.mapper.ReloadDataMapper;
+import com.wirelesskings.wkreload.domain.filter.Filter;
 import com.wirelesskings.wkreload.domain.model.Reload;
 import com.wirelesskings.wkreload.domain.repositories.ReloadRepository;
 
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
@@ -25,6 +27,18 @@ public class ReloadRepositoryImpl implements ReloadRepository {
 
     public ReloadRepositoryImpl(ReloadCache reloadCache) {
         this.reloadCache = reloadCache;
+    }
+
+    @Override
+    public Flowable<List<Reload>> reloadsByFilters(List<Filter> filters) {
+        return reloadCache
+                .getByFilters(filters)
+                .map(new Function<List<RealmReload>, List<Reload>>() {
+                    @Override
+                    public List<Reload> apply(List<RealmReload> realmReloads) throws Exception {
+                        return ReloadDataMapper.transform(realmReloads);
+                    }
+                });
     }
 
     @Override

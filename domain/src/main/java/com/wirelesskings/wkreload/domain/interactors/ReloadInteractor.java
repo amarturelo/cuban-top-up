@@ -1,5 +1,6 @@
 package com.wirelesskings.wkreload.domain.interactors;
 
+import com.wirelesskings.wkreload.domain.filter.Filter;
 import com.wirelesskings.wkreload.domain.model.Reload;
 import com.wirelesskings.wkreload.domain.repositories.ReloadRepository;
 
@@ -22,6 +23,10 @@ public class ReloadInteractor {
 
     public Observable<List<Reload>> getAll() {
         return reloadRepository.reloads();
+    }
+
+    public Flowable<List<Reload>> getByFilters(List<Filter> filters){
+        reloadRepository.reloadsByFilters(filters);
     }
 
     public Single<Reload> reloadById(String id) {
