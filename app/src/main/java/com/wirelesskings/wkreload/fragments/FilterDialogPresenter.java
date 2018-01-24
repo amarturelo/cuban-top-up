@@ -33,8 +33,8 @@ public class FilterDialogPresenter extends BasePresenter<FilterDialogContract.Vi
     }
 
     @Override
-    public void onClients(String ownerId) {
-        addSubscription(clientCache.getAll(ownerId)
+    public void onClients() {
+        addSubscription(clientCache.getAll()
                 .firstOrError()
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .unsubscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
@@ -74,8 +74,8 @@ public class FilterDialogPresenter extends BasePresenter<FilterDialogContract.Vi
     }
 
     @Override
-    public void onSellerName(String ownerId) {
-        addSubscription(sellerCache.getAll(ownerId)
+    public void onSellerName() {
+        addSubscription(sellerCache.getAll()
                 .firstOrError()
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .unsubscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))

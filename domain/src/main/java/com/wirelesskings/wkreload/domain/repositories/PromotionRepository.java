@@ -13,7 +13,7 @@ import io.reactivex.Single;
  */
 
 public interface PromotionRepository {
-    Observable<List<Promotion>> promotions(String wkUser);
+    Observable<List<Promotion>> promotions();
 
     Observable<Promotion> promotionById(String id);
 }

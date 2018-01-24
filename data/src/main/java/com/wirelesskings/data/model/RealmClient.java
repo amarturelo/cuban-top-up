@@ -15,8 +15,6 @@ public class RealmClient extends RealmObject {
     private String number;
     private String name;
 
-    private String wkUser;
-
     public RealmClient() {
     }
 
@@ -38,12 +36,5 @@ public class RealmClient extends RealmObject {
         return this;
     }
 
-    public String getWkUser() {
-        return wkUser;
-    }
 
-    public RealmClient setWkUser(String wkUser) {
-        this.wkUser = wkUser;
-        return this;
-    }
 }

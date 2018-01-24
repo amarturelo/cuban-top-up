@@ -1,17 +1,10 @@
 package com.wirelesskings.data.cache.impl;
 
-import android.util.Pair;
-
 import com.wirelesskings.data.cache.SellerCache;
-import com.wirelesskings.data.model.RealmPromotion;
 import com.wirelesskings.data.model.RealmSeller;
 
-import org.reactivestreams.Publisher;
-
 import java.util.List;
-import java.util.concurrent.Callable;
 
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -26,7 +19,7 @@ import io.realm.RealmResults;
 
 public class SellerCacheImpl implements SellerCache {
     @Override
-    public Observable<List<RealmSeller>> getAll(String wkUser) {
+    public Observable<List<RealmSeller>> getAll() {
         return Observable.create(new ObservableOnSubscribe<List<RealmSeller>>() {
             @Override
             public void subscribe(final ObservableEmitter<List<RealmSeller>> emitter) throws Exception {

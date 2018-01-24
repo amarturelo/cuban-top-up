@@ -25,10 +25,10 @@
     <string name="txt_debit">Débito</string>
 
     <string-array name="array_reload_state">
-        <item>ALL</item>
-        <item>DENIED</item>
-        <item>IN PROGRESS</item>
-        <item>DONE</item>
+        <item>TODOS</item>
+        <item>denied</item>
+        <item>inprogress</item>
+        <item>done</item>
     </string-array>
 
 
@@ -84,7 +84,7 @@
     <string name="toast_update_complete">Actualizacion completada</string>
     <string name="toast_reload_complete">Recarga completada</string>
     <string name="title_not_promotions">No hay promociones</string>
-    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_search">Resultados de la busqueda</string>
     <string name="title_tab_start_date">inicio</string>
     <string name="title_tab_end_date">fin</string>
     <string name="title_client_number">Numero de cliente</string>

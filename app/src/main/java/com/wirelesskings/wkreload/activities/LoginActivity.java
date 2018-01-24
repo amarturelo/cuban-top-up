@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.wirelesskings.data.cache.impl.FatherCacheImpl;
 import com.wirelesskings.data.cache.impl.PromotionCacheImpl;
@@ -28,13 +29,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private LoginPresenter loginPresenter;
 
 
-    private WK wk;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        wk = WK.getInstance();
         initComponents();
 
         loginPresenter = new LoginPresenter(
@@ -44,6 +42,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 , new PromotionCacheImpl()
         )
         );
+        loginPresenter.bindView(this);
 
         initActivity(savedInstanceState);
     }
@@ -57,11 +56,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private void initComponents() {
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loginPresenter.bindView(this);
-    }
 
     @Override
     public void onGoToMain() {
@@ -70,7 +64,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void showError(Exception e) {
-
+        Log.d(this.getClass().getSimpleName(), e.toString());
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Ocurrio un error");
@@ -136,11 +130,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     protected void onDestroy() {
         super.onDestroy();
         loginPresenter.release();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 
 }

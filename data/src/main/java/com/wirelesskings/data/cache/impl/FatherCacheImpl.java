@@ -37,13 +37,12 @@ public class FatherCacheImpl implements FatherCache {
     }
 
     @Override
-    public Observable<RealmFather> fatherByUser(final String wkUser) {
+    public Observable<RealmFather> fatherByUser() {
         return Observable.create(new ObservableOnSubscribe<RealmFather>() {
             @Override
             public void subscribe(final ObservableEmitter<RealmFather> emitter) throws Exception {
                 final Realm observableRealm = Realm.getDefaultInstance();
                 final RealmResults<RealmFather> results = observableRealm.where(RealmFather.class)
-                        .equalTo(RealmFather.WK_USER, wkUser)
                         .findAllAsync();
 
                 final RealmChangeListener<RealmResults<RealmFather>> listener = new RealmChangeListener<RealmResults<RealmFather>>() {

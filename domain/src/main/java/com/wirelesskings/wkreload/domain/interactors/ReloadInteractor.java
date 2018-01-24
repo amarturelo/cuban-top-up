@@ -25,8 +25,8 @@ public class ReloadInteractor {
         return reloadRepository.reloads();
     }
 
-    public Flowable<List<Reload>> getByFilters(List<Filter> filters){
-        reloadRepository.reloadsByFilters(filters);
+    public Flowable<List<Reload>> getByFilters(List<Filter> filters) {
+        return reloadRepository.reloadsByFilters(filters);
     }
 
     public Single<Reload> reloadById(String id) {

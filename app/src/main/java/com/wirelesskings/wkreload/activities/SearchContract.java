@@ -4,6 +4,7 @@ import com.wirelesskings.wkreload.domain.filter.Filter;
 import com.wirelesskings.wkreload.model.ReloadItemModel;
 import com.wirelesskings.wkreload.presenter.BaseContract;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +24,6 @@ public interface SearchContract {
     }
 
     interface Presenter extends BaseContract.Presenter<SearchContract.View> {
-        void onReloads(List<Filter> filters);
+        void onReloads(ArrayList<Filter> filters);
     }
 }

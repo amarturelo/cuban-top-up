@@ -32,11 +32,11 @@ public interface MainContract {
 
     interface Presenter extends BaseContract.Presenter<MainContract.View> {
 
-        void getAllPromotions(String wkUser);
+        void getAllPromotions();
 
         void getPromotionById(String id);
 
-        void getFatherByUser(String wkUser);
+        void getFatherByUser();
 
         void update();
     }

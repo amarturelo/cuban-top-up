@@ -28,8 +28,8 @@ public class PromotionRepositoryImpl implements PromotionRepository {
     }
 
     @Override
-    public Observable<List<Promotion>> promotions(String wkUser) {
-        return promotionCache.getAll(wkUser)
+    public Observable<List<Promotion>> promotions() {
+        return promotionCache.getAll()
                 .map(new Function<List<RealmPromotion>, List<Promotion>>() {
                     @Override
                     public List<Promotion> apply(List<RealmPromotion> realmPromotions) throws Exception {

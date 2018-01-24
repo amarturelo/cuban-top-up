@@ -15,8 +15,6 @@ public class RealmPromotion extends RealmObject {
     public static final String WK_USER = "wkUser";
     public static final String ID = "id";
 
-    private String wkUser;
-
     private String title;
 
     @PrimaryKey
@@ -31,15 +29,6 @@ public class RealmPromotion extends RealmObject {
     private RealmList<RealmReload> reloads;
 
     public RealmPromotion() {
-    }
-
-    public String getWkUser() {
-        return wkUser;
-    }
-
-    public RealmPromotion setWkUser(String wkUser) {
-        this.wkUser = wkUser;
-        return this;
     }
 
     public String getPromotion() {

@@ -16,8 +16,8 @@ public class FatherInteractor {
         this.fatherRepository = fatherRepository;
     }
 
-    public Observable<Father> getFatherByUser(String wkUser) {
-        return fatherRepository.fatherByUser(wkUser);
+    public Observable<Father> getFatherByUser() {
+        return fatherRepository.fatherByUser();
     }
 
     public void save(Father father) {

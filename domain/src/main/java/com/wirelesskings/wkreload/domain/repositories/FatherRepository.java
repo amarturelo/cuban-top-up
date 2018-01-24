@@ -9,7 +9,7 @@ import io.reactivex.Observable;
  */
 
 public interface FatherRepository {
-    Observable<Father> fatherByUser(String wkUser);
+    Observable<Father> fatherByUser();
 
     void save(Father father);
 }

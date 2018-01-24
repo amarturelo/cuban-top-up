@@ -98,7 +98,7 @@ public class PromotionCacheImpl implements PromotionCache {
     }
 
     @Override
-    public Observable<List<RealmPromotion>> getAll(String wkUser) {
+    public Observable<List<RealmPromotion>> getAll() {
         return Observable.create(new ObservableOnSubscribe<List<RealmPromotion>>() {
             @Override
             public void subscribe(final ObservableEmitter<List<RealmPromotion>> emitter) throws Exception {

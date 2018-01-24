@@ -26,9 +26,9 @@ public interface FilterDialogContract {
     }
 
     interface Presenter extends BaseContract.Presenter<FilterDialogContract.View> {
-        void onClients(String ownerId);
+        void onClients();
 
 
-        void onSellerName(String ownerId);
+        void onSellerName();
     }
 }

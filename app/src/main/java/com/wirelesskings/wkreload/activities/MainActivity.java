@@ -30,6 +30,7 @@ import com.wirelesskings.wkreload.domain.exceptions.UserInactiveWKException;
 import com.wirelesskings.wkreload.domain.interactors.FatherInteractor;
 import com.wirelesskings.wkreload.domain.interactors.PromotionInteractor;
 import com.wirelesskings.wkreload.executor.JobExecutor;
+import com.wirelesskings.wkreload.fragments.FilterDialogFragment;
 import com.wirelesskings.wkreload.fragments.LoadingDialogFragment;
 import com.wirelesskings.wkreload.fragments.ReloadsFragment;
 import com.wirelesskings.wkreload.mailmiddleware.exceptions.NetworkErrorToSendException;
@@ -101,8 +102,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     protected void onResume() {
         super.onResume();
         presenter.bindView(this);
-        presenter.getAllPromotions(WK.getInstance().getCredentials().getCredentials().getUsername());
-        presenter.getFatherByUser(WK.getInstance().getCredentials().getCredentials().getUsername());
+        presenter.getAllPromotions();
+        presenter.getFatherByUser();
     }
 
     private void initComponents() {
@@ -124,7 +125,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     private void showFilter() {
-        filterBottomDialog.show();
+        FilterDialogFragment filterDialogFragment = FilterDialogFragment.newInstance();
+        filterDialogFragment.show(getSupportFragmentManager(), FilterDialogFragment.class.getSimpleName());
     }
 
     private void showReload() {

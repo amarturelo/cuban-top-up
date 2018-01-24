@@ -9,7 +9,7 @@ import io.reactivex.Observable;
  */
 
 public interface FatherCache {
-    Observable<RealmFather> fatherByUser(String wkUser);
+    Observable<RealmFather> fatherByUser();
 
     void put(RealmFather realmFather);
 }

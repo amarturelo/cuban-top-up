@@ -21,7 +21,7 @@ import io.realm.RealmResults;
 
 public class ClientCacheImpl implements ClientCache {
     @Override
-    public Observable<List<RealmClient>> getAll(String wkUser) {
+    public Observable<List<RealmClient>> getAll() {
         return Observable.create(new ObservableOnSubscribe<List<RealmClient>>() {
             @Override
             public void subscribe(final ObservableEmitter<List<RealmClient>> emitter) throws Exception {

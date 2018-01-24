@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,6 +95,8 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
         reloadAdapterRecyclerView = new ReloadAdapterRecyclerView(this);
         reloadList.setAdapter(reloadAdapterRecyclerView);
         initFragment(savedInstanceState);
+
+        presenter.onReloads(mPromotionId);
     }
 
 
@@ -124,7 +127,7 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     @Override
     public void showError(Exception e) {
         hideLoading();
-
+        Log.d(this.getClass().getSimpleName(), e.toString());
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle("Ocurrio un error");
@@ -144,7 +147,6 @@ public class ReloadsFragment extends Fragment implements ReloadsContract.View,
     @Override
     public void onResume() {
         super.onResume();
-        presenter.onReloads(mPromotionId);
     }
 
     @Override

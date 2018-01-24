@@ -46,8 +46,8 @@ public class MainPresenter extends BasePresenter<MainContract.View>
     }
 
     @Override
-    public void getAllPromotions(String wkUser) {
-        addSubscription(promotionInteractor.getAllPromotions(wkUser)
+    public void getAllPromotions() {
+        addSubscription(promotionInteractor.getAllPromotions()
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .unsubscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -85,8 +85,8 @@ public class MainPresenter extends BasePresenter<MainContract.View>
     }
 
     @Override
-    public void getFatherByUser(String wkUser) {
-        addSubscription(fatherInteractor.getFatherByUser(wkUser)
+    public void getFatherByUser() {
+        addSubscription(fatherInteractor.getFatherByUser()
                 .subscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .unsubscribeOn(AndroidSchedulers.from(BackgroundLooper.get()))
                 .observeOn(AndroidSchedulers.mainThread())

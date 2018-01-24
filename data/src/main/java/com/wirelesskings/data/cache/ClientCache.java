@@ -11,5 +11,5 @@ import io.reactivex.Observable;
  */
 
 public interface ClientCache {
-    Observable<List<RealmClient>> getAll(String wkUser);
+    Observable<List<RealmClient>> getAll();
 }

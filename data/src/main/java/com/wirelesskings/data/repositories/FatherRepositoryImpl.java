@@ -24,15 +24,14 @@ public class FatherRepositoryImpl implements FatherRepository {
     @Override
     public void save(Father father) {
         fatherCache.put(new RealmFather()
-                .setWkUser(father.getWkUser())
                 .setName(father.getName())
                 .setCost(father.getCost())
         );
     }
 
     @Override
-    public Observable<Father> fatherByUser(String wkUser) {
-        return fatherCache.fatherByUser(wkUser)
+    public Observable<Father> fatherByUser() {
+        return fatherCache.fatherByUser()
                 .map(new Function<RealmFather, Father>() {
                     @Override
                     public Father apply(RealmFather realmFather) throws Exception {

@@ -12,6 +12,7 @@ import com.wirelesskings.wkreload.domain.filter.ClientNameFilter;
 import com.wirelesskings.wkreload.domain.filter.ClientNumberFilter;
 import com.wirelesskings.wkreload.domain.filter.DateFilter;
 import com.wirelesskings.wkreload.domain.filter.Filter;
+import com.wirelesskings.wkreload.domain.filter.ReloadStateFilter;
 import com.wirelesskings.wkreload.domain.model.Reload;
 
 import org.reactivestreams.Publisher;
@@ -116,6 +117,8 @@ public class ReloadCacheImpl extends RealmCache implements ReloadCache {
                                         .forEach(new com.annimon.stream.function.Consumer<Filter>() {
                                             @Override
                                             public void accept(Filter filter) {
+                                                if (filter instanceof ReloadStateFilter)
+                                                    query.equalTo(RealmReload.STATUS, ((ReloadStateFilter) filter).getState());
                                                 if (filter instanceof ClientNameFilter)
                                                     query.equalTo(RealmReload.CLIENT + "." + RealmClient.NAME, ((ClientNameFilter) filter).getName());
                                                 if (filter instanceof ClientNumberFilter)
@@ -130,7 +133,7 @@ public class ReloadCacheImpl extends RealmCache implements ReloadCache {
                                             }
                                         });
 
-                                final RealmResults<RealmReload> realmProfiles = query
+                                RealmResults<RealmReload> realmProfiles = query
                                         .findAll();
 
                                 return realmProfiles.<RealmReload>asFlowable()

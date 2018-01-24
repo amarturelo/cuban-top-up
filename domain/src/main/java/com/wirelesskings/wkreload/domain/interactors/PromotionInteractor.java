@@ -21,8 +21,8 @@ public class PromotionInteractor {
         this.promotionRepository = promotionRepository;
     }
 
-    public Observable<List<Promotion>> getAllPromotions(String wkUser) {
-        return promotionRepository.promotions(wkUser);
+    public Observable<List<Promotion>> getAllPromotions() {
+        return promotionRepository.promotions();
     }
 
     public Observable<Promotion> getPromotionById(String id) {

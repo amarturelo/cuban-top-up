@@ -2,6 +2,7 @@ package com.wirelesskings.wkreload.domain.filter;
 
 import android.os.Parcel;
 
+import java.text.DateFormat;
 import java.util.Date;
 
 /**
@@ -9,6 +10,13 @@ import java.util.Date;
  */
 
 public class DateFilter implements Filter {
+
+    @Override
+    public String toString() {
+        return DateFormat.getDateInstance(DateFormat.MEDIUM).format(start) + " hasta " +
+                DateFormat.getDateInstance(DateFormat.MEDIUM).format(end);
+    }
+
     private Date start;
     private Date end;
 

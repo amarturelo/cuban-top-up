@@ -29,11 +29,13 @@
         <activity
             android:name=".activities.ReloadActivity"
             android:label="@string/title_activity_reload"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.SearchActivity"
             android:label="@string/title_activity_search"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -13,9 +13,6 @@ public class RealmFather extends RealmObject {
     private String name;
     private String cost;
 
-    private String wkUser;
-
-
     public RealmFather() {
     }
 
@@ -37,12 +34,5 @@ public class RealmFather extends RealmObject {
         return this;
     }
 
-    public String getWkUser() {
-        return wkUser;
-    }
 
-    public RealmFather setWkUser(String wkUser) {
-        this.wkUser = wkUser;
-        return this;
-    }
 }
