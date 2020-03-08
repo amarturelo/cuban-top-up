@@ -1,4 +1,94 @@
 <resources>
-    <string name="app_name">Recharge Tree</string>
+    <string name="app_name">WK Reload</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="login">entrar</string>
+    <string name="hi">Hola.</string>
+    <string name="letsgetstarted">Comencemos</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="next">siguiente</string>
+    <string name="settings_server">Ajustes de Nauta</string>
+    <string name="stub_mail">\@nauta.cu</string>
+    <string name="hint_user">usuario</string>
+    <string name="hint_password">contraseña</string>
+    <string name="action_search">Buscar</string>
+    <string name="action_filter">Filtar</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_recharge">Nueva recarga</string>
+    <string name="recharge">Recargar</string>
+    <string name="hint_client_name">Nombre de Cliente</string>
+    <string name="hint_client_number">Numero del cliente</string>
+    <string name="txt_cancel">Cancelar</string>
+    <string name="txt_reload">Recargar</string>
+    <string name="txt_debit">Débito</string>
+
+    <string-array name="array_reload_state">
+        <item>TODOS</item>
+        <item>denied</item>
+        <item>inprogress</item>
+        <item>done</item>
+    </string-array>
+
+
+    <string-array name="array_amount">
+        <item>15</item>
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+    </string-array>
+
+    <string-array name="array_count">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="txt_client_name">Nombre del cliente</string>
+    <string name="txt_client_number">Numero del cliente</string>
+    <string name="txt_seller">Vendedor</string>
+    <string name="txt_seller_amount">Precio de venta</string>
+    <string name="txt_sell">Venta</string>
+    <string name="txt_status">Estado</string>
+    <string name="title_filter">Filtrar</string>
+    <string name="loading">Cargando...</string>
+    <string name="waiting">Espere por favor</string>
+    <string name="loading_content">La espera esta en dependecia de la velocidad de su conección, si desea cancelar la operacion puede dar CLICK en CANCELAR</string>
+    <string name="hint_token">Token</string>
+    <string name="action_change_settings">Cambiar configuración nauta</string>
+    <string name="txt_date">Fecha</string>
+    <string name="action_update">Actualizar</string>
+    <string name="txt_not_promotions">Lo sentimos, pero en estos momentos no hay promociones</string>
+    <string name="action_try">Reintentar</string>
+    <string name="title_not_reload">No hay recargas aun</string>
+    <string name="hint_user_nauta">Correo nauta</string>
+    <string name="hint_password_nauta">Contraseña nauta</string>
+    <string name="hint_user_wk">Usuario en WK</string>
+    <string name="hint_password_wk">Contraseña en WK</string>
+    <string name="error_network_to_send">Lo sentimos, ocurrió un error al intentar enviar la petición</string>
+    <string name="error_unknown">Lo sentimos, ocurrio un error desconocido</string>
+    <string name="title_request_success">Petición completada!!!</string>
+    <string name="message_request_success">La petición se realizo correctamente, verifique que su recarga este en la lista y verifique en que estado se encuentra</string>
+    <string name="error_user_inactive">Lo sentimos, pero su usuario esta desactivado para su uso en la aplicación</string>
+    <string name="txt_add">Agregar</string>
+    <string name="title_state_reload_denied">denied</string>
+    <string name="title_state_reload_in_progress">in progress</string>
+    <string name="title_state_reload_done">done</string>
+    <string name="title_state_reload_all">todos</string>
+    <string name="title_reload_state">Reload STATE</string>
+    <string name="txt_filter">Filtrar</string>
+    <string name="title_activity_reload">Borrador de recagas</string>
+    <string name="toast_update_complete">Actualizacion completada</string>
+    <string name="toast_reload_complete">Recarga completada</string>
+    <string name="title_not_promotions">No hay promociones</string>
+    <string name="title_activity_search">Resultados de la busqueda</string>
+    <string name="title_tab_start_date">inicio</string>
+    <string name="title_tab_end_date">fin</string>
+    <string name="title_client_number">Numero de cliente</string>
+    <string name="title_client_name">Nombre del cliente</string>
+    <string name="title_reload_date_range">Rango de fecha</string>
+    <string name="title_seller_name">Vendedor</string>
 </resources>

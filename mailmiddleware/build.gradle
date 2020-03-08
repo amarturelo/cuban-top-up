@@ -1,0 +1,40 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    compile 'com.google.code.gson:gson:2.8.2'
+    compile 'io.reactivex.rxjava2:rxjava:2.1.4'
+    compile files('libs/mail.jar')
+    compile files('libs/activation.jar')
+    compile files('libs/additionnal.jar')
+    compile files('libs/commons-codec-1.7.jar')
+    compile 'com.google.guava:guava:23.4-android'
+    compile 'com.annimon:stream:1.1.9'
+
+}
